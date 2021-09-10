@@ -1,0 +1,16 @@
+.ingredient {
+  position: relative;
+  max-width: 256px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ingredient__price {
+  display: flex;
+  align-items: center;
+}
+
+.ingredient__text {
+  text-align: center;
+}
