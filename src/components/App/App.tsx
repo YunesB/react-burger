@@ -1,5 +1,5 @@
-import React from 'react';
 import './App.css';
+import React from 'react';
 
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredietns';
@@ -10,8 +10,10 @@ function App() {
   return (
     <div className="App">
       <AppHeader />
-      <BurgerIngredients />
-      <BurgerConstructor />
+      <main className="component-container">
+        <BurgerIngredients />
+        <BurgerConstructor />
+      </main>
     </div>
   );
 }
