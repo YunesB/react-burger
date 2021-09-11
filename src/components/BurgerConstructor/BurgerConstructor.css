@@ -13,9 +13,21 @@
   gap: 10px;
 }
 
+.constructor-element__text {
+  display: inline-block;
+  max-height: 48px;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .basket__list-container {
   max-height: 464px;
   overflow-y: scroll;
+}
+
+.basket__list-container:last-child {
+  margin-bottom: 0 !important;
 }
 
 .basket__list-container::-webkit-scrollbar {

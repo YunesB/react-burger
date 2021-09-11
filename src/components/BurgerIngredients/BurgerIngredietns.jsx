@@ -1,14 +1,15 @@
 import './BurgerIngredients.css';
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
 
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
-import cardData from '../../utils/data';
+import propTypes from '../../utils/propTypes';
 
-function BurgerIngredients() {
+function BurgerIngredients(props) {
 
   const [current, setCurrent] = React.useState('one');
+  const cardData = props.cardData;
 
   function filterArray (string) {
     return cardData.filter((obj) => obj.type === string);
@@ -44,10 +45,10 @@ function BurgerIngredients() {
         </ul>
         <h2 className="text text_type_main-medium mb-6 mt-10">Соусы</h2>
         <ul className="ingredients__list">
-          {sauceArray.map((card) => (
+          {sauceArray.map((card, index) => (
             <BurgerIngredient
               card={card}
-              key={card._id}
+              key={index}
             />
           ))}
         </ul>
@@ -66,7 +67,9 @@ function BurgerIngredients() {
 }
 
 BurgerIngredients.propTypes = {
-  cardData: PropTypes.array
+  cardData: PropTypes.arrayOf
+  (PropTypes.shape(propTypes)
+  .isRequired).isRequired        
 }; 
 
 export default BurgerIngredients;

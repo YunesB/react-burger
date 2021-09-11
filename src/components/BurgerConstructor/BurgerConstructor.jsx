@@ -2,13 +2,25 @@ import './BurgerConstructor.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import cardData from '../../utils/data';
 
 import BasketItem from '../BasketItem/BasketItem';
+import propTypes from '../../utils/propTypes';
 
-function BurgerConstructor() {
+function BurgerConstructor(props) {
 
-  function filterArray (string) {
+  const cardData = props.cardData;
+  const bunPrice = 200;
+  const totalPrice = counTotalPrice(cardData) + bunPrice;
+
+  function counTotalPrice(array) {
+    let filteredDigits = array.map((item) => item.price);
+    filteredDigits.reduce((prev, curr) => { 
+      return filteredDigits = prev + curr 
+    });
+    return filteredDigits;
+  }
+
+  function filterArray(string) {
     return cardData.filter((obj) => obj.type === string);
   };
 
@@ -22,7 +34,7 @@ function BurgerConstructor() {
             type="top"
             isLocked={true}
             text="Краторная булка N-200i (верх)"
-            price={200}
+            price={bunPrice}
             thumbnail={cardData[0].image}
           />
         </li>
@@ -39,14 +51,14 @@ function BurgerConstructor() {
             type="bottom"
             isLocked={true}
             text="Краторная булка N-200i (низ)"
-            price={200}
+            price={bunPrice}
             thumbnail={cardData[0].image}
           />
         </li>
       </ul>
       <div className="basket__container mt-10">
         <div className="basket__total-container mr-10">
-          <p className="text text_type_digits-medium mr-3">620</p>
+          <p className="text text_type_digits-medium mr-3">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
         <Button type="primary" size="large">
@@ -58,7 +70,9 @@ function BurgerConstructor() {
 }
 
 BurgerConstructor.propTypes = {
-  cardData: PropTypes.array
+  cardData: PropTypes.arrayOf
+  (PropTypes.shape(propTypes)
+  .isRequired).isRequired    
 }; 
 
 export default BurgerConstructor;
