@@ -44,3 +44,8 @@
   display: flex;
   align-items: center;
 }
+
+.basket__total-container svg {
+  width: 33px;
+  height: auto;
+}

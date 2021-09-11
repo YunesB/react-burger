@@ -1,5 +1,6 @@
 import './BurgerConstructor.css';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import cardData from '../../utils/data';
 
@@ -46,7 +47,7 @@ function BurgerConstructor() {
       <div className="basket__container mt-10">
         <div className="basket__total-container mr-10">
           <p className="text text_type_digits-medium mr-3">620</p>
-          <CurrencyIcon type="primary" width="33" height="33" />
+          <CurrencyIcon type="primary" />
         </div>
         <Button type="primary" size="large">
           Оформить заказ
@@ -55,5 +56,9 @@ function BurgerConstructor() {
     </section>
   );
 }
+
+BurgerConstructor.propTypes = {
+  cardData: PropTypes.array
+}; 
 
 export default BurgerConstructor;

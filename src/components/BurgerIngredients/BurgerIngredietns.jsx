@@ -1,5 +1,6 @@
 import './BurgerIngredients.css';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
@@ -63,5 +64,9 @@ function BurgerIngredients() {
     </section>
   );
 }
+
+BurgerIngredients.propTypes = {
+  cardData: PropTypes.array
+}; 
 
 export default BurgerIngredients;
