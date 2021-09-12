@@ -1,0 +1,42 @@
+.header {
+  margin: 0 auto;
+  background: #1c1c21;
+}
+
+.header__nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1280px;
+  z-index: 10;
+}
+
+.header__list {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.header__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: unset;
+  border-radius: 40px;
+  transition: 0.2s;
+  padding: 16px 20px;
+}
+
+.header__link:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.header__link-text {
+  margin-top: 0;
+  margin-bottom: 0;
+}
