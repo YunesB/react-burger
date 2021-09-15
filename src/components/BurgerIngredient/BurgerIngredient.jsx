@@ -4,10 +4,15 @@ import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-c
 
 function BurgerIngredient(props) {
 
+  function handleCardClick(card) {
+    props.changeSelectedCard(card);
+  }
+  
+
   return (
-    <li className="ingredient ml-4 mr-4 mb-8">
+    <li className="ingredient ml-4 mr-4 mb-8" onClick={handleCardClick(props.card)}>
       <Counter count={1} size="default" />
-      <img src={props.card.image} className="ingredient__image ml-4 mr-4" />
+      <img src={props.card.image} alt={props.card.name} className="ingredient__image ml-4 mr-4" />
       <div className="ingredient__price-box">
         <p className="ingredient__price text text_type_digits-default mb-1 mt-1">
           {props.card.price}

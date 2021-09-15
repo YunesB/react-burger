@@ -8,9 +8,11 @@ import propTypes from '../../utils/propTypes';
 
 function BurgerConstructor(props) {
 
-  const cardData = props.cardData;
+  const cardsData = props.cardsData;
   const bunPrice = 200;
-  const totalPrice = counTotalPrice(cardData) + bunPrice;
+  let totalPrice
+
+  console.log(cardsData);
 
   function counTotalPrice(array) {
     let filteredDigits = array.map((item) => item.price);
@@ -20,8 +22,12 @@ function BurgerConstructor(props) {
     return filteredDigits;
   }
 
+  if (cardsData) {
+    totalPrice = counTotalPrice(cardsData) + bunPrice;
+  }
+
   function filterArray(string) {
-    return cardData.filter((obj) => obj.type === string);
+    return cardsData.filter((obj) => obj.type === string);
   };
 
   const mainArray = filterArray('main');
@@ -35,7 +41,7 @@ function BurgerConstructor(props) {
             isLocked={true}
             text="Краторная булка N-200i (верх)"
             price={bunPrice}
-            thumbnail={cardData[0].image}
+            thumbnail={cardsData[0].image}
           />
         </li>
         <span className="basket__list-container">
@@ -52,7 +58,7 @@ function BurgerConstructor(props) {
             isLocked={true}
             text="Краторная булка N-200i (низ)"
             price={bunPrice}
-            thumbnail={cardData[0].image}
+            thumbnail={cardsData[0].image}
           />
         </li>
       </ul>
@@ -70,7 +76,7 @@ function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-  cardData: PropTypes.arrayOf
+  cardsData: PropTypes.arrayOf
   (PropTypes.shape(propTypes)
   .isRequired).isRequired    
 }; 

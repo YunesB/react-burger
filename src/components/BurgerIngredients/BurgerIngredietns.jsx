@@ -8,11 +8,12 @@ import propTypes from '../../utils/propTypes';
 
 function BurgerIngredients(props) {
 
-  const [current, setCurrent] = React.useState('one');
-  const cardData = props.cardData;
+  const [ current, setCurrent ] = React.useState('one');
+  const cardsData = props.cardsData;
+  const selectedCard = props.selectedCard;
 
   function filterArray (string) {
-    return cardData.filter((obj) => obj.type === string);
+    return cardsData.filter((obj) => obj.type === string);
   };
 
   const bunsArray = filterArray('bun');
@@ -40,6 +41,8 @@ function BurgerIngredients(props) {
             <BurgerIngredient
               card={card}
               key={card._id}
+              changeSelectedCard={props.changeSelectedCard}
+              selectedCard={selectedCard}
             />
           ))}
         </ul>
@@ -49,6 +52,8 @@ function BurgerIngredients(props) {
             <BurgerIngredient
               card={card}
               key={index}
+              changeSelectedCard={props.changeSelectedCard}
+              selectedCard={selectedCard}
             />
           ))}
         </ul>
@@ -58,6 +63,8 @@ function BurgerIngredients(props) {
             <BurgerIngredient
               card={card}
               key={card._id}
+              changeSelectedCard={props.changeSelectedCard}
+              selectedCard={selectedCard}
             />
           ))}
         </ul>
@@ -66,10 +73,10 @@ function BurgerIngredients(props) {
   );
 }
 
-BurgerIngredients.propTypes = {
-  cardData: PropTypes.arrayOf
-  (PropTypes.shape(propTypes)
-  .isRequired).isRequired        
-}; 
+// BurgerIngredients.propTypes = {
+//   cardsData: PropTypes.arrayOf
+//   (PropTypes.shape(propTypes)
+//   .isRequired).isRequired        
+// }; 
 
 export default BurgerIngredients;
