@@ -12,6 +12,15 @@ function BurgerIngredients(props) {
   const cardsData = props.cardsData;
   const openModal = props.openModal;
 
+  const burgerIngredient = (card) => (
+    <BurgerIngredient
+      card={card}
+      key={card._id}
+      changeSelectedCard={props.changeSelectedCard}
+      openModal = {openModal}
+    />
+  );
+
   function filterArray (string) {
     return cardsData.filter((obj) => obj.type === string);
   };
@@ -36,36 +45,21 @@ function BurgerIngredients(props) {
       </div>
       <div className="ingredients__menu-container">
         <h2 className="text text_type_main-medium mb-6 mt-10">Булки</h2>
-        <ul className="ingredients__list">
+        <ul className="ingredients__list" >
           {bunsArray.map((card) => (
-            <BurgerIngredient
-              card={card}
-              key={card._id}
-              changeSelectedCard={props.changeSelectedCard}
-              openModal = {openModal}
-            />
+            burgerIngredient(card)
           ))}
         </ul>
         <h2 className="text text_type_main-medium mb-6 mt-10">Соусы</h2>
-        <ul className="ingredients__list">
+        <ul className="ingredients__list" >
           {sauceArray.map((card) => (
-            <BurgerIngredient
-              card={card}
-              key={card._id}
-              changeSelectedCard={props.changeSelectedCard}
-              openModal = {openModal}
-            />
+            burgerIngredient(card)
           ))}
         </ul>
         <h2 className="text text_type_main-medium mb-6 mt-10">Начинки</h2>
         <ul className="ingredients__list">
           {mainArray.map((card) => (
-            <BurgerIngredient
-              card={card}
-              key={card._id}
-              changeSelectedCard={props.changeSelectedCard}
-              openModal = {openModal}
-            />
+            burgerIngredient(card)
           ))}
         </ul>
       </div>
@@ -73,10 +67,13 @@ function BurgerIngredients(props) {
   );
 }
 
-// BurgerIngredients.propTypes = {
-//   cardsData: PropTypes.arrayOf
-//   (PropTypes.shape(propTypes)
-//   .isRequired).isRequired        
-// }; 
+BurgerIngredients.propTypes = {
+  cardsData: PropTypes.arrayOf
+  (PropTypes.shape(propTypes)
+  .isRequired).isRequired,
+  changeSelectedCard: PropTypes.func,
+  selectedCard: PropTypes.any,
+  openModal: PropTypes.func,
+}; 
 
 export default BurgerIngredients;

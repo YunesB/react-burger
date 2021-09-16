@@ -1,5 +1,6 @@
 import './Modal.css';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function ModalOverlay(props) {
 
@@ -17,7 +18,7 @@ function ModalOverlay(props) {
     }
     window.addEventListener('keyup', closeModal);
     return () => window.removeEventListener('keyup', closeModal)
-  }, [props.isOpen])
+  }, [ props.isOpen ])
 
 
   return (
@@ -26,5 +27,14 @@ function ModalOverlay(props) {
       </div>
   );
 }
+
+ModalOverlay.propTypes = {
+  children: PropTypes.element,
+  isOpen: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  selectedCard: PropTypes.bool,
+  modalType: PropTypes.bool,
+  changeModalType: PropTypes.func,
+}; 
 
 export default ModalOverlay;

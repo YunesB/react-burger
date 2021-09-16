@@ -1,5 +1,5 @@
 import './Modal.css';
-import loading from '../../images/loading.svg'
+import loading from '../../images/loading.svg';
 
 function Loading(props) {
 

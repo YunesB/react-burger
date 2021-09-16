@@ -78,10 +78,12 @@ function BurgerConstructor(props) {
   );
 }
 
-// BurgerConstructor.propTypes = {
-//   cardsData: PropTypes.arrayOf
-//   (PropTypes.shape(propTypes)
-//   .isRequired).isRequired    
-// }; 
+BurgerConstructor.propTypes = {
+  cardsData: PropTypes.arrayOf
+  (PropTypes.shape(propTypes)
+  .isRequired).isRequired,
+  changeModalType: PropTypes.func,
+  openModal: PropTypes.func,
+}; 
 
 export default BurgerConstructor;

@@ -1,7 +1,6 @@
 import './Modal.css';
 import tick from '../../images/tick.gif';
 import loading from '../../images/loading.svg';
-
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 function OrderDetails(props) {

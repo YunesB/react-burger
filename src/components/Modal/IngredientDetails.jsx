@@ -24,7 +24,7 @@ function IngredientDetails(props) {
           </li>
           <li className="modal__stats-list-item">
             <p className="modal__category text text_type_main-default text_color_inactive">Белки, г</p>
-            <p className="text text_type_main-default text_color_inactive">{cardData.carbohydrates }</p>
+            <p className="text text_type_main-default text_color_inactive">{cardData.carbohydrates}</p>
           </li>
           <li className="modal__stats-list-item">
             <p className="modal__category text text_type_main-default text_color_inactive">Жиры, г</p>
