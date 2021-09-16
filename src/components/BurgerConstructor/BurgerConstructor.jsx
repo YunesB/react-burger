@@ -10,9 +10,7 @@ function BurgerConstructor(props) {
 
   const cardsData = props.cardsData;
   const bunPrice = 200;
-  let totalPrice
-
-  console.log(cardsData);
+  let totalPrice;
 
   function counTotalPrice(array) {
     let filteredDigits = array.map((item) => item.price);
@@ -20,6 +18,11 @@ function BurgerConstructor(props) {
       return filteredDigits = prev + curr 
     });
     return filteredDigits;
+  }
+
+  function handleOpenModal() {
+    props.changeModalType();
+    props.openModal();
   }
 
   if (cardsData) {
@@ -67,7 +70,7 @@ function BurgerConstructor(props) {
           <p className="text text_type_digits-medium mr-3">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" onClick={() => handleOpenModal()}>
           Оформить заказ
         </Button>
       </div>
@@ -75,10 +78,10 @@ function BurgerConstructor(props) {
   );
 }
 
-BurgerConstructor.propTypes = {
-  cardsData: PropTypes.arrayOf
-  (PropTypes.shape(propTypes)
-  .isRequired).isRequired    
-}; 
+// BurgerConstructor.propTypes = {
+//   cardsData: PropTypes.arrayOf
+//   (PropTypes.shape(propTypes)
+//   .isRequired).isRequired    
+// }; 
 
 export default BurgerConstructor;

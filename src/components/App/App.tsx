@@ -7,6 +7,7 @@ import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 
 import Modal from '../Modal/Modal';
 import ModalOverlay from '../Modal/ModalOverlay';
+import Loading from '../Modal/Loading';
 
 import { api } from '../../utils/Api';
 
@@ -14,10 +15,9 @@ function App() {
 
   const [ isCardsData, setCardData ] = React.useState();
   const [ isModalOpen, setModalOpen ] = React.useState(false);
-  // const [ isModalOpenOrder, setModalOpenOrder ] = React.useState(false);
   const [ isModalType, setModalType ] = React.useState(true);
-
-  const [ selectedCard, setSelectedCard ] = React.useState();
+  const [ isPageLoading, setPageLoading ] = React.useState(true);
+  const [ selectedCard, setSelectedCard ] = React.useState({});
 
   function handleModalOpen() {
     setModalOpen(true);
@@ -33,16 +33,7 @@ function App() {
 
   function changeSelectedCard(card: any) {
     setSelectedCard(card);
-    console.log(card);
   };
-
-  // function handleOrderOpen () {
-  //   setModalOpenOrder(true);
-  // }
-
-  // function handleOrderClose() {
-  //   setModalOpenIngredient(false);
-  // }
 
   React.useEffect(() => {
     Promise.all([
@@ -55,6 +46,7 @@ function App() {
         console.log(err)
       })
       .finally(() => {
+        setPageLoading(false);
         console.log('App boot success');
       })
   }, []);
@@ -71,22 +63,28 @@ function App() {
           changeSelectedCard = {changeSelectedCard}
           selectedCard = {selectedCard}
           cardsData = {isCardsData || null}
+          openModal = {handleModalOpen}
         />
         <BurgerConstructor 
-          cardsData = {isCardsData || null}
+          cardsData = {isCardsData || null}      
+          openModal = {handleModalOpen}
+          changeModalType = {changeModalType}
         />
       </main>
       <ModalOverlay 
         isOpen={isModalOpen}
+        closeModal={handleModalClose}
       >
         <Modal 
           selectedCard = {selectedCard}
-          cardData={isCardsData}
           modalType={isModalType}
-          onOpen={handleModalOpen}
-          onClose={handleModalClose}
+          closeModal={handleModalClose}
+          changeModalType = {changeModalType}
         />
       </ModalOverlay>
+      <Loading 
+        isOpen = {isPageLoading}
+      />
     </div>
   );
 }

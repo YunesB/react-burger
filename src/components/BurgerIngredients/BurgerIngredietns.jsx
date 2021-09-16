@@ -10,7 +10,7 @@ function BurgerIngredients(props) {
 
   const [ current, setCurrent ] = React.useState('one');
   const cardsData = props.cardsData;
-  const selectedCard = props.selectedCard;
+  const openModal = props.openModal;
 
   function filterArray (string) {
     return cardsData.filter((obj) => obj.type === string);
@@ -42,18 +42,18 @@ function BurgerIngredients(props) {
               card={card}
               key={card._id}
               changeSelectedCard={props.changeSelectedCard}
-              selectedCard={selectedCard}
+              openModal = {openModal}
             />
           ))}
         </ul>
         <h2 className="text text_type_main-medium mb-6 mt-10">Соусы</h2>
         <ul className="ingredients__list">
-          {sauceArray.map((card, index) => (
+          {sauceArray.map((card) => (
             <BurgerIngredient
               card={card}
-              key={index}
+              key={card._id}
               changeSelectedCard={props.changeSelectedCard}
-              selectedCard={selectedCard}
+              openModal = {openModal}
             />
           ))}
         </ul>
@@ -64,7 +64,7 @@ function BurgerIngredients(props) {
               card={card}
               key={card._id}
               changeSelectedCard={props.changeSelectedCard}
-              selectedCard={selectedCard}
+              openModal = {openModal}
             />
           ))}
         </ul>
