@@ -27,7 +27,18 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "rules": {
+        "property-no-unknown": [ 
+          true, {
+          "ignoreProperties": [
+            "composes"
+            ]
+          } 
+        ]
+      }
+    }
   },
   "browserslist": {
     "production": [
@@ -40,5 +51,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "css-loader": "^6.2.0"
   }
 }

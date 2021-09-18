@@ -1,12 +1,14 @@
-import './App.css';
+import AppStyles from './App.module.css';
 import React from 'react';
 
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredietns';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 
+import IngredientDetails from '../Modal/IngredientDetails';
+import OrderDetails from '../Modal/OrderDetails';
+
 import Modal from '../Modal/Modal';
-import ModalOverlay from '../Modal/ModalOverlay';
 import Loading from '../Modal/Loading';
 
 import { api } from '../../utils/Api';
@@ -14,21 +16,25 @@ import { api } from '../../utils/Api';
 function App() {
 
   const [ isCardsData, setCardData ] = React.useState();
-  const [ isModalOpen, setModalOpen ] = React.useState(false);
-  const [ isModalType, setModalType ] = React.useState(true);
+  const [ isModalOpenIngredients, setModalOpenIngredients ] = React.useState(false);
+  const [ isModalOpenOrder, setModalOpenOrder ] = React.useState(false);
   const [ isPageLoading, setPageLoading ] = React.useState(true);
   const [ selectedCard, setSelectedCard ] = React.useState({});
 
-  function handleModalOpen() {
-    setModalOpen(true);
+  function handleModalOpenIngredients() {
+    setModalOpenIngredients(true);
   }
 
-  function handleModalClose() {
-    setModalOpen(false);
+  function handleModalCloseIngredients() {
+    setModalOpenIngredients(false);
   }
 
-  function changeModalType() {
-    setModalType(!isModalType);
+  function handleModalOpenOrder() {
+    setModalOpenOrder(true);
+  }
+
+  function handleModalCloseOrder() {
+    setModalOpenOrder(false);
   }
 
   function changeSelectedCard(card: any) {
@@ -51,37 +57,49 @@ function App() {
       })
   }, []);
 
+  const IngredientModal = (
+    <IngredientDetails
+      closeModal={handleModalCloseIngredients}
+      selectedCard={selectedCard}
+    />
+  );
+
+  const OrderModal = (
+    <OrderDetails
+      closeModal={handleModalCloseOrder}
+    />
+  );
+
   if (!isCardsData){
     return null;
   }
 
   return (
-    <div className="App">
+    <div className={AppStyles.App}>
       <AppHeader />
-      <main className="component-container">
+      <main className={AppStyles.componentContainer}>
         <BurgerIngredients
           changeSelectedCard = {changeSelectedCard}
           selectedCard = {selectedCard}
           cardsData = {isCardsData || null}
-          openModal = {handleModalOpen}
+          openModal = {handleModalOpenIngredients}
         />
         <BurgerConstructor 
           cardsData = {isCardsData || null}      
-          openModal = {handleModalOpen}
-          changeModalType = {changeModalType}
+          openModal = {handleModalOpenOrder}
         />
       </main>
-      <ModalOverlay 
-        isOpen={isModalOpen}
-        closeModal={handleModalClose}
-      >
-        <Modal 
-          selectedCard = {selectedCard}
-          modalType={isModalType}
-          closeModal={handleModalClose}
-          changeModalType = {changeModalType}
-        />
-      </ModalOverlay>
+      <Modal 
+        isOpen={isModalOpenIngredients}
+        selectedCard = {selectedCard}
+        closeModal={handleModalCloseIngredients}
+        children={IngredientModal}
+      />
+      <Modal
+        isOpen={isModalOpenOrder}
+        closeModal={handleModalCloseOrder}
+        children={OrderModal}
+      />
       <Loading 
         isOpen = {isPageLoading}
       />

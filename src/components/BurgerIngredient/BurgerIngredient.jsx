@@ -1,6 +1,7 @@
-import './BurgerIngredient.css';
-
+import BurgerIngredientStyle from './BurgerIngredient.module.css';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
+import propTypes from '../../utils/propTypes';
 
 function BurgerIngredient(props) {
 
@@ -13,19 +14,25 @@ function BurgerIngredient(props) {
     return null
   } else {
     return (
-      <li className="ingredient ml-4 mr-4 mb-8" onClick={() => handleCardClick(props.card)}>
+      <li className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4 mb-8`} onClick={() => handleCardClick(props.card)}>
         <Counter count={1} size="default" />
-        <img src={props.card.image} alt={props.card.name} className="ingredient__image ml-4 mr-4" />
-        <div className="ingredient__price-box">
-          <p className="ingredient__price text text_type_digits-default mb-1 mt-1">
+        <img src={props.card.image} alt={props.card.name} className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4`} />
+        <div className={BurgerIngredientStyle.ingredient__priceBox}>
+          <p className={`${BurgerIngredientStyle.ingredient__price} text text_type_digits-default mb-1 mt-1`}>
             {props.card.price}
           </p>    
           <CurrencyIcon type="primary" />
         </div>
-        <p className="ingredient__text">{props.card.name}</p>
+        <p className={BurgerIngredientStyle.ingredient__text}>{props.card.name}</p>
       </li>
     );
   }
 }
+
+BurgerIngredient.propTypes = {
+  card: PropTypes.shape(propTypes).isRequired,
+  changeSelectedCard: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
+}; 
 
 export default BurgerIngredient;

@@ -1,9 +1,9 @@
-import './BurgerConstructor.css';
-import React from 'react';
-import PropTypes from 'prop-types';
+import BurgerConstructorStyles from './BurgerConstructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import BasketItem from '../BasketItem/BasketItem';
+
+import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
 
 function BurgerConstructor(props) {
@@ -20,11 +20,6 @@ function BurgerConstructor(props) {
     return filteredDigits;
   }
 
-  function handleOpenModal() {
-    props.changeModalType();
-    props.openModal();
-  }
-
   if (cardsData) {
     totalPrice = counTotalPrice(cardsData) + bunPrice;
   }
@@ -36,9 +31,9 @@ function BurgerConstructor(props) {
   const mainArray = filterArray('main');
 
   return (
-    <section className="basket pt-25">     
-      <ul className="basket__list">
-        <li className="basket__list-item mr-4">
+    <section className={`${BurgerConstructorStyles.basket} pt-25`}>     
+      <ul className={BurgerConstructorStyles.basket__list}>
+        <li className={`${BurgerConstructorStyles.basket__listItem} mr-4`}>
           <ConstructorElement
             type="top"
             isLocked={true}
@@ -47,7 +42,7 @@ function BurgerConstructor(props) {
             thumbnail={cardsData[0].image}
           />
         </li>
-        <span className="basket__list-container">
+        <span className={BurgerConstructorStyles.basket__listContainer}>
           {mainArray.map((card) => (
             <BasketItem
               card={card}
@@ -55,7 +50,7 @@ function BurgerConstructor(props) {
             />
           ))}
         </span>
-        <li className="basket__list-item mr-4">
+        <li className={`${BurgerConstructorStyles.basket__listItem} mr-4`}>
           <ConstructorElement
             type="bottom"
             isLocked={true}
@@ -65,12 +60,12 @@ function BurgerConstructor(props) {
           />
         </li>
       </ul>
-      <div className="basket__container mt-10">
-        <div className="basket__total-container mr-10">
+      <div className={`${BurgerConstructorStyles.basket__container} mt-10`}>
+        <div className={`${BurgerConstructorStyles.basket__totalContainer} mr-10`}>
           <p className="text text_type_digits-medium mr-3">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" onClick={() => handleOpenModal()}>
+        <Button type="primary" size="large" onClick={() => props.openModal()}>
           Оформить заказ
         </Button>
       </div>

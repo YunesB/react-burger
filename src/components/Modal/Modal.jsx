@@ -1,33 +1,35 @@
-import OrderDetails from './OrderDetails';
-import IngredientDetails from './IngredientDetails';
+import ModalStyles from './Modal.module.css';
+import React from 'react';
 import PropTypes from 'prop-types';
-import propTypes from '../../utils/propTypes';
+import ModalOverlay from './ModalOverlay';
 
 function Modal(props) {
-  const cardData = props.selectedCard;
 
-  if (props.modalType) {
-    return (
-      <IngredientDetails 
-        selectedCard = {cardData}
-        closeModal = {props.closeModal}
-      />
-    );
-  } else {
-    return (
-      <OrderDetails  
-        closeModal = {props.closeModal}
-        changeModalType={props.changeModalType}
-      />
-    );
-  }
+  React.useEffect(() => {
+    const closeModal = (evt) => {
+      if( evt.keyCode === 27 ) {
+        props.closeModal();
+      }
+    }
+    window.addEventListener('keyup', closeModal);
+    return () => window.removeEventListener('keyup', closeModal)
+  }, [ props.isOpen ])
+
+  return(
+    <section className={props.isOpen ? ModalStyles.modal_opened : ModalStyles.modal}>
+      {props.children}
+    <ModalOverlay 
+      closeModal={props.closeModal}
+    />
+    </section>
+  )
 }
 
 Modal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  children: PropTypes.element.isRequired,
   selectedCard: PropTypes.object,
-  closeModal: PropTypes.func,
-  modalType: PropTypes.bool,
-  changeModalType: PropTypes.func,
+  closeModal: PropTypes.func.isRequired,
 }; 
 
 export default Modal;

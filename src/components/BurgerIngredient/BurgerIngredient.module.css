@@ -12,7 +12,7 @@
   transform: scale(1.05);
 }
 
-.ingredient__price-box {
+.ingredient__priceBox {
   display: flex;
   align-items: center;
 }

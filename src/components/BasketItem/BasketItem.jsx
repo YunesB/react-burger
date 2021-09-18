@@ -1,13 +1,15 @@
-import './BasketItem.css';
-import React from 'react';
+import BasketStyles from './BasketItem.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
+import PropTypes from 'prop-types';
+import propTypes from '../../utils/propTypes';
 
 function BasketItem(props) {
 
   const cardData = props.card;
 
   return (
-    <li className="basket__list-item mb-4 mr-2">
+    <li className={`${BasketStyles.listItem} mb-4 mr-2`}>
       <DragIcon type="primary" />
       <ConstructorElement
         text={cardData.name}
@@ -17,5 +19,9 @@ function BasketItem(props) {
     </li>
   );
 }
+
+BasketItem.propTypes = {
+  card: PropTypes.shape(propTypes).isRequired,
+}; 
 
 export default BasketItem;
