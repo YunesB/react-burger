@@ -35,7 +35,7 @@ function App() {
 
   function handleModalCloseOrder() {
     setModalOpenOrder(false);
-  }
+  };
 
   function changeSelectedCard(card: any) {
     setSelectedCard(card);

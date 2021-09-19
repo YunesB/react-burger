@@ -3,6 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ModalOverlay from './ModalOverlay';
 
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
 function Modal(props) {
 
   React.useEffect(() => {
@@ -13,14 +15,19 @@ function Modal(props) {
     }
     window.addEventListener('keyup', closeModal);
     return () => window.removeEventListener('keyup', closeModal)
-  }, [ props.isOpen ])
+  }, [ props.isOpen ]);
 
   return(
     <section className={props.isOpen ? ModalStyles.modal_opened : ModalStyles.modal}>
-      {props.children}
-    <ModalOverlay 
-      closeModal={props.closeModal}
-    />
+      <div className={ModalStyles.modal__container}>
+        {props.children}
+        <button type="button" className={ModalStyles.modal__close_modified} onClick={() => props.closeModal()}>
+          <CloseIcon type="primary" />
+        </button>
+      </div>
+      <ModalOverlay 
+        closeModal={props.closeModal}
+      />
     </section>
   )
 }
