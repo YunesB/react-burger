@@ -13,7 +13,7 @@ function BurgerConstructor(props) {
   const [ isOrderData, setOrderData ] = React.useContext(OrderContext);
 
   const cardsData = React.useContext(IngredientsContext);
-  const bunPrice = 200;
+  const bunPrice = 210;
   let totalPrice;
 
   function submitOrder() {   
