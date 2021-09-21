@@ -1,16 +1,15 @@
-import BurgerIngredientsStyle from './BurgerIngredients.module.css';
-
 import React from 'react';
+import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
-
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
+import { IngredientsContext } from '../../utils/burgerContext';
 
 function BurgerIngredients(props) {
 
   const [ current, setCurrent ] = React.useState('one');
-  const cardsData = props.cardsData;
+  const cardsData = React.useContext(IngredientsContext);
   const openModal = props.openModal;
 
   const burgerIngredient = (card) => (

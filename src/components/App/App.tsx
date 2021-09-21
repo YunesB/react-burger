@@ -1,5 +1,6 @@
-import AppStyles from './App.module.css';
 import React from 'react';
+import AppStyles from './App.module.css';
+import * as CONSTANTS from '../../utils/constants';
 
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredietns';
@@ -12,6 +13,7 @@ import Modal from '../Modal/Modal';
 import Loading from '../Modal/Loading';
 
 import { api } from '../../utils/Api';
+import { IngredientsContext, OrderContext } from '../../utils/burgerContext';
 
 function App() {
 
@@ -20,6 +22,7 @@ function App() {
   const [ isModalOpenOrder, setModalOpenOrder ] = React.useState(false);
   const [ isPageLoading, setPageLoading ] = React.useState(true);
   const [ selectedCard, setSelectedCard ] = React.useState({});
+  const orderDataState = React.useState(CONSTANTS.DEFAULT_ORDER);
 
   function handleModalOpenIngredients() {
     setModalOpenIngredients(true);
@@ -37,11 +40,20 @@ function App() {
     setModalOpenOrder(false);
   };
 
+  function handleLoadingOpen() {
+    setPageLoading(true)
+  }
+
+  function handleLoadingClose() {
+    setPageLoading(false)
+  }
+
   function changeSelectedCard(card: any) {
     setSelectedCard(card);
   };
 
   React.useEffect(() => {
+    console.log(orderDataState)
     Promise.all([
       api.getCardsData(),
     ])
@@ -77,32 +89,37 @@ function App() {
   return (
     <div className={AppStyles.App}>
       <AppHeader />
-      <main className={AppStyles.componentContainer}>
-        <BurgerIngredients
-          changeSelectedCard = {changeSelectedCard}
+        <OrderContext.Provider value={orderDataState}>
+          <IngredientsContext.Provider value={isCardsData}>
+            <main className={AppStyles.componentContainer}>
+              <BurgerIngredients
+                changeSelectedCard = {changeSelectedCard}
+                selectedCard = {selectedCard}
+                cardsData = {isCardsData || null}
+                openModal = {handleModalOpenIngredients}
+              />
+              <BurgerConstructor    
+                openModal = {handleModalOpenOrder}
+                openLoading = {handleLoadingOpen}
+                closeLoading = {handleLoadingClose}
+              />
+            </main>
+          </IngredientsContext.Provider>
+        <Modal 
+          isOpen={isModalOpenIngredients}
           selectedCard = {selectedCard}
-          cardsData = {isCardsData || null}
-          openModal = {handleModalOpenIngredients}
+          closeModal={handleModalCloseIngredients}
+          children={IngredientModal}
         />
-        <BurgerConstructor 
-          cardsData = {isCardsData || null}      
-          openModal = {handleModalOpenOrder}
-        />
-      </main>
-      <Modal 
-        isOpen={isModalOpenIngredients}
-        selectedCard = {selectedCard}
-        closeModal={handleModalCloseIngredients}
-        children={IngredientModal}
-      />
-      <Modal
-        isOpen={isModalOpenOrder}
-        closeModal={handleModalCloseOrder}
-        children={OrderModal}
-      />
-      <Loading 
-        isOpen = {isPageLoading}
-      />
+          <Modal
+            isOpen={isModalOpenOrder}
+            closeModal={handleModalCloseOrder}
+            children={OrderModal}
+          />
+        <Loading 
+          isOpen = {isPageLoading}
+        />   
+      </OrderContext.Provider>
     </div>
   );
 }
