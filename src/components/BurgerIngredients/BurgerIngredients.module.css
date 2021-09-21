@@ -2,26 +2,26 @@
   width: 620px;
 }
 
-.ingredients__menu-container {
+.ingredients__menuContainer {
   max-width: 100%;
   max-height: 70vh;
   overflow-y: scroll;
   overflow-x: unset;
 }
 
-.ingredients__menu-container::-webkit-scrollbar {
+.ingredients__menuContainer::-webkit-scrollbar {
   width: 8px;
 }
 
-.ingredients__menu-container::-webkit-scrollbar-track {
+.ingredients__menuContainer::-webkit-scrollbar-track {
   background: #2f2f37;
 }
 
-.ingredients__menu-container::-webkit-scrollbar-thumb {
+.ingredients__menuContainer::-webkit-scrollbar-thumb {
   background: #a5a5d6;
 }
 
-.ingredients__menu-container::-webkit-scrollbar-thumb:hover {
+.ingredients__menuContainer::-webkit-scrollbar-thumb:hover {
   background: #8585ad;
 }
 
@@ -36,7 +36,7 @@
   flex-wrap: wrap;
 }
 
-.ingredients__basket-list {
+.ingredients__basketList {
   list-style-type: none;
   margin: 0;
   padding: 0;

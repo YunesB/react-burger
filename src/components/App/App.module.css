@@ -3,7 +3,7 @@
   font-family: "JetBrainsMono", Arial, sans-serif;
 }
 
-.component-container {
+.componentContainer {
   max-width: 1240px;
   margin: 0 auto;
   display: flex;

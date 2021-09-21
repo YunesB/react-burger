@@ -1,0 +1,151 @@
+.modal {
+  visibility: hidden;
+  position: fixed;
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.2s linear;
+  z-index: 3;
+}
+
+.modal_opened {
+  composes: modal;
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal_overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.modal__loading {
+  background-color: unset;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+.modal__container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  max-width: 720px;
+  width: 100%;
+  background-color: #1c1c21;
+  border-radius: 40px;
+  margin: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  z-index: 3;
+}
+
+.modal__contentBox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #1c1c21;
+  border-radius: 40px;
+}
+
+.modal__title {
+  margin: 0;
+}
+
+.modal__title_shadow {
+  composes: modal__title;
+  text-shadow: 0px 0px 16px rgba(51, 51, 255, 0.25),
+    0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+.modal__title_modified {
+  composes: modal__title;
+  margin: 20px 0;
+  align-self: flex-start;
+}
+
+.modal__image {
+  width: 120px;
+  height: auto;
+}
+
+.modal__ingImage {
+  width: 520px;
+  height: 240px;
+}
+
+.modal__textContainer {
+  text-align: center;
+}
+
+.modal__statsList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-width: 520px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal__statsLlistItem {
+  max-width: 23%;
+  text-align: center;
+}
+
+.modal__close {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: unset;
+  border: none;
+  width: 27px;
+  height: 27px;
+  position: absolute;
+  top: 68px;
+  right: 40px;
+  padding: 0;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.modal__close_modified {
+  composes: modal__close;
+  top: 60px;
+}
+
+.modal__close:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+@media screen and (max-width: 550px) {
+  .modal__container {
+    max-width: 320px;
+  }
+
+  .modal__close {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .modal__tooltip {
+    max-width: 250px;
+  }
+
+  .modal__container {
+    max-width: 250px;
+  }
+}
