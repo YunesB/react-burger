@@ -22,6 +22,8 @@ function App() {
   const [ isModalOpenOrder, setModalOpenOrder ] = React.useState(false);
   const [ isPageLoading, setPageLoading ] = React.useState(true);
   const [ selectedCard, setSelectedCard ] = React.useState({});
+  const [ isBunSelected, setBunSelected ] = React.useState({});
+
   const orderDataState = React.useState(CONSTANTS.DEFAULT_ORDER);
 
   function handleModalOpenIngredients() {
@@ -52,13 +54,23 @@ function App() {
     setSelectedCard(card);
   };
 
+  function changeSelectedBun(bun: any) {
+    setBunSelected(bun);
+  }
+
+  function filterArray(array: any) {
+    return array.filter((obj: any) => obj.type === 'bun')
+  }
+
   React.useEffect(() => {
-    console.log(orderDataState)
+    setPageLoading(true);
     Promise.all([
       api.getCardsData(),
     ])
       .then((data) => {
         setCardData(data[0].data);
+        const buns = filterArray(data[0].data)
+        setBunSelected(buns[0]);
       })
       .catch((err) => {
         console.log(err)
@@ -92,9 +104,10 @@ function App() {
         <OrderContext.Provider value={orderDataState}>
           <IngredientsContext.Provider value={isCardsData}>
             <main className={AppStyles.componentContainer}>
-              <BurgerIngredients
-                changeSelectedCard = {changeSelectedCard}
+              <BurgerIngredients  
                 selectedCard = {selectedCard}
+                changeSelectedCard = {changeSelectedCard}
+                changeSelectedBun = {changeSelectedBun}
                 cardsData = {isCardsData || null}
                 openModal = {handleModalOpenIngredients}
               />
@@ -102,6 +115,7 @@ function App() {
                 openModal = {handleModalOpenOrder}
                 openLoading = {handleLoadingOpen}
                 closeLoading = {handleLoadingClose}
+                isBunSelected = {isBunSelected}
               />
             </main>
           </IngredientsContext.Provider>

@@ -17,6 +17,11 @@
   align-items: center;
 }
 
+.ingredient__priceBox:hover {
+  border: 1px solid skyblue;
+  /* временное решение */
+}
+
 .ingredient__price {
   margin-right: 8px;
 }

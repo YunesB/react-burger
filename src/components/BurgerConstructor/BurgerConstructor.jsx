@@ -13,7 +13,8 @@ function BurgerConstructor(props) {
   const [ isOrderData, setOrderData ] = React.useContext(OrderContext);
 
   const cardsData = React.useContext(IngredientsContext);
-  const bunPrice = 210;
+  const selectedBun = props.isBunSelected;
+  const bunPrice = selectedBun.price;
   let totalPrice;
 
   function submitOrder() {   
@@ -60,9 +61,9 @@ function BurgerConstructor(props) {
           <ConstructorElement
             type="top"
             isLocked={true}
-            text="Краторная булка N-200i (верх)"
+            text={`${selectedBun.name} (верх)`}
             price={bunPrice}
-            thumbnail={cardsData[0].image}
+            thumbnail={selectedBun.image}
           />
         </li>
         <span className={BurgerConstructorStyles.basket__listContainer}>
@@ -77,9 +78,9 @@ function BurgerConstructor(props) {
           <ConstructorElement
             type="bottom"
             isLocked={true}
-            text="Краторная булка N-200i (низ)"
+            text={`${selectedBun.name} (низ)`}
             price={bunPrice}
-            thumbnail={cardsData[0].image}
+            thumbnail={selectedBun.image}
           />
         </li>
       </ul>
@@ -97,9 +98,10 @@ function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
+  isBunSelected: PropTypes.any.isRequired,
   openLoading: PropTypes.func,
   closeLoading: PropTypes.func,
-  openModal: PropTypes.func,
+  openModal: PropTypes.func.isRequired,
 }; 
 
 export default BurgerConstructor;

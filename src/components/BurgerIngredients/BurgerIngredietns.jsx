@@ -18,6 +18,7 @@ function BurgerIngredients(props) {
       key={card._id}
       changeSelectedCard={props.changeSelectedCard}
       openModal = {openModal}
+      changeSelectedBun = {props.changeSelectedBun}
     />
   );
 
@@ -28,6 +29,8 @@ function BurgerIngredients(props) {
   const bunsArray = filterArray('bun');
   const sauceArray = filterArray('sauce');
   const mainArray = filterArray('main');
+
+  console.log(bunsArray);
 
   return (
     <section className={BurgerIngredientsStyle.ingredients}>
@@ -72,6 +75,7 @@ BurgerIngredients.propTypes = {
   (PropTypes.shape(propTypes)
   .isRequired).isRequired,
   changeSelectedCard: PropTypes.func,
+  changeSelectedBun: PropTypes.func,
   selectedCard: PropTypes.any,
   openModal: PropTypes.func,
 }; 
