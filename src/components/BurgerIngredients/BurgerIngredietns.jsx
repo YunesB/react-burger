@@ -1,16 +1,34 @@
 import React from 'react';
+
+import { useDispatch, useSelector } from "react-redux";
+import { getIngredientsData } from '../../services/actions/burgerIngredients';
+
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
+
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
+
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
-import { IngredientsContext } from '../../utils/burgerContext';
+// import { IngredientsContext } from '../../utils/burgerContext';
 
 function BurgerIngredients(props) {
 
   const [ current, setCurrent ] = React.useState('one');
-  const cardsData = React.useContext(IngredientsContext);
   const openModal = props.openModal;
+
+  const { burgerIngredientsArray } = useSelector(
+    (state) => state.burgerIngredients
+  );
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getIngredientsData());
+  }, [dispatch]);
+
+  
+  const cardsData = burgerIngredientsArray ;
 
   const burgerIngredient = (card) => (
     <BurgerIngredient

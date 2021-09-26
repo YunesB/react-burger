@@ -1,5 +1,11 @@
 import React from 'react';
 import AppStyles from './App.module.css';
+
+import thunk from 'redux-thunk';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import { rootReducer } from '../../services/reducers/index';
+
 import * as CONSTANTS from '../../utils/constants';
 
 import AppHeader from '../AppHeader/AppHeader';
@@ -25,6 +31,8 @@ function App() {
   const [ isBunSelected, setBunSelected ] = React.useState({});
 
   const orderDataState = React.useState(CONSTANTS.DEFAULT_ORDER);
+  const store = createStore(rootReducer, applyMiddleware(thunk));
+  
 
   function handleModalOpenIngredients() {
     setModalOpenIngredients(true);
@@ -101,39 +109,41 @@ function App() {
   return (
     <div className={AppStyles.App}>
       <AppHeader />
-        <OrderContext.Provider value={orderDataState}>
-          <IngredientsContext.Provider value={isCardsData}>
-            <main className={AppStyles.componentContainer}>
-              <BurgerIngredients  
-                selectedCard = {selectedCard}
-                changeSelectedCard = {changeSelectedCard}
-                changeSelectedBun = {changeSelectedBun}
-                cardsData = {isCardsData || null}
-                openModal = {handleModalOpenIngredients}
-              />
-              <BurgerConstructor    
-                openModal = {handleModalOpenOrder}
-                openLoading = {handleLoadingOpen}
-                closeLoading = {handleLoadingClose}
-                isBunSelected = {isBunSelected}
-              />
-            </main>
-          </IngredientsContext.Provider>
-        <Modal 
-          isOpen={isModalOpenIngredients}
-          selectedCard = {selectedCard}
-          closeModal={handleModalCloseIngredients}
-          children={IngredientModal}
-        />
-          <Modal
-            isOpen={isModalOpenOrder}
-            closeModal={handleModalCloseOrder}
-            children={OrderModal}
+        <Provider store ={store}>
+          <OrderContext.Provider value={orderDataState}>
+            <IngredientsContext.Provider value={isCardsData}>
+              <main className={AppStyles.componentContainer}>
+                <BurgerIngredients  
+                  selectedCard = {selectedCard}
+                  changeSelectedCard = {changeSelectedCard}
+                  changeSelectedBun = {changeSelectedBun}
+                  cardsData = {isCardsData || null}
+                  openModal = {handleModalOpenIngredients}
+                />
+                <BurgerConstructor    
+                  openModal = {handleModalOpenOrder}
+                  openLoading = {handleLoadingOpen}
+                  closeLoading = {handleLoadingClose}
+                  isBunSelected = {isBunSelected}
+                />
+              </main>
+            </IngredientsContext.Provider>
+          <Modal 
+            isOpen={isModalOpenIngredients}
+            selectedCard = {selectedCard}
+            closeModal={handleModalCloseIngredients}
+            children={IngredientModal}
           />
-        <Loading 
-          isOpen = {isPageLoading}
-        />   
-      </OrderContext.Provider>
+            <Modal
+              isOpen={isModalOpenOrder}
+              closeModal={handleModalCloseOrder}
+              children={OrderModal}
+            />
+          <Loading 
+            isOpen = {isPageLoading}
+          />   
+        </OrderContext.Provider>
+      </Provider>
     </div>
   );
 }
