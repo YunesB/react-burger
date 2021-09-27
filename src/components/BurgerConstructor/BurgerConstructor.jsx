@@ -1,58 +1,63 @@
 import React from 'react';
 
+import { useSelector, useDispatch } from "react-redux";
+
 import BurgerConstructorStyles from './BurgerConstructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import BasketItem from '../BasketItem/BasketItem';
 import PropTypes from 'prop-types';
 
-import { api } from '../../utils/Api';
-import { IngredientsContext, OrderContext } from '../../utils/burgerContext';
+import { getConstructorData } from '../../services/actions/burgerConstructor';
 
 function BurgerConstructor(props) {
 
-  const [ isOrderData, setOrderData ] = React.useContext(OrderContext);
+  const dispatch = useDispatch();
+  const [ totalPrice, setTotalPrice ] = React.useState(0);
 
-  const cardsData = React.useContext(IngredientsContext);
-  const selectedBun = props.isBunSelected;
+  // const burgerIngredientsArray = useSelector(
+  //   (state) => state.burgerIngredients.burgerIngredientsArray
+  // );
+
+  const burgerConstructorArray = useSelector(
+    (state) => state.burgerConstructor.burgerConstructorArray
+  );
+
+  const selectedBun = useSelector(
+    (state) => state.burgerIngredients.selectedBun
+  );
+
+  const cardsData = burgerConstructorArray;
   const bunPrice = selectedBun.price;
-  let totalPrice;
 
-  function submitOrder() {   
-    props.openLoading();
-    api.sendOrder(getIngredientIds(mainArray))
-      .then((data) => {
-        setOrderData(data);  
-        props.openModal();
-      })  
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        props.closeLoading();
-      })
+  function submitOrder() {
+    dispatch(
+      getConstructorData(getIngredientIds(burgerConstructorArray))
+    )
+    props.openModal();
   };
 
+  // const filteredData = getIngredientIds(burgerConstructorArray);
+  // console.log(filteredData);
+
   function counTotalPrice(array) {
-    let filteredDigits = array.map((item) => item.price);
-    filteredDigits.reduce((prev, curr) => { 
-      return filteredDigits = prev + curr 
-    });
-    return filteredDigits;
+    if (array.length === 0) {
+      return
+    } else {
+      let filteredDigits = array.map((item) => item.price);
+      filteredDigits.reduce((prev, curr) => { 
+        return filteredDigits = prev + curr 
+      });
+      return parseInt(filteredDigits);
+    }
   }
 
-  if (cardsData) {
-    totalPrice = counTotalPrice(cardsData) + bunPrice;
-  }
+  React.useEffect(() => {
+    setTotalPrice(counTotalPrice(cardsData) + bunPrice);
+  }, [cardsData, bunPrice])
 
   function getIngredientIds(array) {
     return {ingredients: array.map((item) => item._id)};
   }
-
-  function filterArray(string) {
-    return cardsData.filter((obj) => obj.type === string);
-  };
-
-  const mainArray = filterArray('main');
 
   return (
     <section className={`${BurgerConstructorStyles.basket} pt-25`}>     
@@ -67,10 +72,11 @@ function BurgerConstructor(props) {
           />
         </li>
         <span className={BurgerConstructorStyles.basket__listContainer}>
-          {mainArray.map((card) => (
+          {burgerConstructorArray.length === 0 ? '' :
+          burgerConstructorArray.map((card, index) => (
             <BasketItem
               card={card}
-              key={card._id}
+              key={index}
             />
           ))}
         </span>
@@ -98,7 +104,6 @@ function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-  isBunSelected: PropTypes.any.isRequired,
   openLoading: PropTypes.func,
   closeLoading: PropTypes.func,
   openModal: PropTypes.func.isRequired,

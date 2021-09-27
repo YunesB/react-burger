@@ -5,22 +5,25 @@ import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-c
 import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
 
-function BurgerIngredient(props) {
-  console.log(props);
+import { useDispatch } from "react-redux";
+import { setSelectedBun, setSelectedIngredient } from '../../services/actions/burgerIngredients';
+import { addConstructorItem } from '../../services/actions/burgerConstructor';
 
+function BurgerIngredient(props) {
+  
+  const dispatch = useDispatch();
   const [ itemAmount, setItemAmount ] = React.useState(0);
 
   function handleCardClick(card) {
-    props.changeSelectedCard(card);  
-    props.openModal();
-  }
-
-  function handleCounterClick(evt, card) {
-    evt.stopPropagation();
     if (card.type === 'bun') {
-      props.changeSelectedBun(card);
+      dispatch(setSelectedBun(card));
+      setItemAmount(1);
+    } else {
+      setItemAmount(itemAmount + 1);
+      dispatch(addConstructorItem(card));   
     }
-    setItemAmount(0);
+    dispatch(setSelectedIngredient(card));
+    props.openModal();
   }
   
   if (!props.card) {
@@ -30,7 +33,7 @@ function BurgerIngredient(props) {
       <li className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4 mb-8`} onClick={() => handleCardClick(props.card)}>
         <Counter count={itemAmount} size="default" />
         <img src={props.card.image} alt={props.card.name} className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4`} />
-        <div className={BurgerIngredientStyle.ingredient__priceBox} onClick={(evt) => handleCounterClick(evt, props.card)}>
+        <div className={BurgerIngredientStyle.ingredient__priceBox}>
           <p className={`${BurgerIngredientStyle.ingredient__price} text text_type_digits-default mb-1 mt-1`}>
             {props.card.price}
           </p>    
@@ -44,7 +47,6 @@ function BurgerIngredient(props) {
 
 BurgerIngredient.propTypes = {
   card: PropTypes.shape(propTypes).isRequired,
-  changeSelectedCard: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
 }; 
 

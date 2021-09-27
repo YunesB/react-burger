@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { useDispatch, useSelector } from "react-redux";
-import { getIngredientsData } from '../../services/actions/burgerIngredients';
 
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 
@@ -15,20 +14,20 @@ import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
 
 function BurgerIngredients(props) {
 
-  const [ current, setCurrent ] = React.useState('one');
+  const [ current, setCurrent ] = React.useState('buns');
   const openModal = props.openModal;
 
-  const { burgerIngredientsArray } = useSelector(
-    (state) => state.burgerIngredients
+  const burgerIngredientsArray = useSelector(
+    (state) => state.burgerIngredients.burgerIngredientsArray
   );
-  const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    dispatch(getIngredientsData());
-  }, [dispatch]);
+  function filterArray (string) {
+    return burgerIngredientsArray.filter((obj) => obj.type === string);
+  };
 
-  
-  const cardsData = burgerIngredientsArray ;
+  const bunsArray = filterArray('bun');
+  const sauceArray = filterArray('sauce');
+  const mainArray = filterArray('main');
 
   const burgerIngredient = (card) => (
     <BurgerIngredient
@@ -40,27 +39,17 @@ function BurgerIngredients(props) {
     />
   );
 
-  function filterArray (string) {
-    return cardsData.filter((obj) => obj.type === string);
-  };
-
-  const bunsArray = filterArray('bun');
-  const sauceArray = filterArray('sauce');
-  const mainArray = filterArray('main');
-
-  console.log(bunsArray);
-
   return (
     <section className={BurgerIngredientsStyle.ingredients}>
       <h1 className="text text_type_main-large mb-5 mt-10">Соберите бургер</h1>
       <div style={{ display: 'flex' }}>
-        <Tab value="one" active={current === 'one'} onClick={setCurrent}>
+        <Tab value="buns" active={current === 'buns'} onClick={setCurrent}>
           Булки
         </Tab>
-        <Tab value="two" active={current === 'two'} onClick={setCurrent}>
+        <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>
           Соусы
         </Tab>
-        <Tab value="three" active={current === 'three'} onClick={setCurrent}>
+        <Tab value="main" active={current === 'main'} onClick={setCurrent}>
           Начинки
         </Tab>
       </div>
@@ -88,14 +77,14 @@ function BurgerIngredients(props) {
   );
 }
 
-BurgerIngredients.propTypes = {
-  cardsData: PropTypes.arrayOf
-  (PropTypes.shape(propTypes)
-  .isRequired).isRequired,
-  changeSelectedCard: PropTypes.func,
-  changeSelectedBun: PropTypes.func,
-  selectedCard: PropTypes.any,
-  openModal: PropTypes.func,
-}; 
+// BurgerIngredients.propTypes = {
+//   cardsData: PropTypes.arrayOf
+//   (PropTypes.shape(propTypes)
+//   .isRequired).isRequired,
+//   changeSelectedCard: PropTypes.func,
+//   changeSelectedBun: PropTypes.func,
+//   selectedCard: PropTypes.any,
+//   openModal: PropTypes.func,
+// }; 
 
 export default BurgerIngredients;

@@ -2,12 +2,20 @@ import {
   GET_BURGER_INGREDIENTS_REQUEST,
   GET_BURGER_INGREDIENTS_SUCCESS,
   GET_BURGER_INGREDIENTS_FAILED,
+  GET_SELECTED_BUN,
+  GET_SELECTED_INGREDIENT,
 } from "../actions/burgerIngredients.js";
+
+import { DEFAULT_BUN } from '../../utils/constants';
 
 const initialState = {
   burgerIngredientsArray: [],
   burgerIngredientsRequest: false,
   burgerIngredientsFailed: false,
+
+  selectedBun: DEFAULT_BUN,
+  selectedIngredient: {},
+  isPageLoading: true,
 };
 
 export const burgerIngredientsReducer = (state = initialState, action) => {
@@ -24,6 +32,7 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
         burgerIngredientsArray: action.burgerIngredientsArray,
         burgerIngredientsRequest: false,
         burgerIngredientsFailed: false,
+        isPageLoading: false,
       };
     }
     case GET_BURGER_INGREDIENTS_FAILED: {
@@ -32,6 +41,18 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
         burgerIngredientsFailed: true,
         burgerIngredientsRequest: false,
       };
+    }
+    case GET_SELECTED_BUN: {
+      return {
+        ...state,
+        selectedBun: action.selectedBun
+      }
+    }
+    case GET_SELECTED_INGREDIENT: {
+      return {
+        ...state,
+        selectedIngredient: action.selectedIngredient
+      }
     }
     default: {
       return state;
