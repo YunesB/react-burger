@@ -8,8 +8,14 @@ import propTypes from '../../utils/propTypes';
 import { useDispatch } from "react-redux";
 import { setSelectedBun, setSelectedIngredient } from '../../services/actions/burgerIngredients';
 import { addConstructorItem } from '../../services/actions/burgerConstructor';
+import { useDrag } from "react-dnd";
 
 function BurgerIngredient(props) {
+
+  const [{isDrag}, dragRef] = useDrag({
+    type: 'ingr',
+    item: props.card,
+  });
   
   const dispatch = useDispatch();
   const [ itemAmount, setItemAmount ] = React.useState(0);
@@ -30,9 +36,10 @@ function BurgerIngredient(props) {
     return null
   } else {
     return (
-      <li className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4 mb-8`} onClick={() => handleCardClick(props.card)}>
+      !isDrag &&
+      <li className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4 mb-8`} onClick={() => handleCardClick(props.card)} ref={dragRef}>
         <Counter count={itemAmount} size="default" />
-        <img src={props.card.image} alt={props.card.name} className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4`} />
+        <img src={props.card.image} alt={props.card.name} className={`${BurgerIngredientStyle.ingredient__image} ml-4 mr-4`} />
         <div className={BurgerIngredientStyle.ingredient__priceBox}>
           <p className={`${BurgerIngredientStyle.ingredient__price} text text_type_digits-default mb-1 mt-1`}>
             {props.card.price}

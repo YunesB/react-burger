@@ -40,3 +40,12 @@ export function addConstructorItem(item) {
     });
   }
 }
+
+// export const moveConstructorItem = (item) => {
+//   return ({
+//     type: GET_BURGER_CONSTRUCTOR_ADD_ITEM,
+//     id: item.id,
+//     ingType: item.type,
+//     item: item.ing,
+//   });
+// };

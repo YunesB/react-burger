@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 
@@ -10,10 +10,14 @@ import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
 
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
-// import { IngredientsContext } from '../../utils/burgerContext';
 
 function BurgerIngredients(props) {
 
+  
+  const selectedDiv = React.createRef();
+  const bunsRef = React.createRef();
+  const sauceRef = React.createRef();
+  const mainRef = React.createRef();
   const [ current, setCurrent ] = React.useState('buns');
   const openModal = props.openModal;
 
@@ -28,6 +32,21 @@ function BurgerIngredients(props) {
   const bunsArray = filterArray('bun');
   const sauceArray = filterArray('sauce');
   const mainArray = filterArray('main');
+
+  function handleTabs() {
+    const topDivFrame = selectedDiv.current.offsetTop;
+    const bunsClientRect = bunsRef.current.getBoundingClientRect().top;
+    const sauceClientRect = sauceRef.current.getBoundingClientRect().top - 150;
+    const mainClientRect = mainRef.current.getBoundingClientRect().top - 150;
+    
+    if (topDivFrame >= bunsClientRect && topDivFrame <= sauceClientRect) {
+      setCurrent('buns');
+    } else if (topDivFrame >= sauceClientRect && topDivFrame <= mainClientRect) {
+      setCurrent('sauce');
+    } else if (topDivFrame >= mainClientRect) {
+      setCurrent('main');
+    }
+  }
 
   const burgerIngredient = (card) => (
     <BurgerIngredient
@@ -53,20 +72,20 @@ function BurgerIngredients(props) {
           Начинки
         </Tab>
       </div>
-      <div className={BurgerIngredientsStyle.ingredients__menuContainer}>
-        <h2 className="text text_type_main-medium mb-6 mt-10">Булки</h2>
+      <div className={BurgerIngredientsStyle.ingredients__menuContainer} ref={selectedDiv} onScroll={handleTabs}>
+        <h2 className="text text_type_main-medium mb-6 mt-10" ref={bunsRef}>Булки</h2>
         <ul className={BurgerIngredientsStyle.ingredients__list} >
           {bunsArray.map((card) => (
             burgerIngredient(card)
           ))}
         </ul>
-        <h2 className="text text_type_main-medium mb-6 mt-10">Соусы</h2>
+        <h2 className="text text_type_main-medium mb-6 mt-10" ref={sauceRef}>Соусы</h2>
         <ul className={BurgerIngredientsStyle.ingredients__list} >
           {sauceArray.map((card) => (
             burgerIngredient(card)
           ))}
         </ul>
-        <h2 className="text text_type_main-medium mb-6 mt-10">Начинки</h2>
+        <h2 className="text text_type_main-medium mb-6 mt-10" ref={mainRef}>Начинки</h2>
         <ul className={BurgerIngredientsStyle.ingredients__list}>
           {mainArray.map((card) => (
             burgerIngredient(card)

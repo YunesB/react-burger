@@ -4,6 +4,7 @@ import {
   GET_BURGER_CONSTRUCTOR_FAILED,
   ADD_BURGER_CONSTRUCTOR_ITEM,
   ADD_BUN_FAILED,
+  MOVE_CONSTRUCTOR_ITEM
 } from "../actions/burgerConstructor.js";
 
 import { DEFAULT_ORDER } from '../../utils/constants';
@@ -55,6 +56,21 @@ export const burgerConstructorReducer = (state = initialState, action) => {
     case ADD_BUN_FAILED: {
       return state;
     }
+    // case MOVE_CONSTRUCTOR_ITEM: {
+    //   const array = [...state.burgerConstructorArray];
+
+    //   const draggedItem = array[action.dragIndex];
+    //   const replacedItem = array[action.replacedIndex];
+
+    //   array[action.replacedIndex] = draggedItem;
+    //   array[action.dragIndex] = replacedItem;
+     
+
+    //   return {
+    //     ...state,
+    //     burgerConstructorIngridients: array,
+    //   };
+    // }
     default: {
       return state;
     }

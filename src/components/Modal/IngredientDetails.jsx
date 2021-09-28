@@ -44,7 +44,6 @@ function IngredientDetails() {
 }
 
 IngredientDetails.propTypes = {
-  closeModal: PropTypes.func.isRequired,
   selectedCard: PropTypes.object.isRequired,
 }; 
 

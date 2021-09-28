@@ -1,22 +1,21 @@
 import React from 'react';
 
 import { useSelector, useDispatch } from "react-redux";
+import { useDrop } from "react-dnd";
 
 import BurgerConstructorStyles from './BurgerConstructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import BasketItem from '../BasketItem/BasketItem';
 import PropTypes from 'prop-types';
 
-import { getConstructorData } from '../../services/actions/burgerConstructor';
+import { getConstructorData, addConstructorItem } from '../../services/actions/burgerConstructor';
+import { setSelectedBun } from '../../services/actions/burgerIngredients';
 
 function BurgerConstructor(props) {
 
   const dispatch = useDispatch();
   const [ totalPrice, setTotalPrice ] = React.useState(0);
-
-  // const burgerIngredientsArray = useSelector(
-  //   (state) => state.burgerIngredients.burgerIngredientsArray
-  // );
 
   const burgerConstructorArray = useSelector(
     (state) => state.burgerConstructor.burgerConstructorArray
@@ -29,15 +28,30 @@ function BurgerConstructor(props) {
   const cardsData = burgerConstructorArray;
   const bunPrice = selectedBun.price;
 
-  function submitOrder() {
-    dispatch(
-      getConstructorData(getIngredientIds(burgerConstructorArray))
-    )
-    props.openModal();
-  };
+  const [{isHover}, dropTarget] = useDrop({
+    accept: 'ingr',
+    drop(item) {
+      if (item.type !== 'bun') { 
+        dispatch(addConstructorItem(item)); 
+      } else {
+        dispatch(setSelectedBun(item));
+      }
+    },
+    collect: monitor => ({
+      isHover: monitor.isOver(),
+    })
+  });
 
-  // const filteredData = getIngredientIds(burgerConstructorArray);
-  // console.log(filteredData);
+  const [, dropInternalTarget] = useDrop({
+    accept: 'draggedIngr',
+    drop(item) {
+      if (item.type !== 'bun') {
+        
+      } else {
+        return
+      }
+    }
+  });
 
   function counTotalPrice(array) {
     if (array.length === 0) {
@@ -52,16 +66,27 @@ function BurgerConstructor(props) {
   }
 
   React.useEffect(() => {
-    setTotalPrice(counTotalPrice(cardsData) + bunPrice);
+    if (cardsData.length > 0) {
+      setTotalPrice(counTotalPrice(cardsData) + bunPrice);
+    } else {
+      setTotalPrice(bunPrice);
+    }
   }, [cardsData, bunPrice])
 
   function getIngredientIds(array) {
     return {ingredients: array.map((item) => item._id)};
   }
 
+  function submitOrder() {
+    dispatch(
+      getConstructorData(getIngredientIds(burgerConstructorArray))
+    )
+    props.openModal();
+  };
+
   return (
-    <section className={`${BurgerConstructorStyles.basket} pt-25`}>     
-      <ul className={BurgerConstructorStyles.basket__list}>
+    <section className={`${BurgerConstructorStyles.basket} mt-25 `} ref={dropTarget}>     
+      <ul className={isHover ? BurgerConstructorStyles.basket__list_modified : BurgerConstructorStyles.basket__list}>
         <li className={`${BurgerConstructorStyles.basket__listItem} mr-4`}>
           <ConstructorElement
             type="top"
@@ -71,7 +96,7 @@ function BurgerConstructor(props) {
             thumbnail={selectedBun.image}
           />
         </li>
-        <span className={BurgerConstructorStyles.basket__listContainer}>
+        <span className={BurgerConstructorStyles.basket__listContainer} ref={dropInternalTarget}>
           {burgerConstructorArray.length === 0 ? '' :
           burgerConstructorArray.map((card, index) => (
             <BasketItem

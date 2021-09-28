@@ -4,12 +4,23 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
 
+import { useDrag } from "react-dnd";
+
 function BasketItem(props) {
+
+  const [{isDrag}, dragRef] = useDrag({
+      type: 'draggedIngr',
+      item: props.card,
+      collect: monitor => ({
+          isDrag: monitor.isDragging()
+      })
+  });
 
   const cardData = props.card;
 
   return (
-    <li className={`${BasketStyles.listItem} mb-4 mr-2`}>
+    !isDrag &&
+    <li className={`${BasketStyles.basketItem__listItem} mb-4 mr-2`} ref={dragRef}>
       <DragIcon type="primary" />
       <ConstructorElement
         text={cardData.name}
