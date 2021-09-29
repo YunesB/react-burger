@@ -1,16 +1,15 @@
-import BurgerIngredientsStyle from './BurgerIngredients.module.css';
-
 import React from 'react';
+import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
-
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
+import { IngredientsContext } from '../../utils/burgerContext';
 
 function BurgerIngredients(props) {
 
   const [ current, setCurrent ] = React.useState('one');
-  const cardsData = props.cardsData;
+  const cardsData = React.useContext(IngredientsContext);
   const openModal = props.openModal;
 
   const burgerIngredient = (card) => (
@@ -19,6 +18,7 @@ function BurgerIngredients(props) {
       key={card._id}
       changeSelectedCard={props.changeSelectedCard}
       openModal = {openModal}
+      changeSelectedBun = {props.changeSelectedBun}
     />
   );
 
@@ -29,6 +29,8 @@ function BurgerIngredients(props) {
   const bunsArray = filterArray('bun');
   const sauceArray = filterArray('sauce');
   const mainArray = filterArray('main');
+
+  console.log(bunsArray);
 
   return (
     <section className={BurgerIngredientsStyle.ingredients}>
@@ -73,6 +75,7 @@ BurgerIngredients.propTypes = {
   (PropTypes.shape(propTypes)
   .isRequired).isRequired,
   changeSelectedCard: PropTypes.func,
+  changeSelectedBun: PropTypes.func,
   selectedCard: PropTypes.any,
   openModal: PropTypes.func,
 }; 

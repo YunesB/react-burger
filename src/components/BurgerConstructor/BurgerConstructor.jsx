@@ -1,16 +1,36 @@
+import React from 'react';
+
 import BurgerConstructorStyles from './BurgerConstructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-
 import BasketItem from '../BasketItem/BasketItem';
-
 import PropTypes from 'prop-types';
-import propTypes from '../../utils/propTypes';
+
+import { api } from '../../utils/Api';
+import { IngredientsContext, OrderContext } from '../../utils/burgerContext';
 
 function BurgerConstructor(props) {
 
-  const cardsData = props.cardsData;
-  const bunPrice = 200;
+  const [ isOrderData, setOrderData ] = React.useContext(OrderContext);
+
+  const cardsData = React.useContext(IngredientsContext);
+  const selectedBun = props.isBunSelected;
+  const bunPrice = selectedBun.price;
   let totalPrice;
+
+  function submitOrder() {   
+    props.openLoading();
+    api.sendOrder(getIngredientIds(mainArray))
+      .then((data) => {
+        setOrderData(data);  
+        props.openModal();
+      })  
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        props.closeLoading();
+      })
+  };
 
   function counTotalPrice(array) {
     let filteredDigits = array.map((item) => item.price);
@@ -22,6 +42,10 @@ function BurgerConstructor(props) {
 
   if (cardsData) {
     totalPrice = counTotalPrice(cardsData) + bunPrice;
+  }
+
+  function getIngredientIds(array) {
+    return {ingredients: array.map((item) => item._id)};
   }
 
   function filterArray(string) {
@@ -37,9 +61,9 @@ function BurgerConstructor(props) {
           <ConstructorElement
             type="top"
             isLocked={true}
-            text="Краторная булка N-200i (верх)"
+            text={`${selectedBun.name} (верх)`}
             price={bunPrice}
-            thumbnail={cardsData[0].image}
+            thumbnail={selectedBun.image}
           />
         </li>
         <span className={BurgerConstructorStyles.basket__listContainer}>
@@ -54,9 +78,9 @@ function BurgerConstructor(props) {
           <ConstructorElement
             type="bottom"
             isLocked={true}
-            text="Краторная булка N-200i (низ)"
+            text={`${selectedBun.name} (низ)`}
             price={bunPrice}
-            thumbnail={cardsData[0].image}
+            thumbnail={selectedBun.image}
           />
         </li>
       </ul>
@@ -65,20 +89,19 @@ function BurgerConstructor(props) {
           <p className="text text_type_digits-medium mr-3">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" onClick={() => props.openModal()}>
+        <Button type="primary" size="large" onClick={submitOrder}>
           Оформить заказ
         </Button>
       </div>
-    </section>
+      </section>
   );
 }
 
 BurgerConstructor.propTypes = {
-  cardsData: PropTypes.arrayOf
-  (PropTypes.shape(propTypes)
-  .isRequired).isRequired,
-  changeModalType: PropTypes.func,
-  openModal: PropTypes.func,
+  isBunSelected: PropTypes.any.isRequired,
+  openLoading: PropTypes.func,
+  closeLoading: PropTypes.func,
+  openModal: PropTypes.func.isRequired,
 }; 
 
 export default BurgerConstructor;

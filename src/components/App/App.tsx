@@ -1,5 +1,6 @@
-import AppStyles from './App.module.css';
 import React from 'react';
+import AppStyles from './App.module.css';
+import * as CONSTANTS from '../../utils/constants';
 
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredietns';
@@ -12,6 +13,7 @@ import Modal from '../Modal/Modal';
 import Loading from '../Modal/Loading';
 
 import { api } from '../../utils/Api';
+import { IngredientsContext, OrderContext } from '../../utils/burgerContext';
 
 function App() {
 
@@ -20,6 +22,9 @@ function App() {
   const [ isModalOpenOrder, setModalOpenOrder ] = React.useState(false);
   const [ isPageLoading, setPageLoading ] = React.useState(true);
   const [ selectedCard, setSelectedCard ] = React.useState({});
+  const [ isBunSelected, setBunSelected ] = React.useState({});
+
+  const orderDataState = React.useState(CONSTANTS.DEFAULT_ORDER);
 
   function handleModalOpenIngredients() {
     setModalOpenIngredients(true);
@@ -37,16 +42,35 @@ function App() {
     setModalOpenOrder(false);
   };
 
+  function handleLoadingOpen() {
+    setPageLoading(true)
+  }
+
+  function handleLoadingClose() {
+    setPageLoading(false)
+  }
+
   function changeSelectedCard(card: any) {
     setSelectedCard(card);
   };
 
+  function changeSelectedBun(bun: any) {
+    setBunSelected(bun);
+  }
+
+  function filterArray(array: any) {
+    return array.filter((obj: any) => obj.type === 'bun')
+  }
+
   React.useEffect(() => {
+    setPageLoading(true);
     Promise.all([
       api.getCardsData(),
     ])
       .then((data) => {
         setCardData(data[0].data);
+        const buns = filterArray(data[0].data)
+        setBunSelected(buns[0]);
       })
       .catch((err) => {
         console.log(err)
@@ -77,32 +101,39 @@ function App() {
   return (
     <div className={AppStyles.App}>
       <AppHeader />
-      <main className={AppStyles.componentContainer}>
-        <BurgerIngredients
-          changeSelectedCard = {changeSelectedCard}
+        <OrderContext.Provider value={orderDataState}>
+          <IngredientsContext.Provider value={isCardsData}>
+            <main className={AppStyles.componentContainer}>
+              <BurgerIngredients  
+                selectedCard = {selectedCard}
+                changeSelectedCard = {changeSelectedCard}
+                changeSelectedBun = {changeSelectedBun}
+                cardsData = {isCardsData || null}
+                openModal = {handleModalOpenIngredients}
+              />
+              <BurgerConstructor    
+                openModal = {handleModalOpenOrder}
+                openLoading = {handleLoadingOpen}
+                closeLoading = {handleLoadingClose}
+                isBunSelected = {isBunSelected}
+              />
+            </main>
+          </IngredientsContext.Provider>
+        <Modal 
+          isOpen={isModalOpenIngredients}
           selectedCard = {selectedCard}
-          cardsData = {isCardsData || null}
-          openModal = {handleModalOpenIngredients}
+          closeModal={handleModalCloseIngredients}
+          children={IngredientModal}
         />
-        <BurgerConstructor 
-          cardsData = {isCardsData || null}      
-          openModal = {handleModalOpenOrder}
-        />
-      </main>
-      <Modal 
-        isOpen={isModalOpenIngredients}
-        selectedCard = {selectedCard}
-        closeModal={handleModalCloseIngredients}
-        children={IngredientModal}
-      />
-      <Modal
-        isOpen={isModalOpenOrder}
-        closeModal={handleModalCloseOrder}
-        children={OrderModal}
-      />
-      <Loading 
-        isOpen = {isPageLoading}
-      />
+          <Modal
+            isOpen={isModalOpenOrder}
+            closeModal={handleModalCloseOrder}
+            children={OrderModal}
+          />
+        <Loading 
+          isOpen = {isPageLoading}
+        />   
+      </OrderContext.Provider>
     </div>
   );
 }
