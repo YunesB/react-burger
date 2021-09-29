@@ -4,7 +4,8 @@ import {
   GET_BURGER_CONSTRUCTOR_FAILED,
   ADD_BURGER_CONSTRUCTOR_ITEM,
   ADD_BUN_FAILED,
-  MOVE_CONSTRUCTOR_ITEM
+  MOVE_BURGER_CONSTRUCTOR_ITEM,
+  DELETE_BURGER_CONSTRUCTOR_ITEM
 } from "../actions/burgerConstructor.js";
 
 import { DEFAULT_ORDER } from '../../utils/constants';
@@ -56,21 +57,30 @@ export const burgerConstructorReducer = (state = initialState, action) => {
     case ADD_BUN_FAILED: {
       return state;
     }
-    // case MOVE_CONSTRUCTOR_ITEM: {
-    //   const array = [...state.burgerConstructorArray];
+    case MOVE_BURGER_CONSTRUCTOR_ITEM: {
+      const array = [...state.burgerConstructorArray];
 
-    //   const draggedItem = array[action.dragIndex];
-    //   const replacedItem = array[action.replacedIndex];
+      const dragItem = array[action.dragIndex];
+      const hoveredItem = array[action.hoverIndex];
 
-    //   array[action.replacedIndex] = draggedItem;
-    //   array[action.dragIndex] = replacedItem;
+      array[action.hoverIndex] = dragItem;
+      array[action.dragIndex] = hoveredItem;
      
-
-    //   return {
-    //     ...state,
-    //     burgerConstructorIngridients: array,
-    //   };
-    // }
+      return {
+        ...state,
+        burgerConstructorArray: array,
+      };
+    }
+    case DELETE_BURGER_CONSTRUCTOR_ITEM: {
+      return {
+        ...state,
+        burgerConstructorArray: [
+          ...state.burgerConstructorArray,
+        ].filter((item, index) => {
+          return index !== action.index;
+        }),
+      };
+    }
     default: {
       return state;
     }

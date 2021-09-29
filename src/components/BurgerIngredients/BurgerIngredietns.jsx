@@ -58,17 +58,24 @@ function BurgerIngredients(props) {
     />
   );
 
+  function handleTabClick(string, ref) {
+    if (ref !== null) {
+      setCurrent(string);
+      ref.scrollIntoView({behavior: "smooth"});
+    }
+  }
+
   return (
     <section className={BurgerIngredientsStyle.ingredients}>
       <h1 className="text text_type_main-large mb-5 mt-10">Соберите бургер</h1>
       <div style={{ display: 'flex' }}>
-        <Tab value="buns" active={current === 'buns'} onClick={setCurrent}>
+        <Tab value="buns" active={current === 'buns'} onClick={() => handleTabClick('buns', bunsRef.current)}>
           Булки
         </Tab>
-        <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>
+        <Tab value="sauce" active={current === 'sauce'} onClick={() => handleTabClick('sauce', sauceRef.current)}>
           Соусы
         </Tab>
-        <Tab value="main" active={current === 'main'} onClick={setCurrent}>
+        <Tab value="main" active={current === 'main'} onClick={() => handleTabClick('main', mainRef.current)}>
           Начинки
         </Tab>
       </div>
@@ -96,14 +103,11 @@ function BurgerIngredients(props) {
   );
 }
 
-// BurgerIngredients.propTypes = {
-//   cardsData: PropTypes.arrayOf
-//   (PropTypes.shape(propTypes)
-//   .isRequired).isRequired,
-//   changeSelectedCard: PropTypes.func,
-//   changeSelectedBun: PropTypes.func,
-//   selectedCard: PropTypes.any,
-//   openModal: PropTypes.func,
-// }; 
+BurgerIngredients.propTypes = {
+  cardsData: PropTypes.arrayOf
+  (PropTypes.shape(propTypes)
+  .isRequired).isRequired,
+  openModal: PropTypes.func,
+}; 
 
 export default BurgerIngredients;

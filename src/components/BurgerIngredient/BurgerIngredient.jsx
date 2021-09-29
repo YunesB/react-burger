@@ -5,27 +5,44 @@ import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-c
 import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSelectedBun, setSelectedIngredient } from '../../services/actions/burgerIngredients';
 import { addConstructorItem } from '../../services/actions/burgerConstructor';
 import { useDrag } from "react-dnd";
 
 function BurgerIngredient(props) {
 
+  const dispatch = useDispatch();
+  const [ itemCount, setItemCount ] = React.useState(0);
+  const [ bunCount, setBunCount ] = React.useState(0);
+
+  const burgerConstructorArray = useSelector(
+    (state) => state.burgerConstructor.burgerConstructorArray
+  );
+
+  const selectedBun = useSelector(
+    (state) => state.burgerIngredients.selectedBun
+  );
+  
+  React.useEffect(() => {
+    if (props.card.type === 'bun' && selectedBun._id === props.card._id) {
+      setBunCount('✓');
+    } else {
+      setBunCount('');
+    }
+    const array = burgerConstructorArray.filter((item) => item._id === props.card._id);
+    setItemCount(array.length);
+  }, [ burgerConstructorArray, selectedBun ]);
+
   const [{isDrag}, dragRef] = useDrag({
     type: 'ingr',
     item: props.card,
   });
-  
-  const dispatch = useDispatch();
-  const [ itemAmount, setItemAmount ] = React.useState(0);
 
   function handleCardClick(card) {
     if (card.type === 'bun') {
       dispatch(setSelectedBun(card));
-      setItemAmount(1);
     } else {
-      setItemAmount(itemAmount + 1);
       dispatch(addConstructorItem(card));   
     }
     dispatch(setSelectedIngredient(card));
@@ -38,7 +55,7 @@ function BurgerIngredient(props) {
     return (
       !isDrag &&
       <li className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4 mb-8`} onClick={() => handleCardClick(props.card)} ref={dragRef}>
-        <Counter count={itemAmount} size="default" />
+        <Counter count={props.card.type !== 'bun' ? itemCount : bunCount} size="default" />
         <img src={props.card.image} alt={props.card.name} className={`${BurgerIngredientStyle.ingredient__image} ml-4 mr-4`} />
         <div className={BurgerIngredientStyle.ingredient__priceBox}>
           <p className={`${BurgerIngredientStyle.ingredient__price} text text_type_digits-default mb-1 mt-1`}>

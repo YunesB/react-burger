@@ -5,10 +5,6 @@
   padding: 0;
 }
 
-.basketItem__listItem svg {
-  cursor: pointer;
-}
-
 .basketItem__listItem div {
   width: 90%;
 }

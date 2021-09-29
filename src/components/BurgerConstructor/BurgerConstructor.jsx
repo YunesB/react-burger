@@ -42,17 +42,6 @@ function BurgerConstructor(props) {
     })
   });
 
-  const [, dropInternalTarget] = useDrop({
-    accept: 'draggedIngr',
-    drop(item) {
-      if (item.type !== 'bun') {
-        
-      } else {
-        return
-      }
-    }
-  });
-
   function counTotalPrice(array) {
     if (array.length === 0) {
       return
@@ -74,7 +63,10 @@ function BurgerConstructor(props) {
   }, [cardsData, bunPrice])
 
   function getIngredientIds(array) {
-    return {ingredients: array.map((item) => item._id)};
+    const bunId = selectedBun._id
+    const newArray = array.map((item) => item._id);
+    newArray.push(bunId);
+    return {ingredients: newArray};
   }
 
   function submitOrder() {
@@ -96,12 +88,13 @@ function BurgerConstructor(props) {
             thumbnail={selectedBun.image}
           />
         </li>
-        <span className={BurgerConstructorStyles.basket__listContainer} ref={dropInternalTarget}>
+        <span className={BurgerConstructorStyles.basket__listContainer}>
           {burgerConstructorArray.length === 0 ? '' :
           burgerConstructorArray.map((card, index) => (
             <BasketItem
               card={card}
-              key={index}
+              key={card.key}
+              index={index}
             />
           ))}
         </span>

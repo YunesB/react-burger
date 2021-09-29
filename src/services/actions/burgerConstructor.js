@@ -1,11 +1,15 @@
 import { api } from '../../utils/Api';
+import { v4 as uuidv4 } from 'uuid';
 
 export const GET_BURGER_CONSTRUCTOR_REQUEST = 'GET_BURGER_CONSTRUCTOR_REQUEST';
 export const GET_BURGER_CONSTRUCTOR_SUCCESS = 'GET_BURGER_CONSTRUCTOR_SUCCESS';
 export const GET_BURGER_CONSTRUCTOR_FAILED = 'GET_BURGER_CONSTRUCTOR_FAILED';
 
 export const ADD_BURGER_CONSTRUCTOR_ITEM = 'ADD_BURGER_CONSTRUCTOR_ITEM';
-export const ADD_BUN_FAILED = 'ADD_BUN_FAILED'
+export const ADD_BUN_FAILED = 'ADD_BUN_FAILED';
+
+export const MOVE_BURGER_CONSTRUCTOR_ITEM = 'MOVE_BURGER_CONSTRUCTOR_ITEM';
+export const DELETE_BURGER_CONSTRUCTOR_ITEM = 'DELETE_BURGER_CONSTRUCTOR_ITEM';
 
 
 export function getConstructorData(array) {
@@ -36,16 +40,22 @@ export function addConstructorItem(item) {
   } else {
     return ({
       type: ADD_BURGER_CONSTRUCTOR_ITEM,
-      burgerConstructorArray: item,
+      burgerConstructorArray: {...item, key: uuidv4()}
     });
   }
 }
 
-// export const moveConstructorItem = (item) => {
-//   return ({
-//     type: GET_BURGER_CONSTRUCTOR_ADD_ITEM,
-//     id: item.id,
-//     ingType: item.type,
-//     item: item.ing,
-//   });
-// };
+export function moveConstructorItem(item, index) {
+  return({
+    type: MOVE_BURGER_CONSTRUCTOR_ITEM,
+    dragIndex: item,
+    hoverIndex: index
+  });
+}
+
+export function deleteConstructorItem(index) {
+  return({
+    type: DELETE_BURGER_CONSTRUCTOR_ITEM, 
+    index: index
+  })
+}
