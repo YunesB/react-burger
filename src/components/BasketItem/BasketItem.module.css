@@ -1,0 +1,10 @@
+.basketItem__listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.basketItem__listItem div {
+  width: 90%;
+}

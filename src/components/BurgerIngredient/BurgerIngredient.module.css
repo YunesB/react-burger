@@ -8,8 +8,17 @@
 }
 
 .ingredient:hover {
+  color: #6a6aff;
   cursor: pointer;
-  transform: scale(1.05);
+}
+
+.ingredient__image {
+  transition: 0.2s;
+}
+
+.ingredient:hover .ingredient__image {
+  cursor: pointer;
+  transform: scale(1.2);
 }
 
 .ingredient__priceBox {
@@ -17,10 +26,9 @@
   align-items: center;
 }
 
-.ingredient__priceBox:hover {
+/* .ingredient__priceBox:hover {
   border: 1px solid skyblue;
-  /* временное решение */
-}
+} */
 
 .ingredient__price {
   margin-right: 8px;

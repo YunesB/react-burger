@@ -35,7 +35,6 @@ function Modal(props) {
 Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   children: PropTypes.element.isRequired,
-  selectedCard: PropTypes.object,
   closeModal: PropTypes.func.isRequired,
 }; 
 

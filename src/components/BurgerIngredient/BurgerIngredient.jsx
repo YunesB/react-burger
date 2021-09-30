@@ -5,32 +5,53 @@ import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-c
 import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
 
-function BurgerIngredient(props) {
-  console.log(props);
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedIngredient } from '../../services/actions/burgerIngredients';
+import { useDrag } from "react-dnd";
 
-  const [ itemAmount, setItemAmount ] = React.useState(0);
+function BurgerIngredient(props) {
+
+  const dispatch = useDispatch();
+  const [ itemCount, setItemCount ] = React.useState(0);
+  const [ bunCount, setBunCount ] = React.useState(0);
+
+  const burgerConstructorArray = useSelector(
+    (state) => state.burgerConstructor.burgerConstructorArray
+  );
+
+  const selectedBun = useSelector(
+    (state) => state.burgerIngredients.selectedBun
+  );
+  
+  React.useEffect(() => {
+    if (props.card.type === 'bun' && selectedBun._id === props.card._id) {
+      setBunCount(2);
+    } else {
+      setBunCount(0);
+    }
+    const array = burgerConstructorArray.filter((item) => item._id === props.card._id);
+    setItemCount(array.length);
+  }, [ burgerConstructorArray, selectedBun ]);
+
+  const [{isDrag}, dragRef] = useDrag({
+    type: 'ingr',
+    item: props.card,
+  });
 
   function handleCardClick(card) {
-    props.changeSelectedCard(card);  
+    dispatch(setSelectedIngredient(card));
     props.openModal();
-  }
-
-  function handleCounterClick(evt, card) {
-    evt.stopPropagation();
-    if (card.type === 'bun') {
-      props.changeSelectedBun(card);
-    }
-    setItemAmount(0);
   }
   
   if (!props.card) {
     return null
   } else {
     return (
-      <li className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4 mb-8`} onClick={() => handleCardClick(props.card)}>
-        <Counter count={itemAmount} size="default" />
-        <img src={props.card.image} alt={props.card.name} className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4`} />
-        <div className={BurgerIngredientStyle.ingredient__priceBox} onClick={(evt) => handleCounterClick(evt, props.card)}>
+      !isDrag &&
+      <li className={`${BurgerIngredientStyle.ingredient} ml-4 mr-4 mb-8`} onClick={() => handleCardClick(props.card)} ref={dragRef}>
+        <Counter count={props.card.type !== 'bun' ? itemCount : bunCount} size="default" />
+        <img src={props.card.image} alt={props.card.name} className={`${BurgerIngredientStyle.ingredient__image} ml-4 mr-4`} />
+        <div className={BurgerIngredientStyle.ingredient__priceBox}>
           <p className={`${BurgerIngredientStyle.ingredient__price} text text_type_digits-default mb-1 mt-1`}>
             {props.card.price}
           </p>    
@@ -44,7 +65,6 @@ function BurgerIngredient(props) {
 
 BurgerIngredient.propTypes = {
   card: PropTypes.shape(propTypes).isRequired,
-  changeSelectedCard: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
 }; 
 

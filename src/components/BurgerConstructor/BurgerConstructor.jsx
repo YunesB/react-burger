@@ -1,62 +1,95 @@
 import React from 'react';
 
+import { useSelector, useDispatch } from "react-redux";
+import { useDrop } from "react-dnd";
+
 import BurgerConstructorStyles from './BurgerConstructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import BasketItem from '../BasketItem/BasketItem';
 import PropTypes from 'prop-types';
 
-import { api } from '../../utils/Api';
-import { IngredientsContext, OrderContext } from '../../utils/burgerContext';
+import { getConstructorData, addConstructorItem } from '../../services/actions/burgerConstructor';
+import { setSelectedBun } from '../../services/actions/burgerIngredients';
 
 function BurgerConstructor(props) {
 
-  const [ isOrderData, setOrderData ] = React.useContext(OrderContext);
+  const dispatch = useDispatch();
+  const [ totalPrice, setTotalPrice ] = React.useState(0);
+  const [ submitDisabled, setSubmitDisabled ] = React.useState(true);
 
-  const cardsData = React.useContext(IngredientsContext);
-  const selectedBun = props.isBunSelected;
+  const burgerConstructorArray = useSelector(
+    (state) => state.burgerConstructor.burgerConstructorArray
+  );
+
+  const selectedBun = useSelector(
+    (state) => state.burgerIngredients.selectedBun
+  );
+
+  const cardsData = burgerConstructorArray;
   const bunPrice = selectedBun.price;
-  let totalPrice;
 
-  function submitOrder() {   
-    props.openLoading();
-    api.sendOrder(getIngredientIds(mainArray))
-      .then((data) => {
-        setOrderData(data);  
-        props.openModal();
-      })  
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        props.closeLoading();
-      })
-  };
+  const [{isHover}, dropTarget] = useDrop({
+    accept: 'ingr',
+    drop(item) {
+      if (item.type !== 'bun') { 
+        dispatch(addConstructorItem(item)); 
+      } else {
+        dispatch(setSelectedBun(item));
+      }
+    },
+    collect: monitor => ({
+      isHover: monitor.isOver(),
+    })
+  });
 
   function counTotalPrice(array) {
-    let filteredDigits = array.map((item) => item.price);
-    filteredDigits.reduce((prev, curr) => { 
-      return filteredDigits = prev + curr 
-    });
-    return filteredDigits;
+    if (array.length === 0) {
+      return
+    } else {
+      let filteredDigits = array.map((item) => item.price);
+      filteredDigits.reduce((prev, curr) => { 
+        return filteredDigits = prev + curr 
+      });
+      return parseInt(filteredDigits);
+    }
   }
 
-  if (cardsData) {
-    totalPrice = counTotalPrice(cardsData) + bunPrice;
-  }
+  React.useEffect(() => {
+    if (cardsData.length > 0) {
+      setTotalPrice(counTotalPrice(cardsData) + bunPrice * 2);
+    } else {
+      setTotalPrice(bunPrice * 2);
+    }
+  }, [cardsData, bunPrice]);
+
+  React.useEffect(() => {
+    if (selectedBun._id === 0 && burgerConstructorArray.length === 0) {
+      setSubmitDisabled(true);
+    } else {
+      setSubmitDisabled(false);
+    }
+  }, [ selectedBun ]);
+
+  const submitDisabledStyle = submitDisabled ? 0.3 : 1;
 
   function getIngredientIds(array) {
-    return {ingredients: array.map((item) => item._id)};
+    const bunId = selectedBun._id
+    const newArray = array.map((item) => item._id);
+    newArray.push(bunId);
+    return {ingredients: newArray};
   }
 
-  function filterArray(string) {
-    return cardsData.filter((obj) => obj.type === string);
+  function submitOrder() {
+    dispatch(
+      getConstructorData(getIngredientIds(burgerConstructorArray))
+    )
+    props.openModal();
   };
 
-  const mainArray = filterArray('main');
-
   return (
-    <section className={`${BurgerConstructorStyles.basket} pt-25`}>     
-      <ul className={BurgerConstructorStyles.basket__list}>
+    <section className={`${BurgerConstructorStyles.basket} mt-25 `} ref={dropTarget}>     
+      <ul className={isHover ? BurgerConstructorStyles.basket__list_modified : BurgerConstructorStyles.basket__list}>
         <li className={`${BurgerConstructorStyles.basket__listItem} mr-4`}>
           <ConstructorElement
             type="top"
@@ -67,10 +100,12 @@ function BurgerConstructor(props) {
           />
         </li>
         <span className={BurgerConstructorStyles.basket__listContainer}>
-          {mainArray.map((card) => (
+          {burgerConstructorArray.length === 0 ? '' :
+          burgerConstructorArray.map((card, index) => (
             <BasketItem
               card={card}
-              key={card._id}
+              key={card.key}
+              index={index}
             />
           ))}
         </span>
@@ -89,7 +124,7 @@ function BurgerConstructor(props) {
           <p className="text text_type_digits-medium mr-3">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" onClick={submitOrder}>
+        <Button type="primary" size="large" onClick={submitOrder} disabled={submitDisabled} style={{opacity: submitDisabledStyle}}>
           Оформить заказ
         </Button>
       </div>
@@ -98,7 +133,6 @@ function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-  isBunSelected: PropTypes.any.isRequired,
   openLoading: PropTypes.func,
   closeLoading: PropTypes.func,
   openModal: PropTypes.func.isRequired,
