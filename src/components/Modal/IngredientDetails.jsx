@@ -1,5 +1,4 @@
 import ModalStyles from './Modal.module.css';
-import PropTypes from 'prop-types';
 import { useSelector } from "react-redux";
 
 function IngredientDetails() {
@@ -42,10 +41,6 @@ function IngredientDetails() {
     </div>
   );
 }
-
-IngredientDetails.propTypes = {
-  selectedCard: PropTypes.object.isRequired,
-}; 
 
 
 export default IngredientDetails;

@@ -17,7 +17,6 @@ import Loading from '../Modal/Loading';
 
 function App() {
 
-  const [ isCardsData, setCardData ] = React.useState();
   const [ isModalOpenIngredients, setModalOpenIngredients ] = React.useState(false);
   const [ isModalOpenOrder, setModalOpenOrder ] = React.useState(false);
 
@@ -25,12 +24,7 @@ function App() {
 
   React.useEffect(() => {
     dispatch(getIngredientsData());
-    setCardData(burgerIngredientsArray);
   }, [dispatch]);
-  
-  const burgerIngredientsArray = useSelector(
-    (state) => state.burgerIngredients.burgerIngredientsArray
-  );
 
   const isPageLoading = useSelector(
     (state) => state.burgerIngredients.isPageLoading
@@ -68,17 +62,12 @@ function App() {
     />
   );
 
-  if (!isCardsData){
-    return null;
-  }
-
   return (
     <div className={AppStyles.App}>
       <AppHeader />
       <DndProvider backend={HTML5Backend}>
       <main className={AppStyles.componentContainer}>
-        <BurgerIngredients  
-          cardsData = {burgerIngredientsArray || null}
+        <BurgerIngredients
           openModal = {handleModalOpenIngredients}
         />
         <BurgerConstructor    

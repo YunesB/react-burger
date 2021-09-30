@@ -5,7 +5,8 @@ import {
   ADD_BURGER_CONSTRUCTOR_ITEM,
   ADD_BUN_FAILED,
   MOVE_BURGER_CONSTRUCTOR_ITEM,
-  DELETE_BURGER_CONSTRUCTOR_ITEM
+  DELETE_BURGER_CONSTRUCTOR_ITEM,
+  RESET_BURGER_CONSTRUCTOR
 } from "../actions/burgerConstructor.js";
 
 import { DEFAULT_ORDER } from '../../utils/constants';
@@ -80,6 +81,12 @@ export const burgerConstructorReducer = (state = initialState, action) => {
           return index !== action.index;
         }),
       };
+    }
+    case RESET_BURGER_CONSTRUCTOR: {
+      return {
+        ...state,
+        burgerConstructorArray: action.burgerConstructorArray,
+      }
     }
     default: {
       return state;

@@ -16,6 +16,7 @@ function BurgerConstructor(props) {
 
   const dispatch = useDispatch();
   const [ totalPrice, setTotalPrice ] = React.useState(0);
+  const [ submitDisabled, setSubmitDisabled ] = React.useState(true);
 
   const burgerConstructorArray = useSelector(
     (state) => state.burgerConstructor.burgerConstructorArray
@@ -56,11 +57,21 @@ function BurgerConstructor(props) {
 
   React.useEffect(() => {
     if (cardsData.length > 0) {
-      setTotalPrice(counTotalPrice(cardsData) + bunPrice);
+      setTotalPrice(counTotalPrice(cardsData) + bunPrice * 2);
     } else {
-      setTotalPrice(bunPrice);
+      setTotalPrice(bunPrice * 2);
     }
-  }, [cardsData, bunPrice])
+  }, [cardsData, bunPrice]);
+
+  React.useEffect(() => {
+    if (selectedBun._id === 0 && burgerConstructorArray.length === 0) {
+      setSubmitDisabled(true);
+    } else {
+      setSubmitDisabled(false);
+    }
+  }, [ selectedBun ]);
+
+  const submitDisabledStyle = submitDisabled ? 0.3 : 1;
 
   function getIngredientIds(array) {
     const bunId = selectedBun._id
@@ -113,7 +124,7 @@ function BurgerConstructor(props) {
           <p className="text text_type_digits-medium mr-3">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" onClick={submitOrder}>
+        <Button type="primary" size="large" onClick={submitOrder} disabled={submitDisabled} style={{opacity: submitDisabledStyle}}>
           Оформить заказ
         </Button>
       </div>

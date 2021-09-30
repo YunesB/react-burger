@@ -11,6 +11,8 @@ export const ADD_BUN_FAILED = 'ADD_BUN_FAILED';
 export const MOVE_BURGER_CONSTRUCTOR_ITEM = 'MOVE_BURGER_CONSTRUCTOR_ITEM';
 export const DELETE_BURGER_CONSTRUCTOR_ITEM = 'DELETE_BURGER_CONSTRUCTOR_ITEM';
 
+export const RESET_BURGER_CONSTRUCTOR = 'RESET_BURGER_CONSTRUCTOR';
+
 
 export function getConstructorData(array) {
   return function (dispatch) {
@@ -28,6 +30,12 @@ export function getConstructorData(array) {
         dispatch({
           type: GET_BURGER_CONSTRUCTOR_FAILED,
         });
+      })
+      .finally(() => {
+        dispatch({
+          type: RESET_BURGER_CONSTRUCTOR, 
+          burgerConstructorArray: [],
+        })
       });
   }
 }
@@ -57,5 +65,12 @@ export function deleteConstructorItem(index) {
   return({
     type: DELETE_BURGER_CONSTRUCTOR_ITEM, 
     index: index
+  })
+}
+
+export function resetConstructorArray() {
+  return({
+    type: RESET_BURGER_CONSTRUCTOR, 
+    burgerConstructorArray: [],
   })
 }

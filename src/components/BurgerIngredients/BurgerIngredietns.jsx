@@ -1,19 +1,14 @@
 import React from 'react';
-
-import { useSelector } from "react-redux";
-
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 
+import { useSelector } from "react-redux";
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import PropTypes from 'prop-types';
-import propTypes from '../../utils/propTypes';
-
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
 
 function BurgerIngredients(props) {
 
-  
   const selectedDiv = React.createRef();
   const bunsRef = React.createRef();
   const sauceRef = React.createRef();
@@ -104,9 +99,6 @@ function BurgerIngredients(props) {
 }
 
 BurgerIngredients.propTypes = {
-  cardsData: PropTypes.arrayOf
-  (PropTypes.shape(propTypes)
-  .isRequired).isRequired,
   openModal: PropTypes.func,
 }; 
 

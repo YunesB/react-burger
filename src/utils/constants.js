@@ -1,3 +1,5 @@
+import loading from '../images/loading.svg';
+
 export const BASE_URL = 'https://norma.nomoreparties.space/api/ingredients';
 export const POST_URL = 'https://norma.nomoreparties.space/api/orders';
 
@@ -10,16 +12,16 @@ export const DEFAULT_ORDER = {
 };
 
 export const DEFAULT_BUN = {
-  calories: 643,
-  carbohydrates: 85,
-  fat: 26,
-  image: "https://code.s3.yandex.net/react/code/bun-01.png",
-  image_large: "https://code.s3.yandex.net/react/code/bun-01-large.png",
-  image_mobile: "https://code.s3.yandex.net/react/code/bun-01-mobile.png",
-  name: "Флюоресцентная булка R2-D3",
-  price: 988,
-  proteins: 44,
+  calories: 0,
+  carbohydrates: 0,
+  fat: 0,
+  image: loading,
+  image_large: loading,
+  image_mobile: loading,
+  name: "Перетяните булочку сюда",
+  price: 0,
+  proteins: 0,
   type: "bun",
   __v: 0,
-  _id: "60d3b41abdacab0026a733c7",
+  _id: 0,
 }

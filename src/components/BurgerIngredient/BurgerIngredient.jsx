@@ -6,8 +6,7 @@ import PropTypes from 'prop-types';
 import propTypes from '../../utils/propTypes';
 
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedBun, setSelectedIngredient } from '../../services/actions/burgerIngredients';
-import { addConstructorItem } from '../../services/actions/burgerConstructor';
+import { setSelectedIngredient } from '../../services/actions/burgerIngredients';
 import { useDrag } from "react-dnd";
 
 function BurgerIngredient(props) {
@@ -26,9 +25,9 @@ function BurgerIngredient(props) {
   
   React.useEffect(() => {
     if (props.card.type === 'bun' && selectedBun._id === props.card._id) {
-      setBunCount('✓');
+      setBunCount(2);
     } else {
-      setBunCount('');
+      setBunCount(0);
     }
     const array = burgerConstructorArray.filter((item) => item._id === props.card._id);
     setItemCount(array.length);
@@ -40,11 +39,6 @@ function BurgerIngredient(props) {
   });
 
   function handleCardClick(card) {
-    if (card.type === 'bun') {
-      dispatch(setSelectedBun(card));
-    } else {
-      dispatch(addConstructorItem(card));   
-    }
     dispatch(setSelectedIngredient(card));
     props.openModal();
   }
