@@ -40,3 +40,10 @@
   margin-top: 0;
   margin-bottom: 0;
 }
+
+.header__logo {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}

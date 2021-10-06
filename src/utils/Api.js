@@ -1,9 +1,10 @@
 import * as CONSTANTS from './constants';
 
 class Api {
-  constructor({ address, postAddress }) {
+  constructor({ address, postAddress, resetPasswordAddress }) {
     this._address = address;
     this._postAddress = postAddress;
+    this._resetPasswordAddress = resetPasswordAddress;
   }
 
   handleResponse(res) {
@@ -37,9 +38,23 @@ class Api {
         this.handleResponse(res)
     )
   };
-}
+
+  resetPassword(email) {
+    return fetch(`${this._resetPasswordAddress}`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(email),
+    })
+    .then((res) =>
+        this.handleResponse(res)
+    )
+  }
+};
 
 export const api = new Api({
   address: CONSTANTS.BASE_URL,
-  postAddress: CONSTANTS.POST_URL,
+  postAddress: CONSTANTS.ORDER_URL,
+  resetPasswordAddress: CONSTANTS.RESET_PASSWORD_URL,
 });

@@ -1,6 +1,8 @@
 import React from 'react';
 import AppStyles from './App.module.css';
 
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import { useDispatch, useSelector } from "react-redux";
 import { getIngredientsData } from '../../services/actions/burgerIngredients';
 
@@ -10,6 +12,13 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredietns';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
+import Account from '../../pages/Account/Account';
+
+import Login from '../../pages/Authorization/Login';
+import Register from '../../pages/Authorization/Register';
+import ForgotPassword from '../../pages/Authorization/ForgotPassword';
+import RecoverPassword from '../../pages/Authorization/RecoverPassword';
+
 import IngredientDetails from '../Modal/IngredientDetails';
 import OrderDetails from '../Modal/OrderDetails';
 import Modal from '../Modal/Modal';
@@ -64,17 +73,38 @@ function App() {
 
   return (
     <div className={AppStyles.App}>
+      <Router>
       <AppHeader />
-      <DndProvider backend={HTML5Backend}>
       <main className={AppStyles.componentContainer}>
-        <BurgerIngredients
-          openModal = {handleModalOpenIngredients}
-        />
-        <BurgerConstructor    
-          openModal = {handleModalOpenOrder}
-        />
+        <Switch>
+          <Route path="/" exact={true}>
+            <DndProvider backend={HTML5Backend}>
+              <BurgerIngredients
+                openModal = {handleModalOpenIngredients}
+              />
+              <BurgerConstructor    
+                openModal = {handleModalOpenOrder}
+              />
+            </DndProvider>
+          </Route>
+          <Route path="/account">
+            <Account />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/forgot-password">
+            <ForgotPassword />
+          </Route>
+          <Route path="/recover-password">
+            <RecoverPassword />
+          </Route>
+        </Switch>
       </main>
-      </DndProvider>
+      </Router>
       <Modal 
         isOpen={isModalOpenIngredients}
         closeModal={handleModalCloseIngredients}

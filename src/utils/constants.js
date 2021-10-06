@@ -1,7 +1,8 @@
 import loading from '../images/loading.svg';
 
 export const BASE_URL = 'https://norma.nomoreparties.space/api/ingredients';
-export const POST_URL = 'https://norma.nomoreparties.space/api/orders';
+export const ORDER_URL = 'https://norma.nomoreparties.space/api/orders';
+export const RESET_PASSWORD_URL = 'https://norma.nomoreparties.space/api/password-reset';
 
 export const DEFAULT_ORDER = {
   "name": "DEFAULT_ORDER",
