@@ -2,12 +2,16 @@ import React from 'react';
 import AuthStyles from './Auth.module.css';
 
 import { Input, Button, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+
+import { loginApi } from '../../utils/LoginApi';
 
 function Register() {
+
+  const history = useHistory();
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
-  const [passord, setPassword] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   const nameInputRef = React.useRef(null);
   const mailInputRef = React.useRef(null);
@@ -20,6 +24,23 @@ function Register() {
   const onChange = e => {
     setPassword(e.target.value)
   };
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    const data = {
+      name: name,
+      email: email,
+      password: password
+    };
+    loginApi.register(data)
+      .then((data) => {
+        console.log(data);
+        history.push('/login');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
   return (
     <div className={AuthStyles.login}>
@@ -56,11 +77,11 @@ function Register() {
         <fieldset className={`${AuthStyles.fieldset} mb-6`}>
           <PasswordInput 
             onChange={onChange} 
-            value={passord} 
+            value={password} 
             name={'Пароль'} 
           />
         </fieldset>
-        <Button type="primary" size="medium">
+        <Button type="primary" size="medium" onClick={e => handleSubmit(e)}>
           Зарегистрироваться
         </Button>
       </form>

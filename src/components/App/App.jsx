@@ -9,6 +9,7 @@ import { getIngredientsData } from '../../services/actions/burgerIngredients';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
+import ProtectedRoute from '../../utils/ProtectedRoute';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredietns';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
@@ -35,25 +36,37 @@ function App() {
     dispatch(getIngredientsData());
   }, [dispatch]);
 
+  const isUserAuth = useSelector(
+    (state) => state.currentSession.isCurrentUserAuth
+  );
+
   const isPageLoading = useSelector(
     (state) => state.burgerIngredients.isPageLoading
-  )
+  );
 
   const isOrderLoading = useSelector(
     (state) => state.burgerConstructor.isPageLoading
+  );
+
+  const isAccountLoading = useSelector(
+    (state) => state.currentSession.isAccountLoading
   )
+
+  const isUserResetPassword = useSelector(
+    (state) => state.currentSession.isUserResetPassword
+  );
 
   function handleModalOpenIngredients() {
     setModalOpenIngredients(true);
-  }
+  };
 
   function handleModalCloseIngredients() {
     setModalOpenIngredients(false);
-  }
+  };
 
   function handleModalOpenOrder() {
     setModalOpenOrder(true);
-  }
+  };
 
   function handleModalCloseOrder() {
     setModalOpenOrder(false);
@@ -77,7 +90,7 @@ function App() {
       <AppHeader />
       <main className={AppStyles.componentContainer}>
         <Switch>
-          <Route path="/" exact={true}>
+          <ProtectedRoute path="/" exact={true} loggedIn={isUserAuth} redirect={false}>
             <DndProvider backend={HTML5Backend}>
               <BurgerIngredients
                 openModal = {handleModalOpenIngredients}
@@ -86,10 +99,10 @@ function App() {
                 openModal = {handleModalOpenOrder}
               />
             </DndProvider>
-          </Route>
-          <Route path="/account">
+          </ProtectedRoute>
+          <ProtectedRoute path="/account" loggedIn={isUserAuth} redirect={false}>
             <Account />
-          </Route>
+          </ProtectedRoute>
           <Route path="/login">
             <Login />
           </Route>
@@ -99,9 +112,9 @@ function App() {
           <Route path="/forgot-password">
             <ForgotPassword />
           </Route>
-          <Route path="/recover-password">
+          <ProtectedRoute loggedIn={isUserResetPassword} path="/reset-password" redirect={true}>
             <RecoverPassword />
-          </Route>
+          </ProtectedRoute>
         </Switch>
       </main>
       </Router>
@@ -116,7 +129,7 @@ function App() {
         children={OrderModal}
       />
       <Loading 
-        isOpen = {isPageLoading || isOrderLoading}
+        isOpen = {isPageLoading || isOrderLoading || isAccountLoading}
       />
     </div>
   );

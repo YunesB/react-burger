@@ -1,8 +1,6 @@
 import loading from '../images/loading.svg';
 
-export const BASE_URL = 'https://norma.nomoreparties.space/api/ingredients';
-export const ORDER_URL = 'https://norma.nomoreparties.space/api/orders';
-export const RESET_PASSWORD_URL = 'https://norma.nomoreparties.space/api/password-reset';
+export const BASE_URL = 'https://norma.nomoreparties.space/api';
 
 export const DEFAULT_ORDER = {
   "name": "DEFAULT_ORDER",
@@ -25,4 +23,11 @@ export const DEFAULT_BUN = {
   type: "bun",
   __v: 0,
   _id: 0,
+}
+
+export const DEFAULT_USER = {
+  user: {
+    email: "burger-lover@stellar-burgers.com",
+    name: "Norma"
+  }
 }

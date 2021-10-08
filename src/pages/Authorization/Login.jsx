@@ -2,13 +2,18 @@ import React from 'react';
 import AuthStyles from './Auth.module.css';
 
 import { Input, Button, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+
+import { authorizeUser } from '../../services/actions/currentSession';
+import { loginApi } from '../../utils/LoginApi';
 
 function Login() {
 
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [email, setEmail] = React.useState('');
-  const [passord, setPassword] = React.useState('');
-
+  const [password, setPassword] = React.useState('');
 
   const inputRef = React.useRef(null)
   const onIconClick = () => {
@@ -19,6 +24,24 @@ function Login() {
   const onChange = e => {
     setPassword(e.target.value)
   };
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    const data = {
+      email: email,
+      password: password
+    };
+    loginApi.signIn(data)
+      .then((data) => {
+        dispatch(authorizeUser(true));
+        localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem('refreshToken', data.refreshToken);
+        history.push('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
   return (
     <div className={AuthStyles.login}>
@@ -41,11 +64,11 @@ function Login() {
         <fieldset className={`${AuthStyles.fieldset} mb-6`}>
           <PasswordInput 
             onChange={onChange} 
-            value={passord} 
+            value={password} 
             name={'Пароль'} 
           />
         </fieldset>
-        <Button type="primary" size="medium">
+        <Button type="primary" size="medium" onClick={(e) => handleSubmit(e)}>
           Войти
         </Button>
       </form>

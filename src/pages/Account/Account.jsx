@@ -2,13 +2,27 @@ import React from 'react';
 import AccountStyles from './Account.module.css';
 
 // import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Route, NavLink, useRouteMatch, Redirect, Switch } from "react-router-dom";
+import { Route, NavLink, useRouteMatch, Redirect, Switch, useHistory } from "react-router-dom";
+import { loginApi } from '../../utils/LoginApi';
 
 import Profile from './Profile';
 import OrderHistory from './OrderHistory';
 
 function Account() {
+  const history = useHistory();
   const { path, url } = useRouteMatch();
+
+  function handleSignOut() {
+    loginApi.signOut()
+      .then(() => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        history.push('/login');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
   return (
     <div className={AccountStyles.account}>
@@ -25,7 +39,7 @@ function Account() {
             </NavLink>
           </li>
           <li className={AccountStyles.listItem}>
-            <button type="button" className={`${AccountStyles.button} text text_type_main-medium text_color_inactive`}>
+            <button type="button" className={`${AccountStyles.button} text text_type_main-medium text_color_inactive`} onClick={handleSignOut}>
               Выход
             </button>
           </li>
@@ -40,7 +54,7 @@ function Account() {
           <Route path={`${path}/order-history`}>
             <OrderHistory />
           </Route>
-          <Redirect to={`${url}/profile`}/>
+          {/* <Redirect to={`${url}/profile`}/> */}
         </Switch>
       </div>
     </div>

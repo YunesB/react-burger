@@ -2,9 +2,16 @@ import React from 'react';
 import AuthStyles from './Auth.module.css';
 
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+
+import { loginApi } from '../../utils/LoginApi';
+import { checkResetVisit } from '../../services/actions/currentSession';
 
 function ForgotPassword() {
+
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const [email, setEmail] = React.useState('');
   const mailInputRef = React.useRef(null);
@@ -14,10 +21,25 @@ function ForgotPassword() {
     alert('Icon Click Callback');
   };
 
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    const data = {
+      email: email
+    };
+    loginApi.resetPassword(data)
+      .then(() => {
+        dispatch(checkResetVisit(true));
+        history.push('/reset-password');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
 
   return (
     <div className={AuthStyles.login}>
-      <h2 className={AuthStyles.heading}>Регистрация</h2>
+      <h2 className={AuthStyles.heading}>Восстановление пароля</h2>
       <form className={`${AuthStyles.form} mb-20`}>
         <fieldset className={`${AuthStyles.fieldset} mb-6`}>
           <Input
@@ -33,7 +55,7 @@ function ForgotPassword() {
             errorText={'Ошибка'}
           />
         </fieldset>
-        <Button type="primary" size="medium">
+        <Button type="primary" size="medium" onClick={(e) => handleSubmit(e)}>
           Восстановить
         </Button>
       </form>

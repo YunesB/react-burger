@@ -1,10 +1,8 @@
 import * as CONSTANTS from './constants';
 
 class Api {
-  constructor({ address, postAddress, resetPasswordAddress }) {
+  constructor({ address }) {
     this._address = address;
-    this._postAddress = postAddress;
-    this._resetPasswordAddress = resetPasswordAddress;
   }
 
   handleResponse(res) {
@@ -15,7 +13,7 @@ class Api {
   }
 
   getCardsData() {
-    return fetch(`${this._address}`, {
+    return fetch(`${this._address}/ingredients`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json'
@@ -27,7 +25,7 @@ class Api {
   };
 
   sendOrder(orderArray) {
-    return fetch(`${this._postAddress}`, {
+    return fetch(`${this._address}/orders`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -38,23 +36,8 @@ class Api {
         this.handleResponse(res)
     )
   };
-
-  resetPassword(email) {
-    return fetch(`${this._resetPasswordAddress}`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(email),
-    })
-    .then((res) =>
-        this.handleResponse(res)
-    )
-  }
 };
 
 export const api = new Api({
   address: CONSTANTS.BASE_URL,
-  postAddress: CONSTANTS.ORDER_URL,
-  resetPasswordAddress: CONSTANTS.RESET_PASSWORD_URL,
 });
