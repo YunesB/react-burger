@@ -54,7 +54,7 @@ function Account() {
           <Route path={`${path}/order-history`}>
             <OrderHistory />
           </Route>
-          {/* <Redirect to={`${url}/profile`}/> */}
+          <Redirect to={`${path}/profile`}/>
         </Switch>
       </div>
     </div>

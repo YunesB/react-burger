@@ -1,10 +1,11 @@
 import React from 'react';
 import AppStyles from './App.module.css';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 import { useDispatch, useSelector } from "react-redux";
 import { getIngredientsData } from '../../services/actions/burgerIngredients';
+import { authorizeUser } from '../../services/actions/currentSession';
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -24,6 +25,7 @@ import IngredientDetails from '../Modal/IngredientDetails';
 import OrderDetails from '../Modal/OrderDetails';
 import Modal from '../Modal/Modal';
 import Loading from '../Modal/Loading';
+import { loginApi } from '../../utils/LoginApi';
 
 function App() {
 
@@ -31,10 +33,7 @@ function App() {
   const [ isModalOpenOrder, setModalOpenOrder ] = React.useState(false);
 
   const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    dispatch(getIngredientsData());
-  }, [dispatch]);
+  const history = useHistory();
 
   const isUserAuth = useSelector(
     (state) => state.currentSession.isCurrentUserAuth
@@ -84,6 +83,41 @@ function App() {
     />
   );
 
+  function refreshToken() {
+    if(isUserAuth === false) {
+      loginApi.updateToken()
+        .then((data) => {
+          localStorage.setItem('accessToken', data.accessToken)
+          console.log('token refresh success')
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch(authorizeUser(false));
+        })
+    }
+  }
+
+  React.useEffect(() => {
+    dispatch(getIngredientsData());
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    let jwt = localStorage.getItem('refreshToken')
+    if(jwt) {
+      loginApi.getUserInfo()
+      .then(() => {
+        dispatch(authorizeUser(true));
+        history.push('/');
+      })
+      .catch((err) => {
+        console.log(err);
+        // if(err.message === 'jwt expired') {
+        //   refreshToken();
+        // }
+      })
+    }
+  }, [ dispatch, isUserAuth ]);
+
   return (
     <div className={AppStyles.App}>
       <Router>
@@ -115,6 +149,9 @@ function App() {
           <ProtectedRoute loggedIn={isUserResetPassword} path="/reset-password" redirect={true}>
             <RecoverPassword />
           </ProtectedRoute>
+          {
+            isUserAuth ? <Redirect to="/"/> : <Redirect to="/login"/>
+          }
         </Switch>
       </main>
       </Router>

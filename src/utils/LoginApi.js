@@ -16,18 +16,19 @@ class LoginApi {
 
   updateToken() {
     if (!this._refreshToken) {
-      return
-    }
-    return fetch(`${this._address}/auth/token`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({token: this._refreshToken}),
-    })
-    .then((res) =>
+      console.log('refresh token is missing');
+    } else {
+      return fetch(`${this._address}/auth/token`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({token: this._refreshToken}),
+      })
+      .then((res) =>
         this.handleResponse(res)
-    )
+      )
+    }
   }
 
   register(data) {
@@ -113,7 +114,7 @@ class LoginApi {
 
   setUserInfo(data) {
     return fetch(`${this._address}/auth/user`, {
-      method: "POST",
+      method: "PATCH",
       headers: {
         'Authorization': this._token,
         'Content-Type': 'application/json',
