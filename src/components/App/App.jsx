@@ -1,16 +1,19 @@
 import React from 'react';
 import AppStyles from './App.module.css';
 
-import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Redirect, useHistory } from 'react-router-dom';
 
 import { useDispatch, useSelector } from "react-redux";
 import { getIngredientsData } from '../../services/actions/burgerIngredients';
+import { getCurrentUser } from '../../services/actions/currentSession';
 import { authorizeUser } from '../../services/actions/currentSession';
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import ProtectedRoute from '../../utils/ProtectedRoute';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import ProtectedRouteAuth from '../ProtectedRoute/ProtectedRouteAuth';
+
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredietns';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
@@ -49,10 +52,6 @@ function App() {
 
   const isAccountLoading = useSelector(
     (state) => state.currentSession.isAccountLoading
-  )
-
-  const isUserResetPassword = useSelector(
-    (state) => state.currentSession.isUserResetPassword
   );
 
   function handleModalOpenIngredients() {
@@ -88,7 +87,8 @@ function App() {
       loginApi.updateToken()
         .then((data) => {
           localStorage.setItem('accessToken', data.accessToken)
-          console.log('token refresh success')
+          console.log('token refresh success');
+          history.push('/');
         })
         .catch((err) => {
           console.log(err);
@@ -99,6 +99,7 @@ function App() {
 
   React.useEffect(() => {
     dispatch(getIngredientsData());
+    dispatch(getCurrentUser());
   }, [dispatch]);
 
   React.useEffect(() => {
@@ -107,16 +108,16 @@ function App() {
       loginApi.getUserInfo()
       .then(() => {
         dispatch(authorizeUser(true));
-        history.push('/');
+        history && history.push('/');
       })
       .catch((err) => {
         console.log(err);
-        // if(err.message === 'jwt expired') {
-        //   refreshToken();
-        // }
+        if(err.message === 'jwt expired') {
+          refreshToken();
+        }
       })
     }
-  }, [ dispatch, isUserAuth ]);
+  }, []);
 
   return (
     <div className={AppStyles.App}>
@@ -124,7 +125,7 @@ function App() {
       <AppHeader />
       <main className={AppStyles.componentContainer}>
         <Switch>
-          <ProtectedRoute path="/" exact={true} loggedIn={isUserAuth} redirect={false}>
+          <ProtectedRoute path="/" exact={true} redirect={false}>
             <DndProvider backend={HTML5Backend}>
               <BurgerIngredients
                 openModal = {handleModalOpenIngredients}
@@ -134,19 +135,19 @@ function App() {
               />
             </DndProvider>
           </ProtectedRoute>
-          <ProtectedRoute path="/account" loggedIn={isUserAuth} redirect={false}>
+          <ProtectedRoute path="/account" redirect={false}>
             <Account />
           </ProtectedRoute>
-          <Route path="/login">
+          <ProtectedRouteAuth path="/login">
             <Login />
-          </Route>
-          <Route path="/register">
+          </ProtectedRouteAuth>
+          <ProtectedRouteAuth path="/register">
             <Register />
-          </Route>
-          <Route path="/forgot-password">
+          </ProtectedRouteAuth>
+          <ProtectedRouteAuth path="/forgot-password">
             <ForgotPassword />
-          </Route>
-          <ProtectedRoute loggedIn={isUserResetPassword} path="/reset-password" redirect={true}>
+          </ProtectedRouteAuth>
+          <ProtectedRoute path="/reset-password" redirect={true}>
             <RecoverPassword />
           </ProtectedRoute>
           {

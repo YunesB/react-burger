@@ -1,0 +1,20 @@
+.profile {
+  max-width: 480px;
+}
+
+.profileList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.profileListItem div {
+  width: 100%;
+  text-align: right;
+}
+
+.buttonBox {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

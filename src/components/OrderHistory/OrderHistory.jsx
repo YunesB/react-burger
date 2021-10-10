@@ -37,7 +37,7 @@ function OrderHistory() {
               </li>
             </ul>
             <div className={OrderStyles.textContainer}>
-              <p className='text text_type_digits-default mr-2'>1488</p>
+              <p className='text text_type_digits-default mr-2'>1111</p>
               <CurrencyIcon type="primary" />
             </div>
           </div>

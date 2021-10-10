@@ -1,6 +1,6 @@
 import HeaderStyles from './AppHeader.module.css';
 import { BurgerIcon, Logo, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function AppHeader() {
   return (
@@ -8,25 +8,25 @@ function AppHeader() {
       <nav className={HeaderStyles.header__nav}>
         <ul className={HeaderStyles.header__list}>
           <li className={HeaderStyles.header__listItem}>
-            <Link to={'/'} className={HeaderStyles.header__link}>
+            <NavLink exact to={'/'} className={HeaderStyles.header__link} activeClassName={HeaderStyles.header__link_active}>
               <BurgerIcon type="primary" />
               <p className={`${HeaderStyles.header__linkText} ml-2`}>Конструктор</p>
-            </Link>
+            </NavLink>
           </li>
-          <li className={`${HeaderStyles.header__listItem} ml-2`}>
-            <Link to={''} className={HeaderStyles.header__link}>
+          <li className={`${HeaderStyles.header__listItem} ml-2`} activeClassName={HeaderStyles.header__link_active}>
+            <NavLink to={''} className={HeaderStyles.header__link}>
               <ListIcon type="primary" />
-              <p className={`${HeaderStyles.header__linkText} ml-2`}>Лента Заказов</p>
-            </Link>
+              <p className={`${HeaderStyles.header__linkText} ml-2`} >Лента Заказов</p>
+            </NavLink>
           </li>
         </ul>
         <div className={HeaderStyles.header__logo}>
           <Logo />
         </div>
-        <Link to={'/account'} className={HeaderStyles.header__link}>
+        <NavLink to={'/account'} className={HeaderStyles.header__link} activeClassName={HeaderStyles.header__link_active}>
           <ProfileIcon type="primary" />
           <p className={`${HeaderStyles.header__linkText} ml-2`}>Личный Кабинет</p>
-        </Link>
+        </NavLink>
       </nav>
     </header>
   );

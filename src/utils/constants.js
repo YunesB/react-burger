@@ -28,6 +28,6 @@ export const DEFAULT_BUN = {
 export const DEFAULT_USER = {
   user: {
     email: "burger-lover@stellar-burgers.com",
-    name: "Norma"
+    name: "Норма"
   }
 }

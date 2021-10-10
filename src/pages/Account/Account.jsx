@@ -1,23 +1,28 @@
 import React from 'react';
 import AccountStyles from './Account.module.css';
 
-// import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useDispatch } from "react-redux";
 import { Route, NavLink, useRouteMatch, Redirect, Switch, useHistory } from "react-router-dom";
 import { loginApi } from '../../utils/LoginApi';
 
-import Profile from './Profile';
-import OrderHistory from './OrderHistory';
+import Profile from '../../components/Profile/Profile';
+import OrderHistory from '../../components/OrderHistory/OrderHistory';
+
+import { authorizeUser } from '../../services/actions/currentSession';
 
 function Account() {
   const history = useHistory();
   const { path, url } = useRouteMatch();
 
+  const dispatch = useDispatch();
+
   function handleSignOut() {
     loginApi.signOut()
       .then(() => {
+        history.push('/login');
+        dispatch(authorizeUser(false));
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        history.push('/login');
       })
       .catch((err) => {
         console.log(err);
@@ -54,7 +59,7 @@ function Account() {
           <Route path={`${path}/order-history`}>
             <OrderHistory />
           </Route>
-          <Redirect to={`${path}/profile`}/>
+          <Redirect to={`${url}/profile`}/>
         </Switch>
       </div>
     </div>

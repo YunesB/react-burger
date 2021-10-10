@@ -30,10 +30,15 @@
   border-radius: 40px;
   transition: 0.2s;
   padding: 16px 20px;
+  color: #8585ad;
 }
 
 .header__link:hover {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.header__link_active {
+  color: white;
 }
 
 .header__linkText {

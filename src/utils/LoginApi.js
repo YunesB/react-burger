@@ -107,9 +107,15 @@ class LoginApi {
         'Content-Type': 'application/json',
       }
     })
-    .then((res) =>
-        this.handleResponse(res)
-    )
+    .then((res) => {
+      if (res.status === 403) {
+        return Promise.reject({ message: "jwt expired" });
+      }
+      return res.json();
+    })
+    .then((res) => {
+      return res;
+    });
   }
 
   setUserInfo(data) {

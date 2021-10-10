@@ -2,8 +2,8 @@ import React from 'react';
 import AuthStyles from './Auth.module.css';
 
 import { Input, Button, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useHistory } from 'react-router-dom';
-import { useDispatch } from "react-redux";
+import { Link, useHistory, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
 
 import { authorizeUser } from '../../services/actions/currentSession';
 import { loginApi } from '../../utils/LoginApi';
@@ -14,6 +14,10 @@ function Login() {
   const history = useHistory();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+
+  const isUserAuth = useSelector(
+    (state) => state.currentSession.isCurrentUserAuth
+  );
 
   const inputRef = React.useRef(null)
   const onIconClick = () => {

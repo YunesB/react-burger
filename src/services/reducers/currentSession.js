@@ -41,6 +41,7 @@ export const currentSessionReducer = (state = initialState, action) => {
         ...state,
         currentUserRequest: false,
         currentUserFailed: true,
+        isAccountLoading: false,
       };
     }
     case CHECK_CURRENT_USER_AUTH: {
