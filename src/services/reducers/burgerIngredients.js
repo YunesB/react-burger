@@ -6,7 +6,7 @@ import {
   GET_SELECTED_INGREDIENT,
 } from "../actions/burgerIngredients.js";
 
-import { DEFAULT_BUN } from '../../utils/constants';
+import { DEFAULT_BUN, DEFAULT_ING } from '../../utils/constants';
 
 const initialState = {
   burgerIngredientsArray: [],
@@ -14,7 +14,7 @@ const initialState = {
   burgerIngredientsFailed: false,
 
   selectedBun: DEFAULT_BUN,
-  selectedIngredient: {},
+  selectedIngredient: DEFAULT_ING,
   isPageLoading: true,
 };
 

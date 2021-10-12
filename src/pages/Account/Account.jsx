@@ -1,14 +1,20 @@
-import React from 'react';
-import AccountStyles from './Account.module.css';
+import AccountStyles from "./Account.module.css";
 
 import { useDispatch } from "react-redux";
-import { Route, NavLink, useRouteMatch, Redirect, Switch, useHistory } from "react-router-dom";
-import { loginApi } from '../../utils/LoginApi';
+import {
+  Route,
+  NavLink,
+  useRouteMatch,
+  Redirect,
+  Switch,
+  useHistory,
+} from "react-router-dom";
+import { loginApi } from "../../utils/LoginApi";
 
-import Profile from '../../components/Profile/Profile';
-import OrderHistory from '../../components/OrderHistory/OrderHistory';
+import Profile from "../../components/Profile/Profile";
+import OrderHistory from "../../components/OrderHistory/OrderHistory";
 
-import { authorizeUser } from '../../services/actions/currentSession';
+import { authorizeUser } from "../../services/actions/currentSession";
 
 function Account() {
   const history = useHistory();
@@ -17,16 +23,18 @@ function Account() {
   const dispatch = useDispatch();
 
   function handleSignOut() {
-    loginApi.signOut()
+    let refreshJwt = localStorage.getItem("refreshToken");
+    loginApi
+      .signOut(refreshJwt)
       .then(() => {
-        history.push('/login');
         dispatch(authorizeUser(false));
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        history.push("/login");
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
   return (
@@ -34,22 +42,36 @@ function Account() {
       <nav className={AccountStyles.nav}>
         <ul className={`${AccountStyles.list} mb-20`}>
           <li className={AccountStyles.listItem}>
-            <NavLink to={`${url}/profile`} className={`${AccountStyles.link} text text_type_main-medium text_color_inactive`} activeClassName={AccountStyles.link_active}>
+            <NavLink
+              to={`${url}/profile`}
+              className={`${AccountStyles.link} text text_type_main-medium text_color_inactive`}
+              activeClassName={AccountStyles.link_active}
+            >
               Профиль
             </NavLink>
           </li>
           <li className={AccountStyles.listItem}>
-            <NavLink to={`${url}/order-history`} className={`${AccountStyles.link} text text_type_main-medium text_color_inactive`} activeClassName={AccountStyles.link_active}>
+            <NavLink
+              to={`${url}/order-history`}
+              className={`${AccountStyles.link} text text_type_main-medium text_color_inactive`}
+              activeClassName={AccountStyles.link_active}
+            >
               История заказов
             </NavLink>
           </li>
           <li className={AccountStyles.listItem}>
-            <button type="button" className={`${AccountStyles.button} text text_type_main-medium text_color_inactive`} onClick={handleSignOut}>
+            <button
+              type="button"
+              className={`${AccountStyles.button} text text_type_main-medium text_color_inactive`}
+              onClick={handleSignOut}
+            >
               Выход
             </button>
           </li>
         </ul>
-        <p className={`${AccountStyles.text} text text_type_main-default`}>В этом разделе вы можете изменить свои персональные данные</p>
+        <p className={`${AccountStyles.text} text text_type_main-default`}>
+          В этом разделе вы можете изменить свои персональные данные
+        </p>
       </nav>
       <div className={AccountStyles.contentBox}>
         <Switch>
@@ -59,7 +81,7 @@ function Account() {
           <Route path={`${path}/order-history`}>
             <OrderHistory />
           </Route>
-          <Redirect to={`${url}/profile`}/>
+          <Redirect to={`${url}/profile`} />
         </Switch>
       </div>
     </div>

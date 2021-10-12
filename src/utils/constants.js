@@ -25,6 +25,21 @@ export const DEFAULT_BUN = {
   _id: 0,
 }
 
+export const DEFAULT_ING = {
+  calories: 0,
+  carbohydrates: 0,
+  fat: 0,
+  image: loading,
+  image_large: loading,
+  image_mobile: loading,
+  name: "Какой-то ингридиент",
+  price: 0,
+  proteins: 0,
+  type: "main",
+  __v: 0,
+  _id: 1,
+}
+
 export const DEFAULT_USER = {
   user: {
     email: "burger-lover@stellar-burgers.com",

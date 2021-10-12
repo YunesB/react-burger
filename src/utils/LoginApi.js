@@ -3,19 +3,26 @@ import * as CONSTANTS from './constants';
 class LoginApi {
   constructor({ address }) {
     this._address = address;
-    this._token = localStorage.getItem('accessToken');
-    this._refreshToken = localStorage.getItem('refreshToken');
   };
 
   handleResponse(res) {
-    if (!res.ok) {
+    if (res.status === 403) {
+      let refreshToken = localStorage.getItem('refreshToken')
+      this.updateToken(refreshToken)
+        .then((data) => {
+          localStorage.setItem('accessToken', data.accessToken);
+        })
+        .catch(() => {
+          return Promise.reject(`Ошибка: ${res.status} - ${res.statusText}`);
+        })
+    } else if (!res.ok) {
       return Promise.reject(`Ошибка: ${res.status} - ${res.statusText}`);
     }
     return res.json();
   };
 
-  updateToken() {
-    if (!this._refreshToken) {
+  updateToken(refreshToken) {
+    if (!refreshToken) {
       console.log('refresh token is missing');
     } else {
       return fetch(`${this._address}/auth/token`, {
@@ -23,7 +30,7 @@ class LoginApi {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({token: this._refreshToken}),
+        body: JSON.stringify({token: refreshToken}),
       })
       .then((res) =>
         this.handleResponse(res)
@@ -57,16 +64,13 @@ class LoginApi {
     )
   };
 
-  signOut() {
-    if (!this._refreshToken) {
-      return
-    }
+  signOut(refreshToken) {
     return fetch(`${this._address}/auth/logout`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({token: this._refreshToken}),
+      body: JSON.stringify({token: refreshToken}),
     })
     .then((res) =>
         this.handleResponse(res)
@@ -99,30 +103,24 @@ class LoginApi {
     )
   };
 
-  getUserInfo() {
+  getUserInfo(accessToken) {
     return fetch(`${this._address}/auth/user`, {
       method: "GET",
       headers: {
-        'Authorization': this._token,
+        'Authorization': accessToken,
         'Content-Type': 'application/json',
       }
     })
     .then((res) => {
-      if (res.status === 403) {
-        return Promise.reject({ message: "jwt expired" });
-      }
-      return res.json();
+      return this.handleResponse(res)
     })
-    .then((res) => {
-      return res;
-    });
   }
 
-  setUserInfo(data) {
+  setUserInfo(data, accessToken) {
     return fetch(`${this._address}/auth/user`, {
       method: "PATCH",
       headers: {
-        'Authorization': this._token,
+        'Authorization': accessToken,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),

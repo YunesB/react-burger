@@ -33,8 +33,12 @@
 }
 
 .basket__listContainer {
+  display: flex;
+  flex-direction: column;
   max-height: 464px;
   overflow-y: scroll;
+  width: 100%;
+  align-items: flex-end;
 }
 
 .basket__listContainer .listItem:last-of-type {
@@ -70,5 +74,5 @@
 
 .basket__totalContainer svg {
   width: 33px;
-  height: auto;
+  height: 33px;
 }

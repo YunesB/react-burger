@@ -1,4 +1,6 @@
 .ingredient {
+  text-decoration: none;
+  color: white;
   position: relative;
   max-width: 256px;
   display: flex;

@@ -7,8 +7,6 @@ const ProtectedRouteAuth = ({ children, ...rest }) => {
     (state) => state.currentSession.isCurrentUserAuth
   );
 
-  console.log(isUserAuth);
-
   return (
     <Route {...rest} render={() => (!isUserAuth ? children : <Redirect to='/' />)} />
   )
