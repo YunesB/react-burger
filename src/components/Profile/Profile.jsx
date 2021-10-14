@@ -6,15 +6,10 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-
 import { loginApi } from "../../utils/LoginApi";
-import { getCurrentUser } from "../../services/actions/currentSession";
 
 function Profile() {
-  // const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentSession.currentUser);
-  console.log(currentUser);
 
   const [name, setName] = React.useState(currentUser.user.name);
   const [email, setEmail] = React.useState(currentUser.user.email);
@@ -54,7 +49,6 @@ function Profile() {
   }
 
   React.useEffect(() => {
-    // dispatch(getCurrentUser);
     setInputData();
   });
 

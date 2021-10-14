@@ -9,12 +9,10 @@ import {
   Switch,
   useHistory,
 } from "react-router-dom";
-import { loginApi } from "../../utils/LoginApi";
-
 import Profile from "../../components/Profile/Profile";
 import OrderHistory from "../../components/OrderHistory/OrderHistory";
 
-import { authorizeUser } from "../../services/actions/currentSession";
+import { logoutUser } from "../../services/actions/currentSession";
 
 function Account() {
   const history = useHistory();
@@ -24,17 +22,7 @@ function Account() {
 
   function handleSignOut() {
     let refreshJwt = localStorage.getItem("refreshToken");
-    loginApi
-      .signOut(refreshJwt)
-      .then(() => {
-        dispatch(authorizeUser(false));
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        history.push("/login");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(logoutUser(refreshJwt, () => history.push("/login")));
   }
 
   return (

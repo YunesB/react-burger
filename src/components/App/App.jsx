@@ -6,7 +6,6 @@ import { Switch, useHistory, Route, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getIngredientsData } from "../../services/actions/burgerIngredients";
 import { getCurrentUser } from "../../services/actions/currentSession";
-import { authorizeUser } from "../../services/actions/currentSession";
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -32,6 +31,7 @@ import OrderDetails from "../Modal/OrderDetails";
 import Modal from "../Modal/Modal";
 import Loading from "../Modal/Loading";
 import { loginApi } from "../../utils/LoginApi";
+import NotFound from "../../pages/NotFound/NotFound";
 
 function App() {
   const [isModalOpenIngredients, setModalOpenIngredients] =
@@ -43,8 +43,6 @@ function App() {
   const location = useLocation();
   const background =
     history.action === "PUSH" && location.state && location.state.background;
-
-  const currentUser = useSelector((state) => state.currentSession.currentUser);
 
   const isUserAuth = useSelector(
     (state) => state.currentSession.isCurrentUserAuth
@@ -93,37 +91,19 @@ function App() {
         .then((data) => {
           localStorage.setItem("accessToken", data.accessToken);
           console.log("token refresh success");
-          dispatch(authorizeUser(true));
         })
         .catch((err) => {
           console.log(err);
-          dispatch(authorizeUser(false));
         });
     }
   }
 
   React.useEffect(() => {
-    let jwt = localStorage.getItem("accessToken");
     let refreshJwt = localStorage.getItem("refreshToken");
-    if (refreshJwt) {
-      loginApi
-        .getUserInfo(jwt)
-        .then(() => {
-          dispatch(getCurrentUser());
-          dispatch(authorizeUser(true));
-        })
-        .catch((err) => {
-          console.log(err);
-          if (err.message === "jwt expired") {
-            console.log("token refresh started");
-            refreshToken();
-          }
-        });
-    }
-  }, []);
-
-  React.useEffect(() => {
     dispatch(getIngredientsData());
+    if (refreshJwt) {
+      dispatch(getCurrentUser(() => refreshToken()));
+    }
   }, [dispatch]);
 
   return (
@@ -158,6 +138,9 @@ function App() {
           <ProtectedRoute path="/reset-password" redirect={true}>
             <RecoverPassword />
           </ProtectedRoute>
+          <Route>
+            <NotFound />
+          </Route>
           {/* {isUserAuth ? <Redirect to="/" /> : <Redirect to="/login" />} */}
         </Switch>
       </main>
