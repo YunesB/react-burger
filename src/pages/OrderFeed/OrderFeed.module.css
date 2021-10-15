@@ -1,0 +1,69 @@
+.orderFeed {
+  margin: 0;
+  width: 100%;
+}
+
+.contentBox {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.list {
+  max-height: 77vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  list-style-type: none;
+  padding: 0;
+  margin: 0 56px 0 0;
+  overflow-y: scroll;
+}
+
+.list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: #a5a5d6;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background: #8585ad;
+}
+
+.ordersData {
+  width: 90%;
+  max-width: 584px;
+}
+
+.orderStatusBox {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.orderList {
+  font-size: 24px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: #00cccc;
+}
+
+.orderListReady {
+  composes: orderList;
+  color: unset;
+}
+
+.number {
+  text-shadow: 0px 0px 16px rgb(51 51 255 / 25%),
+    0px 0px 8px rgb(51 51 255 / 25%), 0px 4px 32px rgb(51 51 255 / 50%);
+}

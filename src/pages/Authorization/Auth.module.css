@@ -1,0 +1,38 @@
+.login {
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  margin: 15% auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.form div {
+  width: 100%;
+  text-align: right;
+}
+
+.fieldset {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  padding: 0;
+  width: 100%;
+}
+
+.link {
+  color: #4c4cff;
+  text-decoration: unset;
+  transition: 0.2s;
+}
+
+.link:hover {
+  opacity: 0.8;
+}

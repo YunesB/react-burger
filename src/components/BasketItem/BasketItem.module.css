@@ -1,10 +1,20 @@
 .basketItem__listItem {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: stretch;
   padding: 0;
+  max-width: 100%;
+}
+
+.iconBox {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: -30px;
+  justify-self: flex-start;
 }
 
 .basketItem__listItem div {
-  width: 90%;
+  width: 488px;
 }

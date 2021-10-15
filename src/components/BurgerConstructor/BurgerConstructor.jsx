@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
+import { useHistory } from 'react-router-dom';
 
 import BurgerConstructorStyles from './BurgerConstructor.module.css';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -26,6 +27,11 @@ function BurgerConstructor(props) {
     (state) => state.burgerIngredients.selectedBun
   );
 
+  const isUserAuth = useSelector(
+    (state) => state.currentSession.isCurrentUserAuth
+  );
+
+  const history = useHistory();
   const cardsData = burgerConstructorArray;
   const bunPrice = selectedBun.price;
 
@@ -81,10 +87,14 @@ function BurgerConstructor(props) {
   }
 
   function submitOrder() {
-    dispatch(
-      getConstructorData(getIngredientIds(burgerConstructorArray))
-    )
-    props.openModal();
+    if (isUserAuth) {
+      dispatch(
+        getConstructorData(getIngredientIds(burgerConstructorArray))
+      )
+      props.openModal();
+    } else {
+      history.push('/login');
+    }
   };
 
   return (
@@ -125,7 +135,10 @@ function BurgerConstructor(props) {
           <CurrencyIcon type="primary" />
         </div>
         <Button type="primary" size="large" onClick={submitOrder} disabled={submitDisabled} style={{opacity: submitDisabledStyle}}>
-          Оформить заказ
+          {
+            isUserAuth ? 
+            'Оформить заказ' : 'Войти в аккаунт'
+          }
         </Button>
       </div>
       </section>
