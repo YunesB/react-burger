@@ -12,10 +12,10 @@ interface IBurgerIngredients {
 }
 
 const BurgerIngredients: React.FC<IBurgerIngredients> = (props) => {
-  const selectedDiv = React.createRef<any>();
-  const bunsRef = React.createRef<any>();
-  const sauceRef = React.createRef<any>();
-  const mainRef = React.createRef<any>();
+  const selectedDiv = React.useRef<HTMLDivElement>(null);
+  const bunsRef = React.useRef<HTMLHeadingElement>(null);
+  const sauceRef = React.useRef<HTMLHeadingElement>(null);
+  const mainRef = React.useRef<HTMLHeadingElement>(null);
   const [current, setCurrent] = React.useState<string>("buns");
   const openModal = props.openModal;
 
@@ -32,10 +32,10 @@ const BurgerIngredients: React.FC<IBurgerIngredients> = (props) => {
   const mainArray = filterArray("main");
 
   function handleTabs() {
-    const topDivFrame = selectedDiv.current.offsetTop;
-    const bunsClientRect = bunsRef.current.getBoundingClientRect().top;
-    const sauceClientRect = sauceRef.current.getBoundingClientRect().top - 150;
-    const mainClientRect = mainRef.current.getBoundingClientRect().top - 150;
+    const topDivFrame = selectedDiv.current!.offsetTop;
+    const bunsClientRect = bunsRef.current!.getBoundingClientRect().top;
+    const sauceClientRect = sauceRef.current!.getBoundingClientRect().top - 150;
+    const mainClientRect = mainRef.current!.getBoundingClientRect().top - 150;
 
     if (topDivFrame >= bunsClientRect && topDivFrame <= sauceClientRect) {
       setCurrent("buns");
@@ -68,21 +68,21 @@ const BurgerIngredients: React.FC<IBurgerIngredients> = (props) => {
         <Tab
           value="buns"
           active={current === "buns"}
-          onClick={() => handleTabClick("buns", bunsRef.current)}
+          onClick={() => handleTabClick("buns", bunsRef.current!)}
         >
           Булки
         </Tab>
         <Tab
           value="sauce"
           active={current === "sauce"}
-          onClick={() => handleTabClick("sauce", sauceRef.current)}
+          onClick={() => handleTabClick("sauce", sauceRef.current!)}
         >
           Соусы
         </Tab>
         <Tab
           value="main"
           active={current === "main"}
-          onClick={() => handleTabClick("main", mainRef.current)}
+          onClick={() => handleTabClick("main", mainRef.current!)}
         >
           Начинки
         </Tab>

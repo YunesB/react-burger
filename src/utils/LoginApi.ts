@@ -6,6 +6,11 @@ type TUserData = {
   password?: string;
 }
 
+type TResetPassword = {
+  password: string;
+  token: string;
+}
+
 class LoginApi {
   private address: string;
   constructor({ address }:  {address: string}) {
@@ -97,8 +102,7 @@ class LoginApi {
     )
   };
 
-  updatePassword(data: any) {
-    console.log(data);
+  updatePassword(data: TResetPassword) {
     return fetch(`${this.address}/password-reset/reset`, {
       method: "POST",
       headers: {
