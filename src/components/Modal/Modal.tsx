@@ -1,15 +1,18 @@
 import ModalStyles from './Modal.module.css';
 import React from 'react';
-import PropTypes from 'prop-types';
 import ModalOverlay from './ModalOverlay';
-
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-function Modal(props) {
+interface IModal {
+  isOpen: boolean;
+  closeModal: () => void;
+}
+
+const Modal: React.FC<IModal> = (props) => {
 
   React.useEffect(() => {
-    const closeModal = (evt) => {
-      if( evt.keyCode === 27 ) {
+    const closeModal = (evt: KeyboardEvent) => {
+      if (evt.key === "Escape") {
         props.closeModal();
       }
     }
@@ -31,11 +34,5 @@ function Modal(props) {
     </section>
   )
 }
-
-Modal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  children: PropTypes.element.isRequired,
-  closeModal: PropTypes.func.isRequired,
-}; 
 
 export default Modal;

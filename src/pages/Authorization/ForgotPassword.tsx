@@ -13,15 +13,16 @@ function ForgotPassword() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [email, setEmail] = React.useState("");
-  const mailInputRef = React.useRef(null);
+  const [email, setEmail] = React.useState<string>("");
+  const mailInputRef = React.useRef<HTMLInputElement>(null);
 
-  const onIconClick = (input) => {
-    setTimeout(() => input.current.focus(), 0);
-    alert("Icon Click Callback");
+  const onIconClick = (input: any) => {
+    console.log(input);
+    // setTimeout(() => input.current.focus(), 0);
+    // alert("Icon Click Callback");
   };
 
-  function handleSubmit(evt) {
+  function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const data = {
       email: email,
@@ -41,7 +42,6 @@ function ForgotPassword() {
             type={"text"}
             placeholder={"Email"}
             onChange={(e) => setEmail(e.target.value)}
-            icon={null}
             value={email}
             name={"name"}
             error={false}

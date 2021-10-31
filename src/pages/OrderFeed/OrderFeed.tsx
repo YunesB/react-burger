@@ -5,7 +5,7 @@ import OrderItem from '../../components/OrderHistory/OrderItem';
 function OrderFeed() {
 
   const burgerIngredientsArray = useSelector(
-    (state) => state.burgerIngredients.burgerIngredientsArray
+    (state: any) => state.burgerIngredients.burgerIngredientsArray
   );
 
   if (burgerIngredientsArray.length === 0) {

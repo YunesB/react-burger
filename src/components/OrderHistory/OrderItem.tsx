@@ -1,7 +1,12 @@
 import OrderStyles from './OrderHistory.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-function OrderItem(props) {
+interface IOrderItem {
+  card: any;
+  feed: any;
+}
+
+const OrderItem: React.FC<IOrderItem> = (props) => {
 
   const cardData = props.card;
 

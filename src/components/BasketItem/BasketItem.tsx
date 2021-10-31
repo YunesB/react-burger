@@ -5,29 +5,37 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import PropTypes from "prop-types";
-import propTypes from "../../utils/propTypes";
-
-import { useDrag, useDrop } from "react-dnd";
+import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
 import { useDispatch } from "react-redux";
+
+import { TBasketCard } from "../../types";
+
 import {
   moveConstructorItem,
   deleteConstructorItem,
 } from "../../services/actions/burgerConstructor";
 
-function BasketItem(props) {
+interface IBasketItem {
+  card: TBasketCard;
+  index: number;
+}
+
+type FC<P> = React.FunctionComponent<P>;
+
+const BasketItem: FC<IBasketItem> = (props: IBasketItem) => {
+  
   const dispatch = useDispatch();
-  const ref = React.useRef(null);
-  const cardData = props.card;
+  const ref = React.useRef<HTMLLIElement>(null);
+  const cardData: TBasketCard = props.card;
 
   const [, dropTarget] = useDrop({
     accept: "draggedIngr",
-    item: props.card,
-    hover(item, monitor) {
+    // item: props.card,
+    hover(item: { index: number}, monitor: DropTargetMonitor) {
       if (!ref.current) {
         return;
       }
-      const dragIndex = item.index;
+      const dragIndex: number | undefined = item.index;
       const hoverIndex = props.index;
 
       if (dragIndex === hoverIndex) {
@@ -37,7 +45,7 @@ function BasketItem(props) {
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
+      const clientOffset: any = monitor.getClientOffset();
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
@@ -65,7 +73,7 @@ function BasketItem(props) {
 
   dragRef(dropTarget(ref));
 
-  function handleDeleteItem(index) {
+  function handleDeleteItem(index: number) {
     dispatch(deleteConstructorItem(index));
   }
 
@@ -79,17 +87,13 @@ function BasketItem(props) {
         <DragIcon type="primary" />
       </div>
       <ConstructorElement
-        text={cardData.name}
-        price={cardData.price}
-        thumbnail={cardData.image}
+        text={cardData.name!}
+        price={cardData.price!}
+        thumbnail={cardData.image!}
         handleClose={() => handleDeleteItem(props.index)}
       />
     </li>
   );
 }
-
-BasketItem.propTypes = {
-  card: PropTypes.shape(propTypes).isRequired,
-};
 
 export default BasketItem;

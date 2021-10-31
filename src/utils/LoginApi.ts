@@ -1,15 +1,22 @@
 import * as CONSTANTS from './constants';
 
-class LoginApi {
-  constructor({ address }) {
-    this._address = address;
-  };
+type TUserData = {
+  name?: string;
+  email: string;
+  password?: string;
+}
 
-  handleResponse(res) {
+class LoginApi {
+  private address: string;
+  constructor({ address }:  {address: string}) {
+    this.address = address;
+  }
+
+  handleResponse<T>(res: Response): Promise<T> {
     if (res.status === 403) {
       let refreshToken = localStorage.getItem('refreshToken')
-      this.updateToken(refreshToken)
-        .then((data) => {
+      this.updateToken(refreshToken)!
+        .then((data: unknown | any) => {
           localStorage.setItem('accessToken', data.accessToken);
         })
         .catch(() => {
@@ -21,11 +28,11 @@ class LoginApi {
     return res.json();
   };
 
-  updateToken(refreshToken) {
+  updateToken(refreshToken: string | null) {
     if (!refreshToken) {
       console.log('refresh token is missing');
     } else {
-      return fetch(`${this._address}/auth/token`, {
+      return fetch(`${this.address}/auth/token`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -38,8 +45,8 @@ class LoginApi {
     }
   }
 
-  register(data) {
-    return fetch(`${this._address}/auth/register`, {
+  register(data: TUserData) {
+    return fetch(`${this.address}/auth/register`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -47,12 +54,12 @@ class LoginApi {
       body: JSON.stringify(data),
     })
     .then((res) =>
-        this.handleResponse(res)
+      this.handleResponse(res)
     )
   };
 
-  signIn(data) {
-    return fetch(`${this._address}/auth/login`, {
+  signIn(data: TUserData) {
+    return fetch(`${this.address}/auth/login`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -60,12 +67,12 @@ class LoginApi {
       body: JSON.stringify(data),
     })
     .then((res) =>
-        this.handleResponse(res)
+      this.handleResponse(res)
     )
   };
 
-  signOut(refreshToken) {
-    return fetch(`${this._address}/auth/logout`, {
+  signOut(refreshToken: string) {
+    return fetch(`${this.address}/auth/logout`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -73,12 +80,12 @@ class LoginApi {
       body: JSON.stringify({token: refreshToken}),
     })
     .then((res) =>
-        this.handleResponse(res)
+      this.handleResponse(res)
     )
   }
 
-  resetPassword(email) {
-    return fetch(`${this._address}/password-reset`, {
+  resetPassword(email: string) {
+    return fetch(`${this.address}/password-reset`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -86,12 +93,13 @@ class LoginApi {
       body: JSON.stringify(email),
     })
     .then((res) =>
-        this.handleResponse(res)
+      this.handleResponse(res)
     )
   };
 
-  updatePassword(data) {
-    return fetch(`${this._address}/password-reset/reset`, {
+  updatePassword(data: any) {
+    console.log(data);
+    return fetch(`${this.address}/password-reset/reset`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -99,12 +107,12 @@ class LoginApi {
       body: JSON.stringify(data),
     })
     .then((res) =>
-        this.handleResponse(res)
+      this.handleResponse(res)
     )
   };
 
-  getUserInfo(accessToken) {
-    return fetch(`${this._address}/auth/user`, {
+  getUserInfo(accessToken: string) {
+    return fetch(`${this.address}/auth/user`, {
       method: "GET",
       headers: {
         'Authorization': accessToken,
@@ -116,8 +124,8 @@ class LoginApi {
     })
   }
 
-  setUserInfo(data, accessToken) {
-    return fetch(`${this._address}/auth/user`, {
+  setUserInfo(data: TUserData, accessToken: string) {
+    return fetch(`${this.address}/auth/user`, {
       method: "PATCH",
       headers: {
         'Authorization': accessToken,

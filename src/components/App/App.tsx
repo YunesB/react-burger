@@ -2,6 +2,7 @@ import React from "react";
 import AppStyles from "./App.module.css";
 
 import { Switch, useHistory, Route, useLocation } from "react-router-dom";
+import { Location } from 'history';
 
 import { useDispatch, useSelector } from "react-redux";
 import { getIngredientsData } from "../../services/actions/burgerIngredients";
@@ -24,41 +25,49 @@ import ForgotPassword from "../../pages/Authorization/ForgotPassword";
 import RecoverPassword from "../../pages/Authorization/RecoverPassword";
 import IngredientDetailsPage from "../../pages/IngredientDetailsPage/IngredientDetailsPage";
 import OrderFeed from "../../pages/OrderFeed/OrderFeed";
-// import NotFound from '../../pages/NotFound/NotFound';
+import NotFound from "../../pages/NotFound/NotFound";
 
 import IngredientDetails from "../Modal/IngredientDetails";
 import OrderDetails from "../Modal/OrderDetails";
 import Modal from "../Modal/Modal";
 import Loading from "../Modal/Loading";
 import { loginApi } from "../../utils/LoginApi";
-import NotFound from "../../pages/NotFound/NotFound";
 
-function App() {
+const App = () => {
+
+  type TLocataionState = {
+    from?: Location;
+    background?: Location;
+  };
+
   const [isModalOpenIngredients, setModalOpenIngredients] =
-    React.useState(false);
-  const [isModalOpenOrder, setModalOpenOrder] = React.useState(false);
+    React.useState<boolean>(false);
+  const [isModalOpenOrder, setModalOpenOrder] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<TLocataionState>();
   const background =
     history.action === "PUSH" && location.state && location.state.background;
 
   const isUserAuth = useSelector(
-    (state) => state.currentSession.isCurrentUserAuth
+    (state: any) => state.currentSession.isCurrentUserAuth
   );
 
   const isPageLoading = useSelector(
-    (state) => state.burgerIngredients.isPageLoading
+    (state: any) => state.burgerIngredients.isPageLoading
   );
 
   const isOrderLoading = useSelector(
-    (state) => state.burgerConstructor.isPageLoading
+    (state: any) => state.burgerConstructor.isPageLoading
   );
 
   const isAccountLoading = useSelector(
-    (state) => state.currentSession.isAccountLoading
+    (state: any) => state.currentSession.isAccountLoading
   );
+
+  const IngredientModal = <IngredientDetails />;
+  const OrderModal = <OrderDetails />;
 
   function handleModalOpenIngredients() {
     setModalOpenIngredients(true);
@@ -76,19 +85,13 @@ function App() {
     setModalOpenOrder(false);
   }
 
-  const IngredientModal = (
-    <IngredientDetails closeModal={handleModalCloseIngredients} />
-  );
-
-  const OrderModal = <OrderDetails closeModal={handleModalCloseOrder} />;
-
   function refreshToken() {
     let refreshJwt = localStorage.getItem("refreshToken");
     if (isUserAuth === false) {
       localStorage.removeItem("accessToken");
       loginApi
-        .updateToken(refreshJwt)
-        .then((data) => {
+        .updateToken(refreshJwt)!
+        .then((data: any) => {
           localStorage.setItem("accessToken", data.accessToken);
           console.log("token refresh success");
         })
@@ -111,7 +114,7 @@ function App() {
       <AppHeader />
       <main className={AppStyles.componentContainer}>
         <Switch location={background || location}>
-          <Route path="/" exact={true} redirect={false}>
+          <Route path="/" exact={true}>
             <DndProvider backend={HTML5Backend}>
               <BurgerIngredients openModal={handleModalOpenIngredients} />
               <BurgerConstructor openModal={handleModalOpenOrder} />

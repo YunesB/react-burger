@@ -22,7 +22,7 @@ export const DEFAULT_BUN = {
   proteins: 0,
   type: "bun",
   __v: 0,
-  _id: 0,
+  _id: '0',
 }
 
 export const DEFAULT_ING = {
@@ -37,7 +37,7 @@ export const DEFAULT_ING = {
   proteins: 0,
   type: "main",
   __v: 0,
-  _id: 1,
+  _id: '0',
 }
 
 export const DEFAULT_USER = {

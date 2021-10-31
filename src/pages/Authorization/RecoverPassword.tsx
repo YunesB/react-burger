@@ -14,20 +14,21 @@ function RecoverPassword() {
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const [token, setToken] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const passwordInputRef = React.useRef(null);
+  const [token, setToken] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const passwordInputRef = React.useRef<HTMLInputElement>(null);
 
-  const onIconClick = (input) => {
-    setTimeout(() => input.current.focus(), 0);
-    alert("Icon Click Callback");
+  const onIconClick = (input: any) => {
+    console.log(input)
+    // setTimeout(() => input.current.focus(), 0);
+    // alert("Icon Click Callback");
   };
 
-  const onChange = (e) => {
-    setPassword(e.target.value);
+  const onChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(evt.target.value);
   };
 
-  function handleSubmit(evt) {
+  function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const data = {
       password: password,
@@ -55,7 +56,6 @@ function RecoverPassword() {
             type={"text"}
             placeholder={"Введите код из письма"}
             onChange={(e) => setToken(e.target.value)}
-            icon={null}
             value={token}
             name={"name"}
             error={false}
