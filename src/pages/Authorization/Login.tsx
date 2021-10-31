@@ -8,40 +8,39 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { registerUser } from "../../services/actions/currentSession";
+import { loginUser } from "../../services/actions/currentSession";
 
-function Register() {
+function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
 
-  const nameInputRef = React.useRef(null);
-  const mailInputRef = React.useRef(null);
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
 
-  const onIconClick = (input) => {
-    setTimeout(() => input.current.focus(), 0);
-    alert("Icon Click Callback");
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  
+  const onIconClick = () => {
+    console.log('click');
+    // setTimeout(() => inputRef.current.focus(), 0);
+    // alert("Icon Click Callback");
   };
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  function handleSubmit(evt) {
+  function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const data = {
-      name: name,
       email: email,
       password: password,
     };
-    dispatch(registerUser(data, history.push("/login")));
+    dispatch(loginUser(data, () => history.push("/")));
   }
 
   return (
     <div className={AuthStyles.login}>
-      <h2 className={AuthStyles.heading}>Регистрация</h2>
+      <h2 className={AuthStyles.heading}>Вход</h2>
       <form
         className={`${AuthStyles.form} mb-20`}
         onSubmit={(e) => handleSubmit(e)}
@@ -49,28 +48,13 @@ function Register() {
         <fieldset className={`${AuthStyles.fieldset} mb-6`}>
           <Input
             type={"text"}
-            placeholder={"Имя"}
-            onChange={(e) => setName(e.target.value)}
-            icon={null}
-            value={name}
-            name={"name"}
-            error={false}
-            ref={nameInputRef}
-            onIconClick={() => onIconClick(nameInputRef)}
-            errorText={"Ошибка"}
-          />
-        </fieldset>
-        <fieldset className={`${AuthStyles.fieldset} mb-6`}>
-          <Input
-            type={"text"}
             placeholder={"Email"}
             onChange={(e) => setEmail(e.target.value)}
-            icon={null}
             value={email}
             name={"name"}
             error={false}
-            ref={mailInputRef}
-            onIconClick={() => onIconClick(mailInputRef)}
+            ref={inputRef}
+            onIconClick={onIconClick}
             errorText={"Ошибка"}
           />
         </fieldset>
@@ -78,16 +62,24 @@ function Register() {
           <PasswordInput onChange={onChange} value={password} name={"Пароль"} />
         </fieldset>
         <Button type="primary" size="medium">
-          Зарегистрироваться
+          Войти
         </Button>
       </form>
       <div className={AuthStyles.textContainer}>
         <p
           className={`${AuthStyles.text} text text_type_main-default text_color_inactive mb-4`}
         >
-          Уже зарегистрированы?{" "}
-          <Link to={"/login"} className={AuthStyles.link}>
-            Войти
+          Вы — новый пользователь?{" "}
+          <Link to={"/register"} className={AuthStyles.link}>
+            Зарегистрироваться
+          </Link>
+        </p>
+        <p
+          className={`${AuthStyles.text} text text_type_main-default text_color_inactive`}
+        >
+          Забыли пароль?{" "}
+          <Link to={"/forgot-password"} className={AuthStyles.link}>
+            Восстановить пароль
           </Link>
         </p>
       </div>
@@ -95,4 +87,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;

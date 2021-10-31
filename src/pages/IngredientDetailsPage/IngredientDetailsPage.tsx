@@ -5,19 +5,20 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { DEFAULT_ING } from "../../utils/constants";
+import { TBasketCard } from '../../types'
 
 function IngredientDetailsPage() {
-  const [cardData, setCardData] = React.useState(DEFAULT_ING);
+  const [cardData, setCardData] = React.useState<TBasketCard>(DEFAULT_ING);
 
-  const { id } = useParams();
+  const { id } = useParams<{ id?: string }>();
 
   const burgerIngredientsArray = useSelector(
-    (state) => state.burgerIngredients.burgerIngredientsArray
+    (state: any) => state.burgerIngredients.burgerIngredientsArray
   );
 
   React.useEffect(() => {
-    let ingredient;
-    burgerIngredientsArray.forEach((ing) => {
+    let ingredient: any;
+    burgerIngredientsArray.forEach((ing: TBasketCard) => {
       if (ing._id === id) {
         ingredient = ing;
       }

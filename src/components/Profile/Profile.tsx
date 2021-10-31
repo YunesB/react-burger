@@ -9,21 +9,21 @@ import { useSelector } from "react-redux";
 import { loginApi } from "../../utils/LoginApi";
 
 function Profile() {
-  const currentUser = useSelector((state) => state.currentSession.currentUser);
+  const currentUser = useSelector((state: any) => state.currentSession.currentUser);
 
-  const [name, setName] = React.useState(currentUser.user.name);
-  const [email, setEmail] = React.useState(currentUser.user.email);
-  const [password, setPassword] = React.useState("*****");
+  const [name, setName] = React.useState<string>(currentUser.user.name);
+  const [email, setEmail] = React.useState<string>(currentUser.user.email);
+  const [password, setPassword] = React.useState<string>("*****");
 
-  const [nameDisabled, setNameDisabled] = React.useState(true);
-  const [emailDisabled, setEmailDisabled] = React.useState(true);
-  const [passwordDisabled, setPasswordDisabled] = React.useState(true);
+  const [nameDisabled, setNameDisabled] = React.useState<boolean>(true);
+  const [emailDisabled, setEmailDisabled] = React.useState<boolean>(true);
+  const [passwordDisabled, setPasswordDisabled] = React.useState<boolean>(true);
 
-  const nameInputRef = React.useRef(null);
-  const emailInputRef = React.useRef(null);
-  const passwordInputRef = React.useRef(null);
+  const nameInputRef = React.useRef<HTMLInputElement>(null);
+  const emailInputRef = React.useRef<HTMLInputElement>(null);
+  const passwordInputRef = React.useRef<HTMLInputElement>(null);
 
-  function onIconClick(input, setState) {
+  function onIconClick(input: any, setState: (arg0: boolean) => void) {
     setTimeout(() => input.current.focus(), 0);
     setState(false);
   }
@@ -34,10 +34,14 @@ function Profile() {
       name: name,
       email: email,
     };
-    loginApi
+    if (jwt) {
+      loginApi
       .setUserInfo(data, jwt)
       .then(() => console.log("patch success"))
       .catch((err) => console.log(err));
+    } else {
+      return
+    }
   }
 
   function setInputData() {

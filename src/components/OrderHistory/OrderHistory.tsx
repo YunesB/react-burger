@@ -5,7 +5,7 @@ import OrderItem from './OrderItem';
 function OrderHistory() {
 
   const burgerIngredientsArray = useSelector(
-    (state) => state.burgerIngredients.burgerIngredientsArray
+    (state: any) => state.burgerIngredients.burgerIngredientsArray
   );
 
   if (burgerIngredientsArray.length === 0) {
@@ -15,7 +15,7 @@ function OrderHistory() {
   return (
     <div className={OrderStyles.orderHistory}>
       <ul className={OrderStyles.list}>
-        <OrderItem card={burgerIngredientsArray[0]} />
+        <OrderItem card={burgerIngredientsArray[0]} feed={true} />
       </ul>
     </div>
   );

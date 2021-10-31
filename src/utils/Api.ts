@@ -1,11 +1,16 @@
 import * as CONSTANTS from './constants';
 
+type TOrderArray = {
+  ingredients: number[];
+}
+
 class Api {
-  constructor({ address }) {
-    this._address = address;
+  private address: string;
+  constructor({ address }:  {address: string}) {
+    this.address = address;
   }
 
-  handleResponse(res) {
+  handleResponse<T>(res: Response): Promise<T> {
     if (!res.ok) {
       return Promise.reject(`Ошибка: ${res.status} - ${res.statusText}`);
     }
@@ -13,19 +18,19 @@ class Api {
   }
 
   getCardsData() {
-    return fetch(`${this._address}/ingredients`, {
+    return fetch(`${this.address}/ingredients`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json'
       },
     })
     .then((res) =>
-        this.handleResponse(res)
+      this.handleResponse(res)
     )
   };
 
-  sendOrder(orderArray) {
-    return fetch(`${this._address}/orders`, {
+  sendOrder(orderArray: TOrderArray) {
+    return fetch(`${this.address}/orders`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -33,7 +38,7 @@ class Api {
       body: JSON.stringify(orderArray),
     })
     .then((res) =>
-        this.handleResponse(res)
+      this.handleResponse(res)
     )
   };
 };
