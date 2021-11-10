@@ -1,10 +1,10 @@
 import ModalStyles from './Modal.module.css';
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 
 const IngredientDetails = () => {
 
   const selectedIngredient = useSelector(
-    (state: any) => state.burgerIngredients.selectedIngredient
+    (state) => state.burgerIngredients.selectedIngredient
   );
 
   const cardData = selectedIngredient;

@@ -1,7 +1,7 @@
 import * as CONSTANTS from './constants';
 
 type TOrderArray = {
-  ingredients: number[];
+  ingredients: (string | undefined)[];
 }
 
 class Api {

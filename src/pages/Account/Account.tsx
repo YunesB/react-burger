@@ -1,6 +1,6 @@
 import AccountStyles from "./Account.module.css";
 
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 import {
   Route,
   NavLink,
@@ -21,8 +21,8 @@ function Account() {
   const dispatch = useDispatch();
 
   function handleSignOut() {
-    let refreshJwt = localStorage.getItem("refreshToken");
-    dispatch(logoutUser(refreshJwt, () => history.push("/login")));
+    let refreshJwt: string | null = localStorage.getItem("refreshToken");
+    dispatch(logoutUser(refreshJwt!, () => history.push("/login")));
   }
 
   return (

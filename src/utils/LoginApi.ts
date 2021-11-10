@@ -1,15 +1,6 @@
-import * as CONSTANTS from './constants';
+import { BASE_URL } from "./constants";
 
-type TUserData = {
-  name?: string;
-  email: string;
-  password?: string;
-}
-
-type TResetPassword = {
-  password: string;
-  token: string;
-}
+import {TUserData, TResetPassword} from '../types'
 
 class LoginApi {
   private address: string;
@@ -89,7 +80,7 @@ class LoginApi {
     )
   }
 
-  resetPassword(email: string) {
+  resetPassword(email: TUserData) {
     return fetch(`${this.address}/password-reset`, {
       method: "POST",
       headers: {
@@ -144,5 +135,5 @@ class LoginApi {
 };
 
 export const loginApi = new LoginApi({
-  address: CONSTANTS.BASE_URL,
+  address: BASE_URL,
 });

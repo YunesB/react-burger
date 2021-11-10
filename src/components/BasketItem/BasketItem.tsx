@@ -6,7 +6,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 
 import { TBasketCard } from "../../types";
 
@@ -30,7 +30,6 @@ const BasketItem: FC<IBasketItem> = (props: IBasketItem) => {
 
   const [, dropTarget] = useDrop({
     accept: "draggedIngr",
-    // item: props.card,
     hover(item: { index: number}, monitor: DropTargetMonitor) {
       if (!ref.current) {
         return;

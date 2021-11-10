@@ -1,11 +1,11 @@
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 
 import ModalStyles from "./Modal.module.css";
 import tick from "../../images/tick.gif";
 import loading from "../../images/loading.svg";
 
 function OrderDetails() {
-  const orderData = useSelector((state: any) => state.burgerConstructor.orderData);
+  const orderData = useSelector((state) => state.burgerConstructor.orderData);
 
   return (
     <div className={`${ModalStyles.modal__contentBox} pt-30 pb-30`}>

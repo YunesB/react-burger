@@ -4,11 +4,24 @@ import {
   GET_BURGER_INGREDIENTS_FAILED,
   GET_SELECTED_BUN,
   GET_SELECTED_INGREDIENT,
-} from "../actions/burgerIngredients.js";
+
+  TBurgerIngredientsActions
+} from "../actions/burgerIngredients";
 
 import { DEFAULT_BUN, DEFAULT_ING } from '../../utils/constants';
+import { TBasketCard } from '../../types';
 
-const initialState = {
+type TBurgerIngredientsState = {
+  burgerIngredientsArray: Array<TBasketCard>,
+  burgerIngredientsRequest: boolean,
+  burgerIngredientsFailed: boolean,
+
+  selectedBun: TBasketCard,
+  selectedIngredient: TBasketCard,
+  isPageLoading: boolean,
+} 
+
+const initialState: TBurgerIngredientsState = {
   burgerIngredientsArray: [],
   burgerIngredientsRequest: false,
   burgerIngredientsFailed: false,
@@ -18,7 +31,7 @@ const initialState = {
   isPageLoading: true,
 };
 
-export const burgerIngredientsReducer = (state = initialState, action) => {
+export const burgerIngredientsReducer = (state = initialState, action: TBurgerIngredientsActions): TBurgerIngredientsState => {
   switch (action.type) {
     case GET_BURGER_INGREDIENTS_REQUEST: {
       return {

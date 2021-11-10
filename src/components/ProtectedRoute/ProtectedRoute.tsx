@@ -1,5 +1,5 @@
 import { Route, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 
 interface IProtectedRoute {
   path: string; 
@@ -8,11 +8,11 @@ interface IProtectedRoute {
 
 const ProtectedRoute: React.FC<IProtectedRoute> = ({ children, redirect, ...rest }) => {
   const isUserAuth = useSelector(
-    (state: any) => state.currentSession.isCurrentUserAuth
+    (state) => state.currentSession.isCurrentUserAuth
   );
 
   const isUserResetPassword = useSelector(
-    (state: any) => state.currentSession.isUserResetPassword
+    (state) => state.currentSession.isUserResetPassword
   );
 
   if (redirect) {

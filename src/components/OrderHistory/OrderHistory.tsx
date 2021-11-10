@@ -1,11 +1,11 @@
 import OrderStyles from './OrderHistory.module.css';
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 import OrderItem from './OrderItem';
 
 function OrderHistory() {
 
   const burgerIngredientsArray = useSelector(
-    (state: any) => state.burgerIngredients.burgerIngredientsArray
+    (state) => state.burgerIngredients.burgerIngredientsArray
   );
 
   if (burgerIngredientsArray.length === 0) {

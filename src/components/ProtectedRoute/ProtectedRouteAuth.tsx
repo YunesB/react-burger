@@ -1,5 +1,5 @@
 import { Route, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 
 interface IProtectedRouteAuth {
   path: string;
@@ -8,7 +8,7 @@ interface IProtectedRouteAuth {
 const ProtectedRouteAuth: React.FC<IProtectedRouteAuth> = ({ children, ...rest }) => {
 
   const isUserAuth = useSelector(
-    (state: any) => state.currentSession.isCurrentUserAuth
+    (state) => state.currentSession.isCurrentUserAuth
   );
 
   return (

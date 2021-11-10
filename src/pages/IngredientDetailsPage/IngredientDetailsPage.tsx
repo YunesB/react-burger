@@ -1,7 +1,7 @@
 import React from "react";
 import IngStyles from "./IngredientDetailsPage.module.css";
 
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 import { useParams } from "react-router-dom";
 
 import { DEFAULT_ING } from "../../utils/constants";
@@ -13,7 +13,7 @@ function IngredientDetailsPage() {
   const { id } = useParams<{ id?: string }>();
 
   const burgerIngredientsArray = useSelector(
-    (state: any) => state.burgerIngredients.burgerIngredientsArray
+    (state) => state.burgerIngredients.burgerIngredientsArray
   );
 
   React.useEffect(() => {

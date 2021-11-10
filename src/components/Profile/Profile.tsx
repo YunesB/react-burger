@@ -5,11 +5,11 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 import { loginApi } from "../../utils/LoginApi";
 
 function Profile() {
-  const currentUser = useSelector((state: any) => state.currentSession.currentUser);
+  const currentUser = useSelector((state) => state.currentSession.currentUser);
 
   const [name, setName] = React.useState<string>(currentUser.user.name);
   const [email, setEmail] = React.useState<string>(currentUser.user.email);

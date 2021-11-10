@@ -4,7 +4,6 @@ import AppStyles from "./App.module.css";
 import { Switch, useHistory, Route, useLocation } from "react-router-dom";
 import { Location } from 'history';
 
-import { useDispatch, useSelector } from "react-redux";
 import { getIngredientsData } from "../../services/actions/burgerIngredients";
 import { getCurrentUser } from "../../services/actions/currentSession";
 
@@ -33,6 +32,8 @@ import Modal from "../Modal/Modal";
 import Loading from "../Modal/Loading";
 import { loginApi } from "../../utils/LoginApi";
 
+import { useSelector, useDispatch } from "../../services/hooks";
+
 const App = () => {
 
   type TLocataionState = {
@@ -51,19 +52,19 @@ const App = () => {
     history.action === "PUSH" && location.state && location.state.background;
 
   const isUserAuth = useSelector(
-    (state: any) => state.currentSession.isCurrentUserAuth
+    (state) => state.currentSession.isCurrentUserAuth
   );
 
   const isPageLoading = useSelector(
-    (state: any) => state.burgerIngredients.isPageLoading
+    (state) => state.burgerIngredients.isPageLoading
   );
 
   const isOrderLoading = useSelector(
-    (state: any) => state.burgerConstructor.isPageLoading
+    (state) => state.burgerConstructor.isPageLoading
   );
 
   const isAccountLoading = useSelector(
-    (state: any) => state.currentSession.isAccountLoading
+    (state) => state.currentSession.isAccountLoading
   );
 
   const IngredientModal = <IngredientDetails />;

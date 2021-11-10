@@ -1,7 +1,7 @@
 import React from "react";
 import BurgerIngredientsStyle from "./BurgerIngredients.module.css";
 
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import BurgerIngredient from "../BurgerIngredient/BurgerIngredient";
@@ -20,7 +20,7 @@ const BurgerIngredients: React.FC<IBurgerIngredients> = (props) => {
   const openModal = props.openModal;
 
   const burgerIngredientsArray = useSelector(
-    (state: any) => state.burgerIngredients.burgerIngredientsArray
+    (state) => state.burgerIngredients.burgerIngredientsArray
   );
 
   function filterArray(string: string) {
