@@ -24,6 +24,7 @@ import ForgotPassword from "../../pages/Authorization/ForgotPassword";
 import RecoverPassword from "../../pages/Authorization/RecoverPassword";
 import IngredientDetailsPage from "../../pages/IngredientDetailsPage/IngredientDetailsPage";
 import OrderFeed from "../../pages/OrderFeed/OrderFeed";
+import OrderDetailsPage from "../../pages/OrderDetailsPage/OrderDetailsPage";
 import NotFound from "../../pages/NotFound/NotFound";
 
 import IngredientDetails from "../Modal/IngredientDetails";
@@ -142,6 +143,9 @@ const App = () => {
           <ProtectedRoute path="/reset-password" redirect={true}>
             <RecoverPassword />
           </ProtectedRoute>
+          <Route path="/feeds">
+            <OrderDetailsPage />
+          </Route>
           <Route>
             <NotFound />
           </Route>

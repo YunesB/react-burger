@@ -11,8 +11,8 @@ import { loginApi } from "../../utils/LoginApi";
 function Profile() {
   const currentUser = useSelector((state) => state.currentSession.currentUser);
 
-  const [name, setName] = React.useState<string>(currentUser.user.name);
-  const [email, setEmail] = React.useState<string>(currentUser.user.email);
+  const [name, setName] = React.useState<string>('');
+  const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>("*****");
 
   const [nameDisabled, setNameDisabled] = React.useState<boolean>(true);
