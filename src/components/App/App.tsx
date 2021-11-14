@@ -34,6 +34,7 @@ import Loading from "../Modal/Loading";
 import { loginApi } from "../../utils/LoginApi";
 
 import { useSelector, useDispatch } from "../../services/hooks";
+import { wsConnectionStart } from "../../services/actions/wsActions";
 
 const App = () => {
 
@@ -106,6 +107,7 @@ const App = () => {
   React.useEffect(() => {
     let refreshJwt = localStorage.getItem("refreshToken");
     dispatch(getIngredientsData());
+    dispatch(wsConnectionStart());
     if (refreshJwt) {
       dispatch(getCurrentUser(() => refreshToken()));
     }

@@ -1,4 +1,4 @@
-import { store } from '../index';
+import { store, RootState } from '../services/store';
 
 import { TBurgerIngredientsActions } from '../services/actions/burgerIngredients';
 import { TBurgerConstructorActions } from '../services/actions/burgerConstructor'; 
@@ -6,12 +6,13 @@ import { TCurrentSessionAction } from '../services/actions/currentSession';
 
 import { ThunkAction } from 'redux-thunk';
 import { Action, ActionCreator } from 'redux';
- 
-export type RootState = ReturnType<typeof store.getState>;
+import { TWsActions } from '../services/actions/wsActions';
+
 export type TApplicationActions = 
 | TCurrentSessionAction 
 | TBurgerIngredientsActions 
-| TBurgerConstructorActions;
+| TBurgerConstructorActions
+| TWsActions;
 
 export type AppThunk<TReturn = void> = ActionCreator<
   ThunkAction<TReturn, Action, RootState, TApplicationActions>
@@ -24,7 +25,7 @@ export type TUser = {
     email: string,
     name: string
   }
-}
+};
 
 export type TBasketCard = {
   calories?: number;
@@ -40,7 +41,7 @@ export type TBasketCard = {
   type?: string;
   __v?: number;
   _id?: string;
-}
+};
 
 export type TOrderData = {
   name: string,
@@ -48,19 +49,19 @@ export type TOrderData = {
       number: number
   },
   success: boolean;
-}
+};
 
 export type TOrderArray = {
   ingredients: (string | undefined)[];
-}
+};
 
 export type TUserData = {
   name?: string;
   email: string;
   password?: string;
-}
+};
 
 export type TResetPassword = {
   password: string;
   token: string;
-}
+};

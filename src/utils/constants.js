@@ -1,5 +1,6 @@
 import loading from '../images/loading.svg';
 
+export const WSS_URL = 'wss://norma.nomoreparties.space';
 export const BASE_URL = 'https://norma.nomoreparties.space/api';
 
 export const DEFAULT_ORDER = {
