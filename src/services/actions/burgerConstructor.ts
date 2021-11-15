@@ -67,7 +67,8 @@ export function getConstructorData(array: TOrderArray) {
     dispatch({
       type: GET_BURGER_CONSTRUCTOR_REQUEST,
     });
-    api.sendOrder(array)
+    let accessToken = localStorage.getItem('accessToken')
+    api.sendOrder(array, accessToken!)
       .then((data) => {
         dispatch({
           type: GET_BURGER_CONSTRUCTOR_SUCCESS,

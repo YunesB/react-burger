@@ -13,18 +13,22 @@ type TFeedState = {
   wsConnected?: boolean;
   wsError?: any;
   orderFeedData?: any;
+  isPageLoading?: boolean;
 };
 
 export const initialState: TFeedState = {
   wsConnected: false,
   wsError: null,
-  orderFeedData: undefined,
+  orderFeedData: [],
+  isPageLoading: true,
 };
 
 export const orderFeedReducer = (state = initialState, action: TWsActions) => {
   switch (action.type) {
     case WS_CONNECTION_START:
-      return {};
+      return {
+        isPageLoading: true,
+      };
     case WS_CONNECTION_SUCCESS:
       return {
         ...state,
@@ -52,6 +56,7 @@ export const orderFeedReducer = (state = initialState, action: TWsActions) => {
         ...state,
         wsError: null,
         orderFeedData: action.payload,
+        isPageLoading: false,
       };
     default:
       return state;

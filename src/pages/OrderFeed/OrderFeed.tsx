@@ -1,10 +1,26 @@
 import React from 'react';
 import FeedStyles from './OrderFeed.module.css';
-import { useSelector } from "../../services/hooks";
-import OrderItem from '../../components/OrderHistory/OrderItem';
-import { TBasketCard } from '../../types';
+import AppStyles from '../../components/App/App.module.css';
 
-function OrderFeed() {
+import { useSelector, useDispatch } from "../../services/hooks";
+import OrderItem from '../../components/OrderHistory/OrderItem';
+import { wsConnectionStart } from "../../services/actions/wsActions";
+// import { TBasketCard } from '../../types';
+
+interface IOrderFeed {
+  openModal?: () => void;
+}
+
+const OrderFeed = (props: IOrderFeed) => {
+
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(wsConnectionStart());
+  }, [dispatch]);
+
+  let orderFeedArray;
+  let finishedOrders;
+  let currentOrders;
 
   const burgerIngredientsArray = useSelector(
     (state) => state.burgerIngredients.burgerIngredientsArray
@@ -14,14 +30,13 @@ function OrderFeed() {
     (state) => state.orderFeed
   );
 
-  const orderFeedArray = orderFeed.orderFeedData.orders;
-  const finishedOrders = orderFeedArray.filter((obj: { status: string; }) => obj.status === 'done').slice(0,5);
-
-  const currentOrders = orderFeedArray.filter((obj: { status: string; }) => obj.status !== 'done').slice(0,5);
-
-  if (burgerIngredientsArray.length === 0) {
-    return <></>
+  if (burgerIngredientsArray.length === 0 || orderFeed.wsConnected === false || orderFeed.isPageLoading === true) {
+    return <div className={`${AppStyles.centeredComponent} text text_type_main-large`}>Загрузка...</div>
   }
+
+  orderFeedArray = orderFeed.orderFeedData.orders;
+  finishedOrders = orderFeedArray.filter((obj: { status: string; }) => obj.status === 'done').slice(0,5);
+  currentOrders = orderFeedArray.filter((obj: { status: string; }) => obj.status !== 'done').slice(0,5);
 
   return (
     <div className={FeedStyles.orderFeed}>
@@ -29,7 +44,7 @@ function OrderFeed() {
       <div className={FeedStyles.contentBox}>
         <ul className={FeedStyles.list}>
           {orderFeedArray.map((card: any) =>
-            <OrderItem card={card} feed={true} key={card._id} />
+            <OrderItem card={card} feed={true} key={card._id} openModal={props.openModal} />
           )}
         </ul>
         <div className={FeedStyles.ordersData}>

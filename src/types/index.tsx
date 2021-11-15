@@ -1,4 +1,5 @@
 import { store, RootState } from '../services/store';
+import { Location } from 'history';
 
 import { TBurgerIngredientsActions } from '../services/actions/burgerIngredients';
 import { TBurgerConstructorActions } from '../services/actions/burgerConstructor'; 
@@ -25,6 +26,11 @@ export type TUser = {
     email: string,
     name: string
   }
+};
+
+export type TLocationState = {
+  from?: Location;
+  background?: Location;
 };
 
 export type TBasketCard = {

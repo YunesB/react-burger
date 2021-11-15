@@ -29,10 +29,11 @@ class Api {
     )
   };
 
-  sendOrder(orderArray: TOrderArray) {
+  sendOrder(orderArray: TOrderArray, accessToken: string) {
     return fetch(`${this.address}/orders`, {
       method: "POST",
       headers: {
+        'Authorization': accessToken,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(orderArray),

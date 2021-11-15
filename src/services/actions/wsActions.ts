@@ -1,5 +1,3 @@
-import { AppThunk } from "../../types";
-
 export const WS_CONNECTION_START: "WS_CONNECTION_START" = "WS_CONNECTION_START";
 export const WS_CONNECTION_SUCCESS: "WS_CONNECTION_SUCCESS" =
   "WS_CONNECTION_SUCCESS";
@@ -41,13 +39,9 @@ export type TWsActions =
   | WsConnectionErrorAction
   | WsConnectionClosedAction
   | WsConnectionGetMessageAction
-  | WsConnectionSendMessageAction;
+  | WsConnectionSendMessageAction
 
 
-  export const wsConnectionStart: AppThunk = () => {
-    return function (dispatch) {
-      dispatch({
-        type: WS_CONNECTION_START,
-      });
-    };
-  };
+  export const wsConnectionStart = () => ({
+    type: WS_CONNECTION_START,
+  });
