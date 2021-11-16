@@ -1,5 +1,6 @@
 import React from "react";
 import ProfileStyles from "./Profile.module.css";
+import AppStyles from '../App/App.module.css';
 
 import {
   Input,
@@ -10,9 +11,8 @@ import { loginApi } from "../../utils/LoginApi";
 
 function Profile() {
   const currentUser = useSelector((state) => state.currentSession.currentUser);
-
-  const [name, setName] = React.useState<string>('');
-  const [email, setEmail] = React.useState<string>('');
+  const [name, setName] = React.useState<string>('Загрузка...');
+  const [email, setEmail] = React.useState<string>('Загрузка...');
   const [password, setPassword] = React.useState<string>("*****");
 
   const [nameDisabled, setNameDisabled] = React.useState<boolean>(true);
@@ -22,6 +22,10 @@ function Profile() {
   const nameInputRef = React.useRef<HTMLInputElement>(null);
   const emailInputRef = React.useRef<HTMLInputElement>(null);
   const passwordInputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    setInputData();
+  });
 
   function onIconClick(input: any, setState: (arg0: boolean) => void) {
     setTimeout(() => input.current.focus(), 0);
@@ -45,16 +49,21 @@ function Profile() {
   }
 
   function setInputData() {
-    setName(currentUser.user.name);
-    setEmail(currentUser.user.email);
+    if (currentUser === null || undefined) {
+      setName('Загрузка...');
+      setEmail('Загрузка...');
+    } else {
+      setName(currentUser.user.name);
+      setEmail(currentUser.user.email);
+    }
     setNameDisabled(true);
     setEmailDisabled(true);
     setPasswordDisabled(true);
   }
 
-  React.useEffect(() => {
-    setInputData();
-  });
+  if (currentUser === null || undefined) {
+    return <div className={`${AppStyles.centeredComponent} text text_type_main-large`}>Загрузка...</div>
+  }
 
   return (
     <div className={ProfileStyles.profile}>

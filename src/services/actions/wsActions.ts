@@ -45,3 +45,7 @@ export type TWsActions =
   export const wsConnectionStart = () => ({
     type: WS_CONNECTION_START,
   });
+
+  export const wsConnectionClose = () => ({
+    type: WS_CONNECTION_CLOSED,
+  })

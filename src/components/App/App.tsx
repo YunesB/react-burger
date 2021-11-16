@@ -67,10 +67,6 @@ const App = () => {
     (state) => state.currentSession.isAccountLoading
   );
 
-  // const isOrderFeedLoading = useSelector(
-  //   (state) => state.orderFeed.isPageLoading
-  // );
-
   const IngredientModal = <IngredientDetails />;
   const OrderModal = <OrderDetails />;
   const OrderDataModal = <OrderData isModal={true}/>
@@ -108,6 +104,7 @@ const App = () => {
         .then((data: any) => {
           localStorage.setItem("accessToken", data.accessToken);
           console.log("token refresh success");
+          getCurrentUser(() => null);
         })
         .catch((err) => {
           console.log(err);
@@ -138,7 +135,9 @@ const App = () => {
             <IngredientDetailsPage />
           </Route>
           <ProtectedRoute path="/account" redirect={false}>
-            <Account />
+            <Account 
+              openModal={handleModalOpenOrderData}
+            />
           </ProtectedRoute>
           <ProtectedRouteAuth path="/login">
             <Login />

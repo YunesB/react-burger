@@ -1,3 +1,4 @@
+import React from "react";
 import ModalStyles from "./Modal.module.css";
 import AppStyles from '../App/App.module.css';
 
@@ -15,6 +16,8 @@ interface TOrderData {
 const OrderData = (props: TOrderData) => {
 
   const { id } = useParams<{ id?: string }>();
+  const [ style, setStyle ] = React.useState<string>('red');
+  const [ status, setStatus ] = React.useState<string>('Выполнен');
 
   const orderFeed = useSelector(
     (state) => state.orderFeed
@@ -23,10 +26,27 @@ const OrderData = (props: TOrderData) => {
   const burgerIngredientsArray = useSelector(
     (state) => state.burgerIngredients.burgerIngredientsArray
   );
+
+  React.useEffect(() => {
+    checkOrderStatus();
+  }, [])
   
   if (orderFeed.isPageLoading === true || burgerIngredientsArray.length === 0) {
     return <div className={`${AppStyles.centeredComponent} text text_type_main-large`}>Загрузка...</div>
   }
+
+  const checkOrderStatus = () => {
+    if (cardData.status === 'done') {
+      setStyle('#00CCCC')
+      setStatus('Выполнен');
+    } else if (cardData.status === 'pending') {
+      setStyle('ligntblue')
+      setStatus('В обработке');
+    } else {
+      setStyle('white');
+      setStatus('Создан');
+    }
+  };
 
   const cardData = filterOrderFeed(orderFeed.orderFeedData.orders, id!);
   var time = format(new Date(cardData.createdAt), 'hh:mm');
@@ -39,7 +59,7 @@ const OrderData = (props: TOrderData) => {
     <div className={`${props.isModal ? `${ModalStyles.orderBox} p-10` : ModalStyles.pageBox}`}>
       <p className="text text_type_digits-default mb-10 mt-5">#0{cardData.number}</p>
       <h2 className="text text_type_main-medium mb-2">{cardData.name}</h2>
-      <p className={`${ModalStyles.statusText} text text_type_main-default mb-15`}>Выполнен</p>
+      <p className={`${ModalStyles.statusText} text text_type_main-default mb-15`} style={{ color: style }}>{status}</p>
       <p className="text text_type_main-medium mb-8">Cостав</p>
       <ul className={`${ModalStyles.list}`}>
         {ingrArray && ingrArray.map((card, index) => (

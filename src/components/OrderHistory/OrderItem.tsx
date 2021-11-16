@@ -12,17 +12,38 @@ import { getIngr, getTotalPrice, getCurrentDate } from '../../utils/functions';
 interface IOrderItem {
   card: any;
   feed: boolean;
-  openModal?: any;
+  openModal?: () => void;
 }
 
 const OrderItem: React.FC<IOrderItem> = (props) => {
+
+  const [ style, setStyle ] = React.useState<string>('red');
+  const [ status, setStatus ] = React.useState<string>('Выполнен');
+
   const cardData = props.card;
   const burgerIngredientsArray = useSelector(
     (state) => state.burgerIngredients.burgerIngredientsArray
   );
 
-  var time = format(new Date(props.card.createdAt), 'hh:mm');
-  const date = new Date(props.card.createdAt);
+  const checkOrderStatus = () => {
+    if (cardData.status === 'done') {
+      setStyle('#00CCCC')
+      setStatus('Выполнен');
+    } else if (cardData.status === 'pending') {
+      setStyle('ligntblue')
+      setStatus('В обработке');
+    } else {
+      setStyle('white');
+      setStatus('Создан');
+    }
+  };
+
+  React.useEffect(() => {
+    checkOrderStatus();
+  }, [])
+
+  var time = format(new Date(cardData.createdAt), 'hh:mm');
+  const date = new Date(cardData.createdAt);
 
   const currentDay = getCurrentDate(date);
   const ingrArray = getIngr(cardData, burgerIngredientsArray);
@@ -44,7 +65,7 @@ const OrderItem: React.FC<IOrderItem> = (props) => {
           <p className='text text_type_main-default text_color_inactive'>{`${currentDay}, в ${time} i-GMT+3`}</p>
         </div>
         <h2 className='text text_type_main-medium mb-2'>{cardData.name}</h2>
-        <p className={`${props.feed ? OrderStyles.hidden : OrderStyles.visible } text text_type_main-small mb-7`}>Создан</p>
+        <p className={`${props.feed ? OrderStyles.visible : OrderStyles.hidden } text text_type_main-small mb-7`} style={{ color: style }}>{status}</p>
         <div className={OrderStyles.dataBox}>
           <ul className={OrderStyles.ingrList}>
             {ingrArray.length > 5 ? (

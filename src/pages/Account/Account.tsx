@@ -1,3 +1,4 @@
+import React from "react";
 import AccountStyles from "./Account.module.css";
 
 import { useDispatch } from "../../services/hooks";
@@ -12,13 +13,21 @@ import {
 import Profile from "../../components/Profile/Profile";
 import OrderHistory from "../../components/OrderHistory/OrderHistory";
 
+import { wsConnectionStart } from "../../services/actions/wsActions";
 import { logoutUser } from "../../services/actions/currentSession";
 
-function Account() {
+interface IAcoount {
+  openModal: () => void;
+}
+
+const Account: React.FC<IAcoount> = (props) => {
   const history = useHistory();
   const { path, url } = useRouteMatch();
 
   const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(wsConnectionStart());
+  }, [dispatch]);
 
   function handleSignOut() {
     let refreshJwt: string | null = localStorage.getItem("refreshToken");
@@ -67,7 +76,9 @@ function Account() {
             <Profile />
           </Route>
           <Route path={`${path}/order-history`}>
-            <OrderHistory />
+            <OrderHistory 
+              openModal={props.openModal}
+            />
           </Route>
           <Redirect to={`${url}/profile`} />
         </Switch>
