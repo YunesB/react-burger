@@ -44,7 +44,7 @@ const OrderFeed = (props: IOrderFeed) => {
       <div className={FeedStyles.contentBox}>
         <ul className={FeedStyles.list}>
           {orderFeedArray.map((card: any) =>
-            <OrderItem card={card} feed={false} key={card._id} openModal={props.openModal} />
+            <OrderItem card={card} feed={false} key={card._id} openModal={props.openModal} isAuth={false} />
           )}
         </ul>
         <div className={FeedStyles.ordersData}>

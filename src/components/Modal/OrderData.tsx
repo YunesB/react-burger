@@ -6,8 +6,11 @@ import { useSelector } from "../../services/hooks";
 import { useParams } from "react-router-dom";
 
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { getIngr, getTotalPrice, getCurrentDate, filterOrderFeed } from '../../utils/functions';
+import { getIngr, getTotalPrice, getCurrentDate, filterOrderFeed, filterBothArrays } from '../../utils/functions';
 import { format } from 'date-fns';
+import NotFound from "../../pages/NotFound/NotFound";
+
+import { useLocation } from "react-router-dom";
 
 interface TOrderData {
   isModal?: boolean;
@@ -18,28 +21,43 @@ const OrderData = (props: TOrderData) => {
   const { id } = useParams<{ id?: string }>();
   const [ style, setStyle ] = React.useState<string>('red');
   const [ status, setStatus ] = React.useState<string>('Выполнен');
+  const location = useLocation();
+
+  const isUserAuth = useSelector(
+    (state) => state.currentSession.isCurrentUserAuth
+  );
 
   const orderFeed = useSelector(
     (state) => state.orderFeed
+  );
+
+  const userOrderFeed = useSelector(
+    (state) => state.userOrderFeed
   );
 
   const burgerIngredientsArray = useSelector(
     (state) => state.burgerIngredients.burgerIngredientsArray
   );
 
-  React.useEffect(() => {
-    checkOrderStatus();
-  }, [])
-  
-  if (orderFeed.isPageLoading === true || burgerIngredientsArray.length === 0) {
-    return <div className={`${AppStyles.centeredComponent} text text_type_main-large`}>Загрузка...</div>
-  }
+  let cardData: any = null;
 
-  const checkOrderStatus = () => {
-    if (cardData.status === 'done') {
+  let time;
+  let date;
+  let currentDay;
+  let ingrArray;
+  let totalPrice;
+
+  React.useEffect(() => {
+    setOrderStatus(cardData);
+  }, [cardData]);
+
+  function setOrderStatus(card: any) {
+    if (!card) {
+      return
+    } else if (card.status === 'done') {
       setStyle('#00CCCC')
       setStatus('Выполнен');
-    } else if (cardData.status === 'pending') {
+    } else if (card.status === 'pending') {
       setStyle('ligntblue')
       setStatus('В обработке');
     } else {
@@ -47,18 +65,35 @@ const OrderData = (props: TOrderData) => {
       setStatus('Создан');
     }
   };
+  
+  if (orderFeed.isPageLoading === true 
+    || burgerIngredientsArray.length === 0
+    || (!isUserAuth && !orderFeed.orderFeedData) 
+    || (isUserAuth && !userOrderFeed.orderFeedData)) {
+    return <div className={`${AppStyles.centeredComponent} text text_type_main-large`}>Загрузка...</div>
+  }
 
-  const cardData = filterOrderFeed(orderFeed.orderFeedData.orders, id!);
-  var time = format(new Date(cardData.createdAt), 'hh:mm');
-  const date = new Date(cardData.createdAt);
-  const currentDay = getCurrentDate(date);
-  const ingrArray = getIngr(cardData, burgerIngredientsArray);
-  const totalPrice = getTotalPrice(ingrArray);
+  if ((!isUserAuth && orderFeed && orderFeed.orderFeedData) 
+  || (isUserAuth && userOrderFeed && userOrderFeed.orderFeedData)) {
+    cardData = location.pathname === `/feed/${id}`
+    ? filterOrderFeed(orderFeed.orderFeedData.orders, id!) 
+    : filterOrderFeed(userOrderFeed.orderFeedData.orders, id!);
+  }
+
+  if (!cardData) {
+    return <NotFound />
+  }
+
+  time = format(new Date(cardData.createdAt), 'hh:mm');
+  date = new Date(cardData.createdAt);
+  currentDay = getCurrentDate(date);
+  ingrArray = getIngr(cardData, burgerIngredientsArray);
+  totalPrice = getTotalPrice(ingrArray);
 
   return (
     <div className={`${props.isModal ? `${ModalStyles.orderBox} p-10` : ModalStyles.pageBox}`}>
-      <p className="text text_type_digits-default mb-10 mt-5">#0{cardData.number}</p>
-      <h2 className="text text_type_main-medium mb-2">{cardData.name}</h2>
+      <p className="text text_type_digits-default mb-10 mt-5">#0{cardData.number || 'Загрузка...'}</p>
+      <h2 className="text text_type_main-medium mb-2">{cardData.name  || 'Загрузка...'}</h2>
       <p className={`${ModalStyles.statusText} text text_type_main-default mb-15`} style={{ color: style }}>{status}</p>
       <p className="text text_type_main-medium mb-8">Cостав</p>
       <ul className={`${ModalStyles.list}`}>
@@ -76,9 +111,9 @@ const OrderData = (props: TOrderData) => {
         ))} 
       </ul>
       <div className={`${ModalStyles.priceContainer} mt-10`}>
-        <p className='text text_type_main-default text_color_inactive'>{`${currentDay}, в ${time} i-GMT+3`}</p>
+        <p className='text text_type_main-default text_color_inactive'>{`${currentDay}, в ${time} i-GMT+3` || 'Загрузка...'}</p>
         <div className={`${ModalStyles.priceBox}`}>
-          <p className='text text_type_digits-default mr-2'>{totalPrice}</p>
+          <p className='text text_type_digits-default mr-2'>{totalPrice || 'Загрузка...'}</p>
           <CurrencyIcon type="primary" />
         </div>
       </div>

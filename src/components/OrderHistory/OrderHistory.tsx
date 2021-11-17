@@ -1,8 +1,11 @@
+import React from 'react';
 import OrderStyles from './OrderHistory.module.css';
 import AppStyles from '../App/App.module.css';
 
-import { useSelector } from "../../services/hooks";
+import { useSelector, useDispatch } from "../../services/hooks";
 import OrderItem from './OrderItem';
+
+import { wsAuthConnectionStart } from '../../services/actions/wsAuthActions';
 
 interface IOrderHistory {
   openModal: () => void;
@@ -10,8 +13,13 @@ interface IOrderHistory {
 
 const OrderHistory: React.FC<IOrderHistory> = (props) => {
 
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(wsAuthConnectionStart());
+  }, [dispatch])
+
   const orderFeed = useSelector(
-    (state) => state.orderFeed
+    (state) => state.userOrderFeed
   );
 
   const burgerIngredientsArray = useSelector(
@@ -26,7 +34,7 @@ const OrderHistory: React.FC<IOrderHistory> = (props) => {
     <div className={OrderStyles.orderHistory}>
       <ul className={OrderStyles.profileList}>
         {orderFeed.orderFeedData.orders.map((card: any, index: number) => (
-          <OrderItem card={card} openModal={props.openModal} feed={true} key={index} />
+          <OrderItem card={card} openModal={props.openModal} feed={true} key={index} isAuth={false} />
         ))}
       </ul>
     </div>

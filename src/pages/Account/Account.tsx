@@ -16,6 +16,8 @@ import OrderHistory from "../../components/OrderHistory/OrderHistory";
 import { wsConnectionStart } from "../../services/actions/wsActions";
 import { logoutUser } from "../../services/actions/currentSession";
 
+import { wsAuthConnectionClose } from '../../services/actions/wsAuthActions';
+
 interface IAcoount {
   openModal: () => void;
 }
@@ -30,6 +32,7 @@ const Account: React.FC<IAcoount> = (props) => {
   }, [dispatch]);
 
   function handleSignOut() {
+    dispatch(wsAuthConnectionClose());
     let refreshJwt: string | null = localStorage.getItem("refreshToken");
     dispatch(logoutUser(refreshJwt!, () => history.push("/login")));
   }

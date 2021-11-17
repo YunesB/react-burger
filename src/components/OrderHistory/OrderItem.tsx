@@ -12,6 +12,7 @@ import { getIngr, getTotalPrice, getCurrentDate } from '../../utils/functions';
 interface IOrderItem {
   card: any;
   feed: boolean;
+  isAuth: boolean;
   openModal?: () => void;
 }
 
@@ -19,6 +20,18 @@ const OrderItem: React.FC<IOrderItem> = (props) => {
 
   const [ style, setStyle ] = React.useState<string>('red');
   const [ status, setStatus ] = React.useState<string>('Выполнен');
+  const [ isAuthPath, setAuthPath ] = React.useState<string>('/account/order-history/');
+  const location = useLocation<TLocationState>();
+
+  React.useEffect(() => {
+    if (location.pathname === '/feed') {
+      setAuthPath('/feed/')
+    } else {
+      setAuthPath('/account/order-history/')
+    }
+  }, [location]);
+
+  console.log(location.pathname);
 
   const cardData = props.card;
   const burgerIngredientsArray = useSelector(
@@ -48,7 +61,6 @@ const OrderItem: React.FC<IOrderItem> = (props) => {
   const currentDay = getCurrentDate(date);
   const ingrArray = getIngr(cardData, burgerIngredientsArray);
   const totalPrice = getTotalPrice(ingrArray);
-  const location = useLocation<TLocationState>();
 
   return (
     <li className={`${OrderStyles.listItem} mb-6`}>
@@ -56,7 +68,7 @@ const OrderItem: React.FC<IOrderItem> = (props) => {
         className={OrderStyles.link}
         onClick={props.openModal}
         to={{
-          pathname: `/feed/${cardData._id}`,
+          pathname: `${isAuthPath}${cardData._id}`,
           state: { background: location },
         }}
       >

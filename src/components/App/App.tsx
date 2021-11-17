@@ -44,6 +44,7 @@ const App = () => {
     React.useState<boolean>(false);
   const [isModalOpenOrder, setModalOpenOrder] = React.useState<boolean>(false);
   const [isModalOpenOrderData, setModalOpenOrderData] = React.useState<boolean>(false);
+  const [isModalOpenUserOrderData, setModalOpenUserOrderData] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -95,6 +96,15 @@ const App = () => {
     setModalOpenOrderData(false);
   }
 
+  function handleModalOpenUserOrderData() {
+    console.log('click')
+    setModalOpenUserOrderData(true);
+  }
+
+  function handleModalCloseUserOrderData() {
+    setModalOpenUserOrderData(false);
+  }
+
   function refreshToken() {
     let refreshJwt = localStorage.getItem("refreshToken");
     if (isUserAuth === false) {
@@ -136,7 +146,7 @@ const App = () => {
           </Route>
           <ProtectedRoute path="/account" redirect={false}>
             <Account 
-              openModal={handleModalOpenOrderData}
+              openModal={handleModalOpenUserOrderData}
             />
           </ProtectedRoute>
           <ProtectedRouteAuth path="/login">
@@ -157,6 +167,9 @@ const App = () => {
             />
           </Route>
           <Route path="/feed/:id" exact={true}>
+            <OrderDetailsPage />
+          </Route>
+          <Route path="/account/order-history/:id" exact={true}>
             <OrderDetailsPage />
           </Route>
           <Route>
@@ -190,7 +203,19 @@ const App = () => {
               isOpen={isModalOpenOrderData}
               closeModal={handleModalCloseOrderData}
               children={OrderDataModal}
-          />
+            />
+          }
+        />
+      )}
+      {background && (
+        <Route
+          path="/account/order-history/:id"
+          children={
+            <Modal
+              isOpen={isModalOpenUserOrderData}
+              closeModal={handleModalCloseUserOrderData}
+              children={OrderDataModal}
+            />
           }
         />
       )}
