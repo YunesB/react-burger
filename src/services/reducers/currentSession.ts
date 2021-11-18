@@ -33,6 +33,7 @@ type TCurrentSessionState = {
   currentUser: TUser,
   currentUserRequest: boolean,
   currentUserFailed: boolean,
+  currentUserChecked: boolean,
 
   registerRequest: boolean,
   registerFailed: boolean,
@@ -52,6 +53,7 @@ const initialState: TCurrentSessionState = {
   currentUser: DEFAULT_USER,
   currentUserRequest: false,
   currentUserFailed: false,
+  currentUserChecked: false,
 
   registerRequest: false,
   registerFailed: false,
@@ -74,6 +76,7 @@ export const currentSessionReducer = (state = initialState, action: TCurrentSess
         ...state,
         currentUserRequest: true,
         isAccountLoading: true,
+        currentUserChecked: false,
       };
     }
     case GET_CURRENT_USER_SUCCESS: {
@@ -83,7 +86,8 @@ export const currentSessionReducer = (state = initialState, action: TCurrentSess
         currentUserFailed: false,
         currentUser: action.currentUser,
         isCurrentUserAuth: true,
-        isAccountLoading: false
+        isAccountLoading: false,
+        currentUserChecked: true,
       };
     }
     case GET_CURRENT_USER_FAILED: {
@@ -92,6 +96,7 @@ export const currentSessionReducer = (state = initialState, action: TCurrentSess
         currentUserRequest: false,
         currentUserFailed: true,
         isAccountLoading: false,
+        currentUserChecked: true,
       };
     }
 
@@ -100,6 +105,7 @@ export const currentSessionReducer = (state = initialState, action: TCurrentSess
         ...state,
         registerRequest: true,
         isAccountLoading: true,
+        currentUserChecked: false,
       };
     }
     case REGISTER_USER_SUCCESS: {

@@ -139,7 +139,7 @@ export type TCurrentSessionAction =
 | ICheckCurrentUserAuth
 | ICheckResetPasswordVisit
 
-export function getCurrentUser(func: any) {
+export function getCurrentUser() {
   const jwt = localStorage.getItem('accessToken');
   return function (dispatch: any) {
     dispatch({
@@ -159,11 +159,27 @@ export function getCurrentUser(func: any) {
         });
         if (err.message === "jwt expired") {
           console.log("token refresh started");
-          func();
+          refreshToken();
+          getCurrentUser()
         }
       })
   }
 };
+
+function refreshToken() {
+  let refreshJwt = localStorage.getItem("refreshToken");
+    localStorage.removeItem("accessToken");
+    loginApi
+      .updateToken(refreshJwt)!
+      .then((data: any) => {
+        localStorage.setItem("accessToken", data.accessToken);
+        console.log("token refresh success");
+        getCurrentUser();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+}
 
 export function registerUser(data: TUserData, func: any) {
   return function (dispatch: any) {

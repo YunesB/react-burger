@@ -31,11 +31,8 @@ import OrderDetails from "../Modal/OrderDetails";
 import OrderData from "../Modal/OrderData";
 import Modal from "../Modal/Modal";
 import Loading from "../Modal/Loading";
-import { loginApi } from "../../utils/LoginApi";
 
 import { useSelector, useDispatch } from "../../services/hooks";
-// import { wsConnectionStart } from "../../services/actions/wsActions";
-
 import { TLocationState } from '../../types';
 
 const App = () => {
@@ -51,10 +48,6 @@ const App = () => {
   const location = useLocation<TLocationState>();
   const background =
     history.action === "PUSH" && location.state && location.state.background;
-
-  const isUserAuth = useSelector(
-    (state) => state.currentSession.isCurrentUserAuth
-  );
 
   const isPageLoading = useSelector(
     (state) => state.burgerIngredients.isPageLoading
@@ -97,7 +90,6 @@ const App = () => {
   }
 
   function handleModalOpenUserOrderData() {
-    console.log('click')
     setModalOpenUserOrderData(true);
   }
 
@@ -105,28 +97,11 @@ const App = () => {
     setModalOpenUserOrderData(false);
   }
 
-  function refreshToken() {
-    let refreshJwt = localStorage.getItem("refreshToken");
-    if (isUserAuth === false) {
-      localStorage.removeItem("accessToken");
-      loginApi
-        .updateToken(refreshJwt)!
-        .then((data: any) => {
-          localStorage.setItem("accessToken", data.accessToken);
-          console.log("token refresh success");
-          getCurrentUser(() => null);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
   React.useEffect(() => {
     let refreshJwt = localStorage.getItem("refreshToken");
     dispatch(getIngredientsData());
     if (refreshJwt) {
-      dispatch(getCurrentUser(() => refreshToken()));
+      dispatch(getCurrentUser());
     }
   }, [dispatch]);
 
@@ -144,11 +119,6 @@ const App = () => {
           <Route path="/ingredient/:id" exact={true}>
             <IngredientDetailsPage />
           </Route>
-          <ProtectedRoute path="/account" redirect={false}>
-            <Account 
-              openModal={handleModalOpenUserOrderData}
-            />
-          </ProtectedRoute>
           <ProtectedRouteAuth path="/login">
             <Login />
           </ProtectedRouteAuth>
@@ -172,10 +142,14 @@ const App = () => {
           <Route path="/account/order-history/:id" exact={true}>
             <OrderDetailsPage />
           </Route>
+          <ProtectedRoute path="/account" redirect={false}>
+            <Account 
+              openModal={handleModalOpenUserOrderData}
+            />
+          </ProtectedRoute>
           <Route>
             <NotFound />
           </Route>
-          {/* {isUserAuth ? <Redirect to="/" /> : <Redirect to="/login" />} */}
         </Switch>
       </main>
       {background && (

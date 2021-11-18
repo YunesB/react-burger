@@ -71,3 +71,26 @@ export type TResetPassword = {
   password: string;
   token: string;
 };
+
+export type TCardData = {
+  createdAt: string,
+  ingredients: Array<string>,
+  name: string,
+  number: number,
+  status: string,
+  updatedAt: string,
+  _id: string,
+}
+
+export type TOrderFeed = {
+  orders: Array<TCardData>,
+  total: number,
+  totalToday: number,
+}
+
+export type TFeedState = {
+  wsConnected?: boolean;
+  wsError?: boolean | null;
+  orderFeedData?: TOrderFeed | [];
+  isPageLoading?: boolean;
+};

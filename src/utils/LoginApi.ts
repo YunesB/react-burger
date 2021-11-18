@@ -10,10 +10,13 @@ class LoginApi {
 
   handleResponse<T>(res: Response): Promise<T> {
     if (res.status === 403) {
-      let refreshToken = localStorage.getItem('refreshToken')
+      console.log('403 Error')
+      let refreshToken = localStorage.getItem('refreshToken');
       this.updateToken(refreshToken)!
         .then((data: unknown | any) => {
+          console.log('updating tokens');
           localStorage.setItem('accessToken', data.accessToken);
+          localStorage.setItem('refreshToken', data.refreshToken);
         })
         .catch(() => {
           return Promise.reject(`Ошибка: ${res.status} - ${res.statusText}`);
@@ -33,7 +36,7 @@ class LoginApi {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({token: refreshToken}),
+        body: JSON.stringify({ "token": refreshToken }),
       })
       .then((res) =>
         this.handleResponse(res)

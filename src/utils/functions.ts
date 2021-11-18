@@ -1,9 +1,9 @@
-import { TBasketCard } from "../types";
+import { TBasketCard, TCardData } from "../types";
 import { isToday, format, isYesterday } from 'date-fns';
 
-export const getIngr = (array: any, burgerIngredientsArray: any) => {
+export const getIngr = (array: TCardData | null, burgerIngredientsArray: Array<TBasketCard>) => {
   let Ingr: Array<TBasketCard> = [];
-  array.ingredients.map((id: string) => {
+  array!.ingredients.map((id: string) => {
     return burgerIngredientsArray.forEach((item: TBasketCard) => {
       if (item._id === id) {
         Ingr.push(item!);
@@ -13,17 +13,17 @@ export const getIngr = (array: any, burgerIngredientsArray: any) => {
   return Ingr;
 };
 
-export const getTotalPrice = (array: any) => {
+export const getTotalPrice = (array: Array<TBasketCard>) => {
   let totalSum = 0;
   let ingrPrices: Array<number> = [];
-  array.forEach((item: { price: number; }) => ingrPrices.push(item.price!));
+  array.forEach((item) => ingrPrices.push(item.price!));
   for (let i = 0; i < ingrPrices.length; i++) {
     totalSum += ingrPrices[i];
   }
   return totalSum;
 };
 
-export const getCurrentDate = (date: any) => {
+export const getCurrentDate = (date: Date) => {
   if (isToday(date)) {
     return 'Сегодня'
   } else if (isYesterday(date)) {
@@ -33,24 +33,18 @@ export const getCurrentDate = (date: any) => {
   }
 };
 
-export function filterOrderFeed(array: any, id: string) {
+export function filterOrderFeed(array: Array<TCardData>, id: string) {
   let filteredArray = array.filter((obj: { _id: string }) => obj._id === id);
   return filteredArray[0];
 }
 
-export function filterBothArrays(unauthArray: any, authArray: any, id: string) {
-  let filteredArray = unauthArray.filter((obj: { _id: string }) => obj._id === id);
-  if (filteredArray === []) {
-    filteredArray = authArray.filter((obj: { _id: string }) => obj._id === id);
-    if (filteredArray !== []) {
-      return filteredArray[0];
-    } else {
-      return
-    }
-  }
-  if (filteredArray !== []) {
-    return filteredArray[0]; 
-  } else {
-    return false;
-  }
-}
+export const getNumberOfIngrs = (array: TCardData) => {
+  const idArray: any = {};
+  array &&
+  array.ingredients.forEach((id: string) => {
+    if (!idArray[id]) idArray[id] = 0;
+      idArray[id]++;
+    });
+  return idArray;
+};
+

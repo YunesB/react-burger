@@ -7,14 +7,7 @@ import {
 } from "../actions/wsActions";
 
 import { TWsActions } from "../actions/wsActions";
-// import { TFeedData } from "../../types/feed";
-
-type TFeedState = {
-  wsConnected?: boolean;
-  wsError?: any;
-  orderFeedData?: any;
-  isPageLoading?: boolean;
-};
+import { TFeedState } from "../../types";
 
 export const initialState: TFeedState = {
   wsConnected: false,

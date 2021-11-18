@@ -31,8 +31,6 @@ const OrderItem: React.FC<IOrderItem> = (props) => {
     }
   }, [location]);
 
-  console.log(location.pathname);
-
   const cardData = props.card;
   const burgerIngredientsArray = useSelector(
     (state) => state.burgerIngredients.burgerIngredientsArray

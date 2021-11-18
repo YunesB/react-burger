@@ -5,6 +5,7 @@ import AppStyles from '../App/App.module.css';
 import { useSelector, useDispatch } from "../../services/hooks";
 import OrderItem from './OrderItem';
 
+import { TCardData } from '../../types';
 import { wsAuthConnectionStart } from '../../services/actions/wsAuthActions';
 
 interface IOrderHistory {
@@ -33,8 +34,8 @@ const OrderHistory: React.FC<IOrderHistory> = (props) => {
   return (
     <div className={OrderStyles.orderHistory}>
       <ul className={OrderStyles.profileList}>
-        {orderFeed.orderFeedData.orders.map((card: any, index: number) => (
-          <OrderItem card={card} openModal={props.openModal} feed={true} key={index} isAuth={false} />
+        {orderFeed.orderFeedData.orders.map((card: TCardData, index: number) => (
+          <OrderItem card={card} openModal={props.openModal} feed={true} key={index} isAuth={true} />
         ))}
       </ul>
     </div>

@@ -6,11 +6,12 @@ import { useSelector } from "../../services/hooks";
 import { useParams } from "react-router-dom";
 
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { getIngr, getTotalPrice, getCurrentDate, filterOrderFeed, filterBothArrays } from '../../utils/functions';
+import { getIngr, getTotalPrice, getCurrentDate, filterOrderFeed, getNumberOfIngrs } from '../../utils/functions';
 import { format } from 'date-fns';
-import NotFound from "../../pages/NotFound/NotFound";
 
 import { useLocation } from "react-router-dom";
+import { TBasketCard, TCardData } from '../../types';
+import NotFound from "../../pages/NotFound/NotFound";
 
 interface TOrderData {
   isModal?: boolean;
@@ -39,19 +40,19 @@ const OrderData = (props: TOrderData) => {
     (state) => state.burgerIngredients.burgerIngredientsArray
   );
 
-  let cardData: any = null;
+  let cardData: TCardData | null = null;
 
   let time;
   let date;
   let currentDay;
-  let ingrArray;
+  let ingrArray: TBasketCard[];
   let totalPrice;
 
   React.useEffect(() => {
     setOrderStatus(cardData);
   }, [cardData]);
 
-  function setOrderStatus(card: any) {
+  function setOrderStatus(card: TCardData | null) {
     if (!card) {
       return
     } else if (card.status === 'done') {
@@ -80,31 +81,38 @@ const OrderData = (props: TOrderData) => {
     : filterOrderFeed(userOrderFeed.orderFeedData.orders, id!);
   }
 
-  if (!cardData) {
+  if (cardData === undefined) {
     return <NotFound />
   }
 
-  time = format(new Date(cardData.createdAt), 'hh:mm');
-  date = new Date(cardData.createdAt);
+  time = format(new Date(cardData!.createdAt), 'hh:mm');
+  date = new Date(cardData!.createdAt);
   currentDay = getCurrentDate(date);
-  ingrArray = getIngr(cardData, burgerIngredientsArray);
+  
+  ingrArray = getIngr(cardData!, burgerIngredientsArray);
   totalPrice = getTotalPrice(ingrArray);
+
+  const uniqueArray = ingrArray.filter((item: TBasketCard, pos: number) => {
+    return ingrArray.indexOf(item) === pos;
+  });
+
+  const numberOfIngrs: any = getNumberOfIngrs(cardData!);
 
   return (
     <div className={`${props.isModal ? `${ModalStyles.orderBox} p-10` : ModalStyles.pageBox}`}>
-      <p className="text text_type_digits-default mb-10 mt-5">#0{cardData.number || 'Загрузка...'}</p>
-      <h2 className="text text_type_main-medium mb-2">{cardData.name  || 'Загрузка...'}</h2>
+      <p className="text text_type_digits-default mb-10 mt-5">#0{cardData!.number || 'Загрузка...'}</p>
+      <h2 className="text text_type_main-medium mb-2">{cardData!.name  || 'Загрузка...'}</h2>
       <p className={`${ModalStyles.statusText} text text_type_main-default mb-15`} style={{ color: style }}>{status}</p>
       <p className="text text_type_main-medium mb-8">Cостав</p>
       <ul className={`${ModalStyles.list}`}>
-        {ingrArray && ingrArray.map((card, index) => (
+        {uniqueArray && uniqueArray.map((card, index) => (
           <li className={`${ModalStyles.listItem} mb-4`} key={index}>
             <div className={`${ModalStyles.imgBox}`}>
               <img src={card.image} alt={card.name} className={`${ModalStyles.img} mr-4`} />
               <p className={`${ModalStyles.ingrText} text text_type_main-default`}>{card.name}</p>
             </div>
             <div className={`${ModalStyles.priceBox}`}>
-              <p className={`text text_type_digits-default mr-2`}>{card.price}</p>
+              <p className={`text text_type_digits-default mr-2`}>{numberOfIngrs[card._id!] > 1 ? numberOfIngrs[card._id!] + ' X ' : ''}{card && card.price}</p>
               <CurrencyIcon type="primary" />
             </div>
           </li>

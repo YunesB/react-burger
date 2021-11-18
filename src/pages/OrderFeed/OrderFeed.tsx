@@ -5,7 +5,7 @@ import AppStyles from '../../components/App/App.module.css';
 import { useSelector, useDispatch } from "../../services/hooks";
 import OrderItem from '../../components/OrderHistory/OrderItem';
 import { wsConnectionStart } from "../../services/actions/wsActions";
-// import { TBasketCard } from '../../types';
+import { TCardData } from '../../types';
 
 interface IOrderFeed {
   openModal?: () => void;
@@ -43,7 +43,7 @@ const OrderFeed = (props: IOrderFeed) => {
       <h1 className='text text_type_main-large mt-10 mb-5'>Лента заказов</h1>
       <div className={FeedStyles.contentBox}>
         <ul className={FeedStyles.list}>
-          {orderFeedArray.map((card: any) =>
+          {orderFeedArray.map((card: TCardData) =>
             <OrderItem card={card} feed={false} key={card._id} openModal={props.openModal} isAuth={false} />
           )}
         </ul>
@@ -56,14 +56,14 @@ const OrderFeed = (props: IOrderFeed) => {
               В работе:
             </p>
             <ul className={FeedStyles.orderList}>
-              {finishedOrders && finishedOrders.map((card: any, index: number) => ( 
+              {finishedOrders && finishedOrders.map((card: TCardData, index: number) => ( 
                 <li className='text text_type_digits-default mb-2' key={index}>0{card.number}</li>
               ))}
             </ul>
             <ul className={FeedStyles.orderListReady}>
               {currentOrders.length === 0 ? 
               <li className='text text_type_main-small'>Все текущие заказы готовы!</li>
-              : currentOrders && currentOrders.map((card: any, index: number) => ( 
+              : currentOrders && currentOrders.map((card: TCardData, index: number) => ( 
                 <li className='text text_type_digits-default mb-2' key={index}>0{card.number}</li>
               ))}
             </ul>

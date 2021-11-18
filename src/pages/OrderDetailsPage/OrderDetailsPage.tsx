@@ -30,7 +30,6 @@ function OrderDetailsPage() {
     dispatch(wsConnectionStart());
     if (isUserAuth) {
       dispatch(wsAuthConnectionStart());
-      console.log('click');
     } 
   }, [dispatch, isUserAuth]);
 
