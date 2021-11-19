@@ -98,7 +98,7 @@ const App = () => {
   }
 
   React.useEffect(() => {
-    let refreshJwt = localStorage.getItem("refreshToken");
+    const refreshJwt = localStorage.getItem("refreshToken");
     dispatch(getIngredientsData());
     if (refreshJwt) {
       dispatch(getCurrentUser());

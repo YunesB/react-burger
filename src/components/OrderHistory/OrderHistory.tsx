@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "../../services/hooks";
 import OrderItem from './OrderItem';
 
 import { TCardData } from '../../types';
-import { wsAuthConnectionStart } from '../../services/actions/wsAuthActions';
+import { wsAuthConnectionClose, wsAuthConnectionStart } from '../../services/actions/wsAuthActions';
 
 interface IOrderHistory {
   openModal: () => void;
@@ -15,8 +15,9 @@ interface IOrderHistory {
 const OrderHistory: React.FC<IOrderHistory> = (props) => {
 
   const dispatch = useDispatch();
-  React.useEffect(() => {
+  React.useEffect((): () => void => {
     dispatch(wsAuthConnectionStart());
+    return () => dispatch(wsAuthConnectionClose());
   }, [dispatch])
 
   const orderFeed = useSelector(

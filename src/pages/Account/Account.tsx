@@ -13,7 +13,7 @@ import {
 import Profile from "../../components/Profile/Profile";
 import OrderHistory from "../../components/OrderHistory/OrderHistory";
 
-import { wsConnectionStart } from "../../services/actions/wsActions";
+import { wsConnectionClose, wsConnectionStart } from "../../services/actions/wsActions";
 import { logoutUser } from "../../services/actions/currentSession";
 
 import { wsAuthConnectionClose } from '../../services/actions/wsAuthActions';
@@ -27,13 +27,14 @@ const Account: React.FC<IAcoount> = (props) => {
   const { path, url } = useRouteMatch();
 
   const dispatch = useDispatch();
-  React.useEffect(() => {
+  React.useEffect((): () => void => {
     dispatch(wsConnectionStart());
+    return () => dispatch(wsConnectionClose());
   }, [dispatch]);
 
   function handleSignOut() {
     dispatch(wsAuthConnectionClose());
-    let refreshJwt: string | null = localStorage.getItem("refreshToken");
+    const refreshJwt: string | null = localStorage.getItem("refreshToken");
     dispatch(logoutUser(refreshJwt!, () => history.push("/login")));
   }
 

@@ -27,7 +27,10 @@ function Profile() {
     setInputData();
   });
 
-  function onIconClick(input: any, setState: (arg0: boolean) => void) {
+  function onIconClick(input: any, 
+    // HTMLInputElement не срабатывает, так и не смог разобраться почему
+    setState: (arg0: boolean) => void) {
+    console.log(input);
     setTimeout(() => input.current.focus(), 0);
     setState(false);
   }

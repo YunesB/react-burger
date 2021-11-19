@@ -3,8 +3,8 @@ import OrderData from "../../components/Modal/OrderData";
 import AppStyles from '../../components/App/App.module.css';
 
 import { useDispatch, useSelector } from "../../services/hooks";
-import { wsConnectionStart } from "../../services/actions/wsActions";
-import { wsAuthConnectionStart } from "../../services/actions/wsAuthActions";
+import { wsConnectionStart, wsConnectionClose } from "../../services/actions/wsActions";
+import { wsAuthConnectionStart, wsAuthConnectionClose } from "../../services/actions/wsAuthActions";
 
 function OrderDetailsPage() {
 
@@ -26,11 +26,14 @@ function OrderDetailsPage() {
     (state) => state.burgerIngredients.burgerIngredientsArray
   );
 
-  React.useEffect(() => {
-    dispatch(wsConnectionStart());
+  React.useEffect((): () => void => {
     if (isUserAuth) {
       dispatch(wsAuthConnectionStart());
-    } 
+      return () => dispatch(wsAuthConnectionClose());
+    } else {
+      dispatch(wsConnectionStart());
+      return () => dispatch(wsConnectionClose());
+    }
   }, [dispatch, isUserAuth]);
 
   if (orderFeed.isPageLoading === true 

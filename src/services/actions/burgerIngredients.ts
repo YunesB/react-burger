@@ -1,5 +1,5 @@
 import { api } from '../../utils/Api';
-import { TBasketCard } from '../../types';
+import { TBasketCard, AppThunk } from '../../types';
 
 export const GET_BURGER_INGREDIENTS_REQUEST: 'GET_BURGER_INGREDIENTS_REQUEST' = 'GET_BURGER_INGREDIENTS_REQUEST';
 export const GET_BURGER_INGREDIENTS_SUCCESS: 'GET_BURGER_INGREDIENTS_SUCCESS' = 'GET_BURGER_INGREDIENTS_SUCCESS';
@@ -39,12 +39,13 @@ export type TBurgerIngredientsActions =
 | IGetSelectedIngredient
 
 export function getIngredientsData() {
-  return function (dispatch: any) {
+  return function (dispatch: AppThunk) {
     dispatch({
       type: GET_BURGER_INGREDIENTS_REQUEST,
     });
     api.getCardsData()
       .then((res: any) => {
+        console.log(res);
         if (res && res.success) {
           dispatch({
             type: GET_BURGER_INGREDIENTS_SUCCESS,

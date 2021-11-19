@@ -11,7 +11,7 @@ class LoginApi {
   handleResponse<T>(res: Response): Promise<T> {
     if (res.status === 403) {
       console.log('403 Error')
-      let refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = localStorage.getItem('refreshToken');
       this.updateToken(refreshToken)!
         .then((data: unknown | any) => {
           console.log('updating tokens');

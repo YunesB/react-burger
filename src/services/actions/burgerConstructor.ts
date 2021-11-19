@@ -1,6 +1,6 @@
 import { api } from '../../utils/Api';
 import { v4 as uuidv4 } from 'uuid';
-import { TBasketCard, TOrderData, TOrderArray } from '../../types/index';
+import { TBasketCard, TOrderData, TOrderArray, AppThunk } from '../../types/index';
 
 export const GET_BURGER_CONSTRUCTOR_REQUEST: 'GET_BURGER_CONSTRUCTOR_REQUEST' = 'GET_BURGER_CONSTRUCTOR_REQUEST';
 export const GET_BURGER_CONSTRUCTOR_SUCCESS: 'GET_BURGER_CONSTRUCTOR_SUCCESS' = 'GET_BURGER_CONSTRUCTOR_SUCCESS';
@@ -63,11 +63,11 @@ export type TBurgerConstructorActions =
 | IResetBurgerConstructor;
 
 export function getConstructorData(array: TOrderArray) {
-  return function (dispatch: any) {
+  return function (dispatch: AppThunk) {
     dispatch({
       type: GET_BURGER_CONSTRUCTOR_REQUEST,
     });
-    let accessToken = localStorage.getItem('accessToken')
+    const accessToken = localStorage.getItem('accessToken')
     api.sendOrder(array, accessToken!)
       .then((data) => {
         dispatch({

@@ -4,7 +4,7 @@ import AppStyles from '../../components/App/App.module.css';
 
 import { useSelector, useDispatch } from "../../services/hooks";
 import OrderItem from '../../components/OrderHistory/OrderItem';
-import { wsConnectionStart } from "../../services/actions/wsActions";
+import { wsConnectionStart, wsConnectionClose } from "../../services/actions/wsActions";
 import { TCardData } from '../../types';
 
 interface IOrderFeed {
@@ -14,8 +14,9 @@ interface IOrderFeed {
 const OrderFeed = (props: IOrderFeed) => {
 
   const dispatch = useDispatch();
-  React.useEffect(() => {
+  React.useEffect((): () => void => {
     dispatch(wsConnectionStart());
+    return () => dispatch(wsConnectionClose());
   }, [dispatch]);
 
   let orderFeedArray;

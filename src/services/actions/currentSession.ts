@@ -1,5 +1,5 @@
 import { loginApi } from '../../utils/LoginApi';
-import { TUserData, TResetPassword, TUser } from '../../types'
+import { TUserData, TResetPassword, TUser, AppThunk, TLocationState } from '../../types'
 
 export const GET_CURRENT_USER_REQUEST: 'GET_CURRENT_USER_REQUEST' = 'GET_CURRENT_USER_REQUEST';
 export const GET_CURRENT_USER_SUCCESS: 'GET_CURRENT_USER_SUCCESS'  = 'GET_CURRENT_USER_SUCCESS';
@@ -141,7 +141,7 @@ export type TCurrentSessionAction =
 
 export function getCurrentUser() {
   const jwt = localStorage.getItem('accessToken');
-  return function (dispatch: any) {
+  return function (dispatch: AppThunk) {
     dispatch({
       type: GET_CURRENT_USER_REQUEST,
     });
@@ -167,7 +167,7 @@ export function getCurrentUser() {
 };
 
 function refreshToken() {
-  let refreshJwt = localStorage.getItem("refreshToken");
+  const refreshJwt = localStorage.getItem("refreshToken");
     localStorage.removeItem("accessToken");
     loginApi
       .updateToken(refreshJwt)!
@@ -181,8 +181,8 @@ function refreshToken() {
       });
 }
 
-export function registerUser(data: TUserData, func: any) {
-  return function (dispatch: any) {
+export function registerUser(data: TUserData, func: () => void) {
+  return function (dispatch: AppThunk) {
     dispatch({
       type:REGISTER_USER_REQUEST,
     });
@@ -202,8 +202,8 @@ export function registerUser(data: TUserData, func: any) {
   }
 }
 
-export function loginUser(data: TUserData, func: any) {
-  return function (dispatch: any) {
+export function loginUser(data: TUserData, func: () => void) {
+  return function (dispatch: AppThunk) {
     dispatch({
       type: LOGIN_USER_REQUEST,
     });
@@ -233,8 +233,8 @@ export function loginUser(data: TUserData, func: any) {
   }
 };
 
-export function logoutUser(refreshJwt: string, func: any) {
-  return function (dispatch: any) {
+export function logoutUser(refreshJwt: string, func: () => void) {
+  return function (dispatch: AppThunk) {
     dispatch({
       type: LOGOUT_USER_REQUEST,
     });
@@ -257,8 +257,8 @@ export function logoutUser(refreshJwt: string, func: any) {
   }
 }
 
-export function forgotPassword(data: TUserData, func: any) {
-  return function (dispatch: any) {
+export function forgotPassword(data: TUserData, func: () => void) {
+  return function (dispatch: AppThunk) {
     dispatch({
       type: FORGOT_PASSWORD_REQUEST,
     });
@@ -279,8 +279,8 @@ export function forgotPassword(data: TUserData, func: any) {
   }
 };
 
-export function recoverPassword(data: TResetPassword, func: any) {
-  return function (dispatch: any) {
+export function recoverPassword(data: TResetPassword, func: () => void) {
+  return function (dispatch: AppThunk) {
     dispatch({
       type: RECOVER_PASSWORD_REQUEST,
     });

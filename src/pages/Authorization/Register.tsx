@@ -37,7 +37,7 @@ function Register() {
       email: email,
       password: password,
     };
-    dispatch(registerUser(data, history.push("/login")));
+    dispatch(registerUser(data, () => history.push("/login")));
   }
 
   return (

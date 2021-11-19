@@ -2,7 +2,7 @@ import React from 'react';
 import OrderStyles from './OrderHistory.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from "../../services/hooks";
-import { TBasketCard, TLocationState } from '../../types';
+import { TBasketCard, TLocationState, TCardData } from '../../types';
 
 import { format } from 'date-fns';
 import { Link, useLocation } from 'react-router-dom';
@@ -10,7 +10,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { getIngr, getTotalPrice, getCurrentDate } from '../../utils/functions';
 
 interface IOrderItem {
-  card: any;
+  card: TCardData;
   feed: boolean;
   isAuth: boolean;
   openModal?: () => void;
