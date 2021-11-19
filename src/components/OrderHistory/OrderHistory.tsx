@@ -1,21 +1,43 @@
+import React from 'react';
 import OrderStyles from './OrderHistory.module.css';
-import { useSelector } from "react-redux";
+import AppStyles from '../App/App.module.css';
+
+import { useSelector, useDispatch } from "../../services/hooks";
 import OrderItem from './OrderItem';
 
-function OrderHistory() {
+import { TCardData } from '../../types';
+import { wsAuthConnectionClose, wsAuthConnectionStart } from '../../services/actions/wsAuthActions';
 
-  const burgerIngredientsArray = useSelector(
-    (state: any) => state.burgerIngredients.burgerIngredientsArray
+interface IOrderHistory {
+  openModal: () => void;
+}
+
+const OrderHistory: React.FC<IOrderHistory> = (props) => {
+
+  const dispatch = useDispatch();
+  React.useEffect((): () => void => {
+    dispatch(wsAuthConnectionStart());
+    return () => dispatch(wsAuthConnectionClose());
+  }, [dispatch])
+
+  const orderFeed = useSelector(
+    (state) => state.userOrderFeed
   );
 
-  if (burgerIngredientsArray.length === 0) {
-    return <></>
+  const burgerIngredientsArray = useSelector(
+    (state) => state.burgerIngredients.burgerIngredientsArray
+  );
+  
+  if (orderFeed.isPageLoading === true || burgerIngredientsArray.length === 0) {
+    return <div className={`${AppStyles.centeredComponent} text text_type_main-large`}>Загрузка...</div>
   }
 
   return (
     <div className={OrderStyles.orderHistory}>
-      <ul className={OrderStyles.list}>
-        <OrderItem card={burgerIngredientsArray[0]} feed={true} />
+      <ul className={OrderStyles.profileList}>
+        {orderFeed.orderFeedData.orders.map((card: TCardData, index: number) => (
+          <OrderItem card={card} openModal={props.openModal} feed={true} key={index} isAuth={true} />
+        ))}
       </ul>
     </div>
   );

@@ -1,13 +1,14 @@
 import loading from '../images/loading.svg';
 
+export const WSS_URL = 'wss://norma.nomoreparties.space';
 export const BASE_URL = 'https://norma.nomoreparties.space/api';
 
 export const DEFAULT_ORDER = {
-  "name": "DEFAULT_ORDER",
-  "order": {
-      "number": 9999
+  name: "DEFAULT_ORDER",
+  order: {
+      number: 9999
   },
-  "success": true
+  success: true
 };
 
 export const DEFAULT_BUN = {

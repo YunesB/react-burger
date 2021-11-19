@@ -2,9 +2,7 @@ import React from "react";
 import AppStyles from "./App.module.css";
 
 import { Switch, useHistory, Route, useLocation } from "react-router-dom";
-import { Location } from 'history';
 
-import { useDispatch, useSelector } from "react-redux";
 import { getIngredientsData } from "../../services/actions/burgerIngredients";
 import { getCurrentUser } from "../../services/actions/currentSession";
 
@@ -25,49 +23,47 @@ import ForgotPassword from "../../pages/Authorization/ForgotPassword";
 import RecoverPassword from "../../pages/Authorization/RecoverPassword";
 import IngredientDetailsPage from "../../pages/IngredientDetailsPage/IngredientDetailsPage";
 import OrderFeed from "../../pages/OrderFeed/OrderFeed";
+import OrderDetailsPage from "../../pages/OrderDetailsPage/OrderDetailsPage";
 import NotFound from "../../pages/NotFound/NotFound";
 
 import IngredientDetails from "../Modal/IngredientDetails";
 import OrderDetails from "../Modal/OrderDetails";
+import OrderData from "../Modal/OrderData";
 import Modal from "../Modal/Modal";
 import Loading from "../Modal/Loading";
-import { loginApi } from "../../utils/LoginApi";
+
+import { useSelector, useDispatch } from "../../services/hooks";
+import { TLocationState } from '../../types';
 
 const App = () => {
-
-  type TLocataionState = {
-    from?: Location;
-    background?: Location;
-  };
 
   const [isModalOpenIngredients, setModalOpenIngredients] =
     React.useState<boolean>(false);
   const [isModalOpenOrder, setModalOpenOrder] = React.useState<boolean>(false);
+  const [isModalOpenOrderData, setModalOpenOrderData] = React.useState<boolean>(false);
+  const [isModalOpenUserOrderData, setModalOpenUserOrderData] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const location = useLocation<TLocataionState>();
+  const location = useLocation<TLocationState>();
   const background =
     history.action === "PUSH" && location.state && location.state.background;
 
-  const isUserAuth = useSelector(
-    (state: any) => state.currentSession.isCurrentUserAuth
-  );
-
   const isPageLoading = useSelector(
-    (state: any) => state.burgerIngredients.isPageLoading
+    (state) => state.burgerIngredients.isPageLoading
   );
 
   const isOrderLoading = useSelector(
-    (state: any) => state.burgerConstructor.isPageLoading
+    (state) => state.burgerConstructor.isPageLoading
   );
 
   const isAccountLoading = useSelector(
-    (state: any) => state.currentSession.isAccountLoading
+    (state) => state.currentSession.isAccountLoading
   );
 
   const IngredientModal = <IngredientDetails />;
   const OrderModal = <OrderDetails />;
+  const OrderDataModal = <OrderData isModal={true}/>
 
   function handleModalOpenIngredients() {
     setModalOpenIngredients(true);
@@ -85,27 +81,27 @@ const App = () => {
     setModalOpenOrder(false);
   }
 
-  function refreshToken() {
-    let refreshJwt = localStorage.getItem("refreshToken");
-    if (isUserAuth === false) {
-      localStorage.removeItem("accessToken");
-      loginApi
-        .updateToken(refreshJwt)!
-        .then((data: any) => {
-          localStorage.setItem("accessToken", data.accessToken);
-          console.log("token refresh success");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+  function handleModalOpenOrderData() {
+    setModalOpenOrderData(true);
+  }
+
+  function handleModalCloseOrderData() {
+    setModalOpenOrderData(false);
+  }
+
+  function handleModalOpenUserOrderData() {
+    setModalOpenUserOrderData(true);
+  }
+
+  function handleModalCloseUserOrderData() {
+    setModalOpenUserOrderData(false);
   }
 
   React.useEffect(() => {
-    let refreshJwt = localStorage.getItem("refreshToken");
+    const refreshJwt = localStorage.getItem("refreshToken");
     dispatch(getIngredientsData());
     if (refreshJwt) {
-      dispatch(getCurrentUser(() => refreshToken()));
+      dispatch(getCurrentUser());
     }
   }, [dispatch]);
 
@@ -123,12 +119,6 @@ const App = () => {
           <Route path="/ingredient/:id" exact={true}>
             <IngredientDetailsPage />
           </Route>
-          <ProtectedRoute path="/feed" redirect={false}>
-            <OrderFeed />
-          </ProtectedRoute>
-          <ProtectedRoute path="/account" redirect={false}>
-            <Account />
-          </ProtectedRoute>
           <ProtectedRouteAuth path="/login">
             <Login />
           </ProtectedRouteAuth>
@@ -141,10 +131,25 @@ const App = () => {
           <ProtectedRoute path="/reset-password" redirect={true}>
             <RecoverPassword />
           </ProtectedRoute>
+          <Route path="/feed" exact={true}>
+            <OrderFeed 
+              openModal={handleModalOpenOrderData}
+            />
+          </Route>
+          <Route path="/feed/:id" exact={true}>
+            <OrderDetailsPage />
+          </Route>
+          <Route path="/account/order-history/:id" exact={true}>
+            <OrderDetailsPage />
+          </Route>
+          <ProtectedRoute path="/account" redirect={false}>
+            <Account 
+              openModal={handleModalOpenUserOrderData}
+            />
+          </ProtectedRoute>
           <Route>
             <NotFound />
           </Route>
-          {/* {isUserAuth ? <Redirect to="/" /> : <Redirect to="/login" />} */}
         </Switch>
       </main>
       {background && (
@@ -164,6 +169,30 @@ const App = () => {
         closeModal={handleModalCloseOrder}
         children={OrderModal}
       />
+      {background && (
+        <Route
+          path="/feed/:id"
+          children={
+            <Modal
+              isOpen={isModalOpenOrderData}
+              closeModal={handleModalCloseOrderData}
+              children={OrderDataModal}
+            />
+          }
+        />
+      )}
+      {background && (
+        <Route
+          path="/account/order-history/:id"
+          children={
+            <Modal
+              isOpen={isModalOpenUserOrderData}
+              closeModal={handleModalCloseUserOrderData}
+              children={OrderDataModal}
+            />
+          }
+        />
+      )}
       <Loading isOpen={isPageLoading || isOrderLoading || isAccountLoading} />
     </div>
   );

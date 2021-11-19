@@ -22,14 +22,38 @@ import {
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS,
   LOGOUT_USER_FAILED,
+
+  TCurrentSessionAction
 } from "../actions/currentSession";
 
 import { DEFAULT_USER } from '../../utils/constants';
+import { TUser } from '../../types';
 
-const initialState = {
+type TCurrentSessionState = {
+  currentUser: TUser,
+  currentUserRequest: boolean,
+  currentUserFailed: boolean,
+  currentUserChecked: boolean,
+
+  registerRequest: boolean,
+  registerFailed: boolean,
+
+  loginRequest: boolean,
+  loginFailed: boolean,
+
+  logoutRequest: boolean,
+  logoutFailed: boolean,
+
+  isAccountLoading: boolean,
+  isCurrentUserAuth: boolean,
+  isUserResetPassword: boolean,
+} 
+
+const initialState: TCurrentSessionState = {
   currentUser: DEFAULT_USER,
   currentUserRequest: false,
   currentUserFailed: false,
+  currentUserChecked: false,
 
   registerRequest: false,
   registerFailed: false,
@@ -45,13 +69,14 @@ const initialState = {
   isUserResetPassword: false,
 };
 
-export const currentSessionReducer = (state = initialState, action) => {
+export const currentSessionReducer = (state = initialState, action: TCurrentSessionAction): TCurrentSessionState => {
   switch (action.type) {
     case GET_CURRENT_USER_REQUEST: {
       return {
         ...state,
         currentUserRequest: true,
         isAccountLoading: true,
+        currentUserChecked: false,
       };
     }
     case GET_CURRENT_USER_SUCCESS: {
@@ -61,7 +86,8 @@ export const currentSessionReducer = (state = initialState, action) => {
         currentUserFailed: false,
         currentUser: action.currentUser,
         isCurrentUserAuth: true,
-        isAccountLoading: false
+        isAccountLoading: false,
+        currentUserChecked: true,
       };
     }
     case GET_CURRENT_USER_FAILED: {
@@ -70,6 +96,7 @@ export const currentSessionReducer = (state = initialState, action) => {
         currentUserRequest: false,
         currentUserFailed: true,
         isAccountLoading: false,
+        currentUserChecked: true,
       };
     }
 
@@ -78,6 +105,7 @@ export const currentSessionReducer = (state = initialState, action) => {
         ...state,
         registerRequest: true,
         isAccountLoading: true,
+        currentUserChecked: false,
       };
     }
     case REGISTER_USER_SUCCESS: {

@@ -1,6 +1,7 @@
+import React from "react";
 import AccountStyles from "./Account.module.css";
 
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 import {
   Route,
   NavLink,
@@ -12,17 +13,29 @@ import {
 import Profile from "../../components/Profile/Profile";
 import OrderHistory from "../../components/OrderHistory/OrderHistory";
 
+import { wsConnectionClose, wsConnectionStart } from "../../services/actions/wsActions";
 import { logoutUser } from "../../services/actions/currentSession";
 
-function Account() {
+import { wsAuthConnectionClose } from '../../services/actions/wsAuthActions';
+
+interface IAcoount {
+  openModal: () => void;
+}
+
+const Account: React.FC<IAcoount> = (props) => {
   const history = useHistory();
   const { path, url } = useRouteMatch();
 
   const dispatch = useDispatch();
+  React.useEffect((): () => void => {
+    dispatch(wsConnectionStart());
+    return () => dispatch(wsConnectionClose());
+  }, [dispatch]);
 
   function handleSignOut() {
-    let refreshJwt = localStorage.getItem("refreshToken");
-    dispatch(logoutUser(refreshJwt, () => history.push("/login")));
+    dispatch(wsAuthConnectionClose());
+    const refreshJwt: string | null = localStorage.getItem("refreshToken");
+    dispatch(logoutUser(refreshJwt!, () => history.push("/login")));
   }
 
   return (
@@ -67,7 +80,9 @@ function Account() {
             <Profile />
           </Route>
           <Route path={`${path}/order-history`}>
-            <OrderHistory />
+            <OrderHistory 
+              openModal={props.openModal}
+            />
           </Route>
           <Redirect to={`${url}/profile`} />
         </Switch>

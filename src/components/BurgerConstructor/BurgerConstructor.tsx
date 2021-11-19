@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/hooks";
 import { useDrop } from "react-dnd";
 import { useHistory } from "react-router-dom";
 
@@ -31,20 +31,20 @@ const BurgerConstructor: React.FC<IBurgerConstructor> = (props) => {
   const [submitDisabled, setSubmitDisabled] = React.useState<boolean>(true);
 
   const burgerConstructorArray = useSelector(
-    (state: any) => state.burgerConstructor.burgerConstructorArray
+    (state) => state.burgerConstructor.burgerConstructorArray
   );
 
   const selectedBun = useSelector(
-    (state: any) => state.burgerIngredients.selectedBun
+    (state) => state.burgerIngredients.selectedBun
   );
 
   const isUserAuth = useSelector(
-    (state: any) => state.currentSession.isCurrentUserAuth
+    (state) => state.currentSession.isCurrentUserAuth
   );
 
   const history = useHistory();
   const cardsData = burgerConstructorArray;
-  const bunPrice = selectedBun.price;
+  const bunPrice: number = selectedBun.price!;
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: "ingr",
@@ -74,14 +74,14 @@ const BurgerConstructor: React.FC<IBurgerConstructor> = (props) => {
 
   React.useEffect(() => {
     if (cardsData.length > 0) {
-      setTotalPrice(counTotalPrice(cardsData)! + bunPrice * 2);
+      setTotalPrice(counTotalPrice(cardsData)! + bunPrice! * 2);
     } else {
-      setTotalPrice(bunPrice * 2);
+      setTotalPrice(bunPrice! * 2);
     }
   }, [cardsData, bunPrice]);
 
   React.useEffect(() => {
-    if (selectedBun._id === 0 && burgerConstructorArray.length === 0) {
+    if (selectedBun._id === '0' && burgerConstructorArray.length === 0) {
       setSubmitDisabled(true);
     } else {
       setSubmitDisabled(false);
@@ -124,7 +124,7 @@ const BurgerConstructor: React.FC<IBurgerConstructor> = (props) => {
             isLocked={true}
             text={`${selectedBun.name} (верх)`}
             price={bunPrice}
-            thumbnail={selectedBun.image}
+            thumbnail={selectedBun.image!}
           />
         </li>
         <span className={BurgerConstructorStyles.basket__listContainer}>
@@ -140,7 +140,7 @@ const BurgerConstructor: React.FC<IBurgerConstructor> = (props) => {
             isLocked={true}
             text={`${selectedBun.name} (низ)`}
             price={bunPrice}
-            thumbnail={selectedBun.image}
+            thumbnail={selectedBun.image!}
           />
         </li>
       </ul>

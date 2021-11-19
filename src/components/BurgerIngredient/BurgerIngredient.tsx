@@ -7,7 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { Link, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "../../services/hooks";
 import { setSelectedIngredient } from "../../services/actions/burgerIngredients";
 import { useDrag } from "react-dnd";
 
@@ -26,11 +26,11 @@ const BurgerIngredient: React.FC<IBurgerIngredient> = (props) => {
   const [bunCount, setBunCount] = React.useState<number>(0);
 
   const burgerConstructorArray = useSelector(
-    (state: any) => state.burgerConstructor.burgerConstructorArray
+    (state) => state.burgerConstructor.burgerConstructorArray
   );
 
   const selectedBun = useSelector(
-    (state: any) => state.burgerIngredients.selectedBun
+    (state) => state.burgerIngredients.selectedBun
   );
 
   React.useEffect(() => {

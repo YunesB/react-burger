@@ -7,7 +7,7 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks";
 import { registerUser } from "../../services/actions/currentSession";
 
 function Register() {
@@ -37,7 +37,7 @@ function Register() {
       email: email,
       password: password,
     };
-    dispatch(registerUser(data, history.push("/login")));
+    dispatch(registerUser(data, () => history.push("/login")));
   }
 
   return (

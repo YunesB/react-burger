@@ -1,15 +1,6 @@
-import * as CONSTANTS from './constants';
+import { BASE_URL } from "./constants";
 
-type TUserData = {
-  name?: string;
-  email: string;
-  password?: string;
-}
-
-type TResetPassword = {
-  password: string;
-  token: string;
-}
+import {TUserData, TResetPassword} from '../types'
 
 class LoginApi {
   private address: string;
@@ -19,10 +10,13 @@ class LoginApi {
 
   handleResponse<T>(res: Response): Promise<T> {
     if (res.status === 403) {
-      let refreshToken = localStorage.getItem('refreshToken')
+      console.log('403 Error')
+      const refreshToken = localStorage.getItem('refreshToken');
       this.updateToken(refreshToken)!
         .then((data: unknown | any) => {
+          console.log('updating tokens');
           localStorage.setItem('accessToken', data.accessToken);
+          localStorage.setItem('refreshToken', data.refreshToken);
         })
         .catch(() => {
           return Promise.reject(`Ошибка: ${res.status} - ${res.statusText}`);
@@ -42,7 +36,7 @@ class LoginApi {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({token: refreshToken}),
+        body: JSON.stringify({ "token": refreshToken }),
       })
       .then((res) =>
         this.handleResponse(res)
@@ -89,7 +83,7 @@ class LoginApi {
     )
   }
 
-  resetPassword(email: string) {
+  resetPassword(email: TUserData) {
     return fetch(`${this.address}/password-reset`, {
       method: "POST",
       headers: {
@@ -144,5 +138,5 @@ class LoginApi {
 };
 
 export const loginApi = new LoginApi({
-  address: CONSTANTS.BASE_URL,
+  address: BASE_URL,
 });

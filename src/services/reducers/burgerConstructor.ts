@@ -6,12 +6,23 @@ import {
   ADD_BUN_FAILED,
   MOVE_BURGER_CONSTRUCTOR_ITEM,
   DELETE_BURGER_CONSTRUCTOR_ITEM,
-  RESET_BURGER_CONSTRUCTOR
-} from "../actions/burgerConstructor.js";
+  RESET_BURGER_CONSTRUCTOR,
+  TBurgerConstructorActions
+} from "../actions/burgerConstructor";
 
 import { DEFAULT_ORDER } from '../../utils/constants';
+import { TBasketCard, TOrderData } from '../../types';
 
-const initialState = {
+type TBurgerConstructorState = {
+  burgerConstructorArray: Array<TBasketCard>,
+  burgerConstructorRequest: boolean,
+  burgerConstructorFailed: boolean,
+
+  orderData: TOrderData,
+  isPageLoading: boolean,
+} 
+
+const initialState: TBurgerConstructorState = {
   burgerConstructorArray: [],
   burgerConstructorRequest: false,
   burgerConstructorFailed: false,
@@ -20,7 +31,7 @@ const initialState = {
   isPageLoading: false,
 };
 
-export const burgerConstructorReducer = (state = initialState, action) => {
+export const burgerConstructorReducer = (state = initialState, action: TBurgerConstructorActions): TBurgerConstructorState => {
   switch (action.type) {
     case GET_BURGER_CONSTRUCTOR_REQUEST: {
       return {
