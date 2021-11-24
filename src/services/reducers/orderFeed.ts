@@ -1,9 +1,9 @@
 import {
+  WS_CONNECTION_START,
   WS_CONNECTION_SUCCESS,
   WS_CONNECTION_ERROR,
   WS_CONNECTION_CLOSED,
   WS_GET_MESSAGE,
-  WS_CONNECTION_START,
 } from "../actions/wsActions";
 
 import { TWsActions } from "../actions/wsActions";
@@ -30,7 +30,6 @@ export const orderFeedReducer = (state = initialState, action: TWsActions) => {
       };
 
     case WS_CONNECTION_ERROR:
-      console.log(action.payload);
       return {
         ...state,
         wsError: action.payload,
