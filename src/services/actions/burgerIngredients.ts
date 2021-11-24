@@ -45,7 +45,6 @@ export function getIngredientsData() {
     });
     api.getCardsData()
       .then((res: any) => {
-        console.log(res);
         if (res && res.success) {
           dispatch({
             type: GET_BURGER_INGREDIENTS_SUCCESS,
