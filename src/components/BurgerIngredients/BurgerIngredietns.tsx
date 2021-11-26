@@ -56,7 +56,6 @@ const BurgerIngredients: React.FC<IBurgerIngredients> = (props) => {
   function handleTabClick(string: string, ref: Element) {
     if (ref !== null) {
       setCurrent(string);
-      console.log(ref);
       ref.scrollIntoView({ behavior: "smooth" });
     }
   }
